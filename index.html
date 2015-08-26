@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hello World, AngularJS - ViralPatel.net</title>
+    <link rel="shortcut icon" type="image/png" href="js/jasmine-2.3.4/jasmine_favicon.png">
+    <link rel="stylesheet" type="text/css" href="js/jasmine-2.3.4/jasmine.css">
+    <script type="text/javascript" src="js/jasmine-2.3.4/jasmine.js"></script>
+    <script type="text/javascript" src="js/jasmine-2.3.4/jasmine-html.js"></script>
+    <script type="text/javascript" src="js/jasmine-2.3.4/boot.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.2.9/angular-mocks.js"></script>
+</head>
+
+<body ng-app="myApp">
+    <div ng-controller="main">
+        <h1>Total Score:{{point.p}}</h1>
+        <select ng-change="changePoint(tttt)" ng-model="tttt" ng-options="xxa.label for xxa in pointRange track by xxa.id">
+        </select>
+        <ul>
+            <li ng-repeat="(key,value) in army">
+                <h1>{{key}}</h1>
+                <ul>
+                    <li choice ng-repeat="tt in value" aa nid="{{tt.id}}">{{tt.name}}</li>
+                </ul>
+            </li>
+        </ul>
+        <hr>
+        <ul>
+            <li ng-repeat="list in displayArmy">
+                <h4 hashid="{{list.$$hashKey}}">{{list.name}}</h4>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+    var app = angular.module('myApp', []);
+    var originArmy = '';
+
+
+    app.controller('main', function($scope, $http) {
+
+        // $scope.pointRange = [15, 25, 35, 50];
+
+        $scope.pointRange = [{
+            id: 1,
+            label: '15'
+        }, {
+            id: 2,
+            label: '25'
+        }, {
+            id: 3,
+            label: '35'
+        }, {
+            id: 4,
+            label: '50'
+        }];
+
+        $scope.tttt = $scope.pointRange[0];
+
+
+        $scope.changePoint = function(aa) {
+            console.log(aa);
+        }
+
+
+        $scope.displayArmy = [];
+        $scope.point = {
+            p: 0
+        };
+        $http.get("army.json").success(function(response) {
+            originArmy = response;
+            $scope.army = originArmy;
+        });
+
+        /*
+                $scope.changePoint = function(score) {
+                    console.log(score);
+                }*/
+
+
+    }).directive('choice', function() {
+
+        function process(scope, element, attr) {
+
+            element.bind("click", function() {
+
+                var _c = findCharacterById(attr.nid, originArmy);
+
+                switch (_c.fa) {
+                    case "c":
+
+                        if (checkHas(attr.nid, scope.displayArmy) == 0) {
+                            scope.displayArmy.push(angular.copy(_c));
+                        }
+
+                        break;
+
+                    case "u":
+                        scope.displayArmy.push(angular.copy(_c));
+                        break;
+
+                    default:
+
+                        if (typeof(_c.fa) == "number") {
+                            if (checkHas(attr.nid, scope.displayArmy) < _c.fa) {
+                                scope.displayArmy.push(angular.copy(_c));
+                            }
+                        }
+                }
+
+
+                var _score = scoreCounter(scope.displayArmy);
+                scope.point.p = _score.total_point + "/" + (parseInt(scope.tttt.label) + parseInt(_score.extra_point));
+
+
+
+                scope.$apply();
+
+
+                //   console.log(scope.displayArmy);
+
+                //this.unbind('click');
+
+            }.bind(element));
+
+        }
+
+
+        return {
+
+            link: process
+        }
+    })
+
+
+    function findCharacterById(_id, _obj) {
+        var _match = false;
+        for (var _key in _obj) {
+            for (var i = 0; i < _obj[_key].length; i++) {
+                if (_obj[_key][i].id == _id) {
+                    _match = true;
+                    return _obj[_key][i];
+                    break;
+                }
+            }
+
+            if (_match) {
+                break;
+            }
+        }
+    }
+
+    function checkHas(_id, _arr) {
+        _c = 0;
+        for (var i = 0; i < _arr.length; i++) {
+            if (_arr[i].id == _id) {
+                _c++;
+            }
+        }
+
+        return _c;
+    }
+
+    function scoreCounter(_arr) {
+        var _total_point = 0,
+            _extra_point = 0;
+        for (var i = 0; i < _arr.length; i++) {
+            _total_point += _arr[i].pc;
+            _extra_point += _arr[i].wp
+        }
+
+        return {
+            total_point: _total_point,
+            extra_point: _extra_point,
+        }
+
+    }
+    </script>
+</body>
+
+</html>
