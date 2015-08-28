@@ -28,7 +28,7 @@
         <hr>
         <ul>
             <li ng-repeat="list in displayArmy">
-                <h4 hashid="{{list.$$hashKey}}">{{list.name}}</h4>
+                <h4 remove hashid="{{list.$$hashKey}}">{{list.name}}</h4>
             </li>
         </ul>
     </div>
@@ -78,7 +78,9 @@
                 }*/
 
 
-    }).directive('choice', function() {
+    })
+    
+    app.directive('choice', function() {
 
         function process(scope, element, attr) {
 
@@ -127,7 +129,32 @@
 
 
         return {
+            link: process
+        }
+    })
 
+    app.directive('remove', function() {
+        function process(scope, element, attr) {
+            element.bind("click", function() {
+
+
+
+                for (var i = 0; i < scope.displayArmy.length; i++) {
+                    if (scope.displayArmy[i].$$hashKey == attr.hashid) {
+                        scope.displayArmy.splice(i, 1);
+                        break;
+                    }
+                }
+
+                var _score = scoreCounter(scope.displayArmy);
+                scope.point.p = _score.total_point + "/" + (parseInt(scope.tttt.label) + parseInt(_score.extra_point));
+
+                scope.$apply();
+
+            }.bind(element));
+        }
+
+        return {
             link: process
         }
     })

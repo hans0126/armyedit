@@ -1,0 +1,13 @@
+{
+    "warmachine": {
+        "url": "http://privateerpress.com/warmachine/gallery/",
+        "faction": ["cygnar", "the-protectorate-of-menoth", "khador", "cryx", "retribution-of-scyrah", "mercenaries", "convergence-of-cyriss"],
+        "class": ["warcasters", "warjacks", "units", "solos", "battle-engines", "colossals", "privateer-exclusives"]
+    },
+
+    "horde": {
+        "url": "http://privateerpress.com/hordes/gallery/",
+        "faction": ["trollbloods", "circle-orboros", "skorne", "legion-of-everblight", "minions"],
+        "class": ["warlocks", "warbeasts", "units", "solos", "battle-engines", "gargantuans", "privateer-exclusives"]
+    }
+}
