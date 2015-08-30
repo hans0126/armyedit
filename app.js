@@ -28,7 +28,7 @@ app.get('/p', function(req, res) {
         _factions = JSON.parse(data);
     });
 
-    var url = 'http://privateerpress.com/warmachine/gallery/cygnar/colossals';
+    var url = 'http://privateerpress.com/warmachine/gallery/cygnar/warcasters';
 
     var myClass = new parser.parserFaction();
 

@@ -17,7 +17,15 @@ parserFaction.prototype.parser = function(url) {
         links = $('.views-row'); //use your CSS selector here        
 
         $(links).each(function(i, link) {
-            tt += $(link).find('.views-field-field-image-fid img').attr('src');
+            var _img = $(link).find('.views-field-field-image-fid img').attr('src');
+            _img = _img.split("/");
+            _img = _img[_img.length-1];
+
+            tt.push({
+                img:_img,
+                title:$(link).find('.views-field-title .field-content').text(),
+                pipCode:$(link).find('.views-field-field-pip-code-value .field-content').text()
+            })  
 
         });
 
