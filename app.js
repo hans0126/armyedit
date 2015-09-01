@@ -1,14 +1,14 @@
 var express = require('express');
 var path = require("path");
-var mongodb = require('mongodb');//mongodb
-var assert = require('assert');//單元測試
-var util = require('util');//繼承object
-var events = require('events');//事件
+var mongodb = require('mongodb'); //mongodb
+var assert = require('assert'); //單元測試
+var util = require('util'); //繼承object
+var events = require('events'); //事件
 var fs = require('fs');
 
 var app = express();
 
-var parser = require("./my_modules/parser.js");
+
 
 
 
@@ -21,30 +21,31 @@ app.get('/', function(req, res) {
 
 app.get('/p', function(req, res) {
     //parse web data
+    var parser = require("./my_modules/parser.js");
+    /*var pF = new parser.parserFaction();
 
-    var _factions;
-    fs.readFile('factions.json', 'utf8', function(err, data) {
-        if (err) throw err;
-        _factions = JSON.parse(data);
-    });
+    pF.startParser();
 
-    var url = 'http://privateerpress.com/warmachine/gallery/cygnar/warcasters';
+    pF.on("save complete", function() {
+        console.log("this ok");
+    })*/
 
-    var myClass = new parser.parserFaction();
-
-    myClass.on('response', function(msg) {
-       this.send(msg);
-    }.bind(res));
-
-    myClass.parser(url);
-    //  res.send(parserFaction(url));
-    //  parserFaction(url);
-
-    // console.log(aa);
-
+    var ca = new parser.createCategory2DB();
+    ca.start();   
+    res.send("ok");
 
 });
 
+
+app.get('/i', function(req, res) {
+    var getter = require("pixel-getter");
+    //get pixel info
+    getter.get("test.png", function(err, pixels) {
+        console.log(pixels[0].length);
+
+    });
+
+})
 
 app.get('/m', function(req, res) {
 
@@ -56,7 +57,7 @@ app.get('/m', function(req, res) {
 
     // Connect to the db
 
-    var url = 'mongodb://localhost:27017/test';
+    var url = 'mongodb://localhost:27017/warmachine';
     res.send("A");
 
     MongoClient.connect(url, function(err, db) {
@@ -108,7 +109,7 @@ function parserFaction() {
 
 util.inherits(parserFaction, events.EventEmitter);
 
-parserFaction.prototype.parser = function() {   
+parserFaction.prototype.parser = function() {
 
     var request = require('request'),
         cheerio = require('cheerio'),
