@@ -17,6 +17,28 @@
         <h1>Total Score:{{point.p}}</h1>
         <select ng-change="changePoint(tttt)" ng-model="tttt" ng-options="xxa.label for xxa in pointRange track by xxa.id">
         </select>
+        <div>
+            <p>
+                <select ng-model="series.default_value" ng-change="seriesSelect()" ng-options="sel.title for sel in series.data track by sel._id">
+                    <option value="">--</option>
+                </select>
+                <select ng-model="faction.default_value" ng-options="sel.title for sel in faction.data track by sel._id">
+                    <option value="">--</option>
+                </select>
+                <select ng-model="category.default_value" ng-options="sel.title for sel in category.data track by sel._id">
+                    <option value="">--</option>
+                </select>
+            </p>
+            <input type="text" ng-model="keyword">
+            <button ng-click="search()">search</button>
+        </div>
+        <div>
+            <ul>
+                <li ng-repeat="value in returnArmy">
+                    {{value.title}}
+                </li>
+            </ul>
+        </div>
         <ul>
             <li ng-repeat="(key,value) in army">
                 <h1>{{key}}</h1>
@@ -35,6 +57,9 @@
     <script type="text/javascript">
     var app = angular.module('myApp', []);
     var originArmy = '';
+
+    var pageshow = 10;
+    var currentPage = 0;
 
 
     app.controller('main', function($scope, $http) {
@@ -62,24 +87,95 @@
             console.log(aa);
         }
 
-
         $scope.displayArmy = [];
         $scope.point = {
             p: 0
         };
+
         $http.get("army.json").success(function(response) {
             originArmy = response;
             $scope.army = originArmy;
         });
+
+
+        $scope.search = function() {
+
+            var _series_id = ($scope.series.default_value == null) ? null : $scope.series.default_value._id;
+            var _faction_id = ($scope.faction.default_value == null) ? null : $scope.faction.default_value._id;
+            var _category_id = ($scope.category.default_value == null) ? null : $scope.category.default_value._id;
+            var _keyword = ($scope.keyword == "undefined") ? null : $scope.keyword;
+
+            $http.post("getData", {
+                type: "search",
+                series: _series_id,
+                faction: _faction_id,
+                category: _category_id,
+                keyword: _keyword,
+                pageshow: pageshow,
+                currentPage: currentPage
+            }).success(function(response) {
+                $scope.returnArmy = response;
+            })
+
+        }
+
 
         /*
                 $scope.changePoint = function(score) {
                     console.log(score);
                 }*/
 
+        $http.post("getData", {
+            type: "series"
+        }).success(function(response) {
+            $scope.series = {
+                data: response,
+                default_value: null
+            }
+
+            $scope.faction = {
+                data: null,
+                default_value: null
+            }
+
+
+            $scope.category = {
+                data: null,
+                default_value: null
+            }
+
+            $scope.seriesSelect = function() {
+
+                if ($scope.series.default_value != null) {
+
+                    $http.post("getData", {
+                        type: "faction",
+                        id: $scope.series.default_value._id
+                    }).success(function(response) {
+                        $scope.faction = {
+                            data: response,
+                            default_value: null
+                        }
+                    })
+
+                    $http.post("getData", {
+                        type: "category",
+                        id: $scope.series.default_value._id
+                    }).success(function(response) {
+                        $scope.category = {
+                            data: response,
+                            default_value: null
+                        }
+                    })
+                }
+            }
+
+
+
+        });
 
     })
-    
+
     app.directive('choice', function() {
 
         function process(scope, element, attr) {

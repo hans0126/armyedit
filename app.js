@@ -8,8 +8,16 @@ var fs = require('fs');
 
 var app = express();
 
+global.dbUrl = "mongodb://localhost:27017/warmachine";
 
-
+var MongoClient = mongodb.MongoClient;
+var ObjectId = mongodb.ObjectId;
+//body parser
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({
+    extended: true
+})); // support encoded bodies
 
 
 app.use(express.static(__dirname));
@@ -17,6 +25,74 @@ app.use(express.static(__dirname));
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
+
+app.post('/getData', function(req, res) {
+
+    var getData = require("./my_modules/getdata.js");
+    var getSelectData = new getData.getSelect();
+
+    switch (req.body.type) {
+        case "series":
+            getSelectData.getValue({
+                "type": "series"
+            })
+
+            getSelectData.on("ok", function(re) {
+                res.send(re, 200);
+            })
+
+            break;
+
+        case "faction":
+
+            getSelectData.getValue({
+                "type": "faction",
+                "parent": ObjectId(req.body.id)
+            })
+            getSelectData.on("ok", function(re) {
+                res.send(re, 200);
+            })
+
+            break;
+        case "category":
+
+            getSelectData.getValue({
+                "type": "category",
+                "relation": {
+                    "$in": [ObjectId(req.body.id)]
+                }
+            })
+
+            getSelectData.on("ok", function(re) {
+                res.send(re, 200);
+            })
+            break;
+        case "search":
+
+            var getArmyList = new getData.getArmyList();
+
+            getArmyList.getData({
+                field: [
+                    req.body.series,
+                    req.body.faction,
+                    req.body.category
+                ],
+                keyword:req.body.keyword,
+                currentPage:req.body.currentPage,
+                pageshow:req.body.pageshow
+            });
+        
+
+            getArmyList.on("ok", function(re) {
+                res.send(re, 200);
+            })
+
+            break;
+
+    }
+
+});
+
 
 
 app.get('/p', function(req, res) {
@@ -28,11 +104,13 @@ app.get('/p', function(req, res) {
 
     pF.on("save complete", function() {
         console.log("this ok");
-    })*/
+    })
+*/
 
-    var ca = new parser.createCategory2DB();
-    ca.start();   
-    res.send("ok");
+    /*var ca = new parser.createCategory2DB();
+    ca.start();*/
+
+    //res.send("ok");
 
 });
 

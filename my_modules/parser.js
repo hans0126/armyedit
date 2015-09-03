@@ -5,12 +5,94 @@ var cheerio = require('cheerio');
 var fs = require('fs');
 var mongodb = require('mongodb');
 
-var dbUrl = 'mongodb://localhost:27017/warmachine';
+
 var MongoClient = mongodb.MongoClient;
 var ObjectID = mongodb.ObjectID;
 
-function parserFaction() {}
+function parserFaction() {
+
+
+
+}
 util.inherits(parserFaction, events.EventEmitter);
+
+
+
+
+parserFaction.prototype.startParser = function() {
+
+    MongoClient.connect(global.dbUrl, _getCategory2Array.bind(this));
+    // when category data loaded 
+    this.on('category loaded', function(re) {
+            this.category = re;
+            // get faction datas 
+            // when loaded, parser start!!
+            fs.readFile('factions.json', 'utf8', _startParserData.bind(this));
+        })
+        /**
+         * get category data,conver to array
+         */
+    function _getCategory2Array(err, db) {
+
+        var _category = db.collection('category');
+        _category.find({}, {
+            title: 1
+        }).sort({
+            title: 1
+        }).toArray(function(err, re) {
+            var _arrReturn = [];
+            for (var i = 0; i < re.length; i++) {
+                _arrReturn[re[i].title] = re[i]._id;
+            }
+
+            this.emit('category loaded', _arrReturn);
+
+        }.bind(this))
+    }
+    /**
+     *  parser process
+     */
+    function _startParserData(err, data) {
+
+        if (err) throw err;
+
+        var _factions = JSON.parse(data);
+        var url = [];
+        var _arrResult = [];
+
+        this.eventCount = 0;
+        this.totalCount = 0;
+
+        for (var key in _factions) {
+            for (var i = 0; i < _factions[key].faction.length; i++) {
+                for (var j = 0; j < _factions[key].class.length; j++) {
+                    var _url = _factions[key].url + _factions[key].faction[i] + "/" + _factions[key].class[j];
+                    this.parser(_url, key, _factions.warmachine.faction[i], _factions.warmachine.class[j]);
+                    this.totalCount++;
+                }
+            }
+        }
+        // wher all parser complete, save to DB
+        this.on("parser complete", function(re) {
+            this.eventCount++;
+            _arrResult = _arrResult.concat(re);
+            console.log("p" + _arrResult.length);
+
+            if (this.eventCount >= this.totalCount) {
+
+                console.log("parser complete");
+                this.saveData(_arrResult);
+
+            }
+
+        }.bind(this));
+
+    }
+
+
+
+}
+
 /**
  * parser process
  * @param  url {string} 
@@ -18,8 +100,12 @@ util.inherits(parserFaction, events.EventEmitter);
  * @param _faction {string} 
  * @param _category {string} 
  */
-
 parserFaction.prototype.parser = function(url, _series, _faction, _category) {
+
+    var _arrRelation = [];
+    _arrRelation.push(this.category[_series]);
+    _arrRelation.push(this.category[_faction]);
+    _arrRelation.push(this.category[_category]);
 
     //url = "http://privateerpress.com/warmachine/gallery/cygnar/warcasters";
     request(url, function(err, resp, body) {
@@ -41,101 +127,73 @@ parserFaction.prototype.parser = function(url, _series, _faction, _category) {
                 pc: null,
                 series: _series,
                 faction: _faction,
-                category: _category
+                category: _category,
+                relation: _arrRelation
             })
 
         });
 
-        this.emit('response', tt);
+        this.emit('parser complete', tt);
 
     }.bind(this));
 
 };
 
-
-parserFaction.prototype.startParser = function() {
-
-    fs.readFile('factions.json', 'utf8', function(err, data) {
-        if (err) throw err;
-
-        var _factions = JSON.parse(data);
-        var url = [];
-        var _arrResult = [];
-
-        this.eventCount = 0;
-        this.totalCount = 0;
-
-        for (var key in _factions) {
-            for (var i = 0; i < _factions[key].faction.length; i++) {
-                for (var j = 0; j < _factions[key].class.length; j++) {
-                    var _url = _factions[key].url + _factions[key].faction[i] + "/" + _factions[key].class[j];
-                    this.parser(_url, key, _factions.warmachine.faction[i], _factions.warmachine.class[j]);
-                    this.totalCount++;
-                }
-            }
-        }
-
-        this.on("response", function(re) {
-
-            this.eventCount++;
-            console.log(re.length)
-            _arrResult = _arrResult.concat(re);
-            console.log(_arrResult.length);
-
-            if (this.eventCount >= this.totalCount) {
-                this.saveData(_arrResult);
-                console.log("complete");
-            }
-
-        }.bind(this));
-
-    }.bind(this));
-}
-
+/**
+ * save data to DB
+ */
 parserFaction.prototype.saveData = function(_arrData) {
-
+    console.log(_arrData.length);
     //process count
     this.eventCount = 0;
     this.totalCount = 0;
 
-    MongoClient.connect(dbUrl, function(err, db) {
+    MongoClient.connect(global.dbUrl, function(err, db) {
 
         var products = db.collection('products'),
             newProducts = db.collection('new_products');
-
 
         newProducts.drop(function(err) {
 
             for (var i = 0; i < _arrData.length; i++) {
 
-                this.currentValue = _arrData[i];
-                this.totalCount++;
+                _saveProcee.call(this, _arrData[i], {
+                    products: products,
+                    newProducts: newProducts
+                });
 
-                products.count({
-                    title: _arrData[i].title,
-                    pip_code: _arrData[i].pip_code
-                }, function(err, count) {
-
-                    if (count == 0) {
-                        products.insert(this.currentValue, _eventCount.call(this));
-                        newProducts.insert(this.currentValue, _eventCount.call(this));
-                        this.totalCount += 2;
-                    }
-                    _eventCount.call(this);
-
-                }.bind(this));
             }
 
         }.bind(this))
 
     }.bind(this));
 
-    function _eventCount(err, result) {
-        console.log(this.eventCount);
+    this.on("current save complete", function() {
         this.eventCount++;
+
         if (this.eventCount == this.totalCount) {
-            this.emit("save complete");
+            this.emit("all complete");
+            console.log("complete");
         }
+    })
+
+    function _eventCount(err, result) {
+        this.emit("current save complete");
+    }
+
+    function _saveProcee(_arr, _db) {
+        //1. check db has the same product?
+        //2. if has't,save to products DB and new products DB
+        _db.products.count({
+            title: _arr.title,
+            pip_code: _arr.pip_code
+        }, function(err, count) {
+            if (count == 0) {
+                this.totalCount += 2;
+                _db.products.insert(_arr, _eventCount.bind(this));
+                _db.newProducts.insert(_arr, _eventCount.bind(this));
+            }
+        }.bind(this));
     }
 }
 
@@ -148,7 +206,7 @@ createCategory2DB.prototype.start = function() {
     this.eventCount = 0;
     this.totalCount = 0;
 
-    MongoClient.connect(dbUrl, function(err, db) {
+    MongoClient.connect(global.dbUrl, function(err, db) {
 
         var category = db.collection('category');
 
@@ -208,7 +266,7 @@ createCategory2DB.prototype.start = function() {
 
 
 createCategory2DB.prototype.removeDuplicate = function() {
-    MongoClient.connect(dbUrl, function(err, db) {
+    MongoClient.connect(global.dbUrl, function(err, db) {
         var category = db.collection('category');
 
         category.aggregate([{
