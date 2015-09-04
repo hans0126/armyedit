@@ -67,10 +67,7 @@ getArmyList.prototype.getData = function(_field) {
     MongoClient.connect(global.dbUrl, function(err, db) {
 
         var _product = db.collection('products');
-        _product.find(_dbq, {
-            "title": 1,
-            "_id": 1
-        }).sort({
+        _product.find(_dbq, {relation:0}).sort({
             "order": 1,
             "title": 1
         }).skip(_field.pageshow*_field.currentPage).limit(_field.pageshow).toArray(function(err, re) {

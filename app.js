@@ -20,10 +20,15 @@ app.use(bodyParser.urlencoded({
 })); // support encoded bodies
 
 
-app.use(express.static(__dirname));
+
+
+global.appRoot = path.resolve(__dirname+'/frontend/');
+
+app.use(express.static(global.appRoot));
 
 app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+   // res.sendFile(path.join(__dirname + '/frontend/index.html'));
+   res.sendFile(global.appRoot +'/index.html');
 });
 
 app.post('/getData', function(req, res) {
@@ -98,19 +103,18 @@ app.post('/getData', function(req, res) {
 app.get('/p', function(req, res) {
     //parse web data
     var parser = require("./my_modules/parser.js");
-    /*var pF = new parser.parserFaction();
+    var pF = new parser.parserFaction();
 
     pF.startParser();
 
     pF.on("save complete", function() {
         console.log("this ok");
     })
-*/
 
     /*var ca = new parser.createCategory2DB();
     ca.start();*/
 
-    //res.send("ok");
+    res.send("ok");
 
 });
 

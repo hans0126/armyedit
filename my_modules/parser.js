@@ -67,7 +67,7 @@ parserFaction.prototype.startParser = function() {
             for (var i = 0; i < _factions[key].faction.length; i++) {
                 for (var j = 0; j < _factions[key].class.length; j++) {
                     var _url = _factions[key].url + _factions[key].faction[i] + "/" + _factions[key].class[j];
-                    this.parser(_url, key, _factions.warmachine.faction[i], _factions.warmachine.class[j]);
+                    this.parser(_url, key, _factions[key].faction[i], _factions[key].class[j]);
                     this.totalCount++;
                 }
             }

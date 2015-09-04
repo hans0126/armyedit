@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>army list</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.2.9/angular-mocks.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/default.css">
+</head>
+
+<body ng-app="myApp">
+    <div class="container-fluid row" ng-controller="main" id="wrap">
+        <div class="row">
+            <div class="col-md-4 " id="choice_product">
+                <select ng-model="series.default_value" ng-change="seriesSelect()" ng-options="sel.title for sel in series.data track by sel._id">
+                    <option value="">--</option>
+                </select>
+                <select ng-model="faction.default_value" ng-options="sel.title for sel in faction.data track by sel._id">
+                    <option value="">--</option>
+                </select>
+                <select ng-model="category.default_value" ng-options="sel.title for sel in category.data track by sel._id">
+                    <option value="">--</option>
+                </select>
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" ng-model="keyword">
+                    </div>
+                    <div class="col-md-4">
+                        <button ng-click="search()">search</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+            </div>
+        </div>
+        <div class="row">
+            <ul id="product_list">
+                <li class="col-xs-2" ng-repeat="value in returnArmy">
+                    <img ng-src="http://privateerpress.com/files/imagecache/3up_square/products/{{value.img}}" alt="" imageonload>
+                    <h4>{{value.title}}</h4>
+                </li>
+            </ul>
+        </div>
+
+        <div ng-click="testa()">bbbbbbbbb</div>
+    </div>
+    <script>
+    var app = angular.module('myApp', []);
+
+    app.controller('main', function($scope, $http) {
+
+        var pageshow = 50;
+        var currentPage = 0;
+
+
+        $scope.testa=function(e){
+        	
+        }
+
+        $scope.search = function() {
+
+            var _series_id = ($scope.series.default_value == null) ? null : $scope.series.default_value._id;
+            var _faction_id = ($scope.faction.default_value == null) ? null : $scope.faction.default_value._id;
+            var _category_id = ($scope.category.default_value == null) ? null : $scope.category.default_value._id;
+            var _keyword = ($scope.keyword == "undefined") ? null : $scope.keyword;
+
+            $http.post("getData", {
+                type: "search",
+                series: _series_id,
+                faction: _faction_id,
+                category: _category_id,
+                keyword: _keyword,
+                pageshow: pageshow,
+                currentPage: currentPage
+            }).success(function(response) {
+                $scope.returnArmy = response;
+            })
+
+        }
+
+
+        /*
+                $scope.changePoint = function(score) {
+                    console.log(score);
+                }*/
+
+        $http.post("getData", {
+            type: "series"
+        }).success(function(response) {
+            $scope.series = {
+                data: response,
+                default_value: null
+            }
+
+            $scope.faction = {
+                data: null,
+                default_value: null
+            }
+
+
+            $scope.category = {
+                data: null,
+                default_value: null
+            }
+
+            $scope.seriesSelect = function() {
+
+                if ($scope.series.default_value != null) {
+
+                    $http.post("getData", {
+                        type: "faction",
+                        id: $scope.series.default_value._id
+                    }).success(function(response) {
+                        $scope.faction = {
+                            data: response,
+                            default_value: null
+                        }
+                    })
+
+                    $http.post("getData", {
+                        type: "category",
+                        id: $scope.series.default_value._id
+                    }).success(function(response) {
+                        $scope.category = {
+                            data: response,
+                            default_value: null
+                        }
+                    })
+                }
+            }
+
+
+
+        });
+
+
+    })
+
+    app.directive('imageonload', function($compile) {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+                element.bind('error', function() {
+                	console.log("err");
+                    var html = '<div class="no_img">I should not be red</div>';
+                    var e = $compile(html)(scope);
+                    element.replaceWith(e);
+                });
+            }
+        };
+    });
+
+    app.directive('temp', function($compile) {
+        //	$scope.test= "A";
+
+     	return {
+     		 restrict: 'A',
+     		link:function($scope, el,attr){
+     			var _n ='<h1 bbbb>test</h1>';
+     			var _com = $compile(_n)($scope);
+     			el.replaceWith(_com);
+     		}
+     	}
+    
+    })
+
+
+   
+    </script>
+</body>
+
+</html>

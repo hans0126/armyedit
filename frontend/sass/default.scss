@@ -1,0 +1,54 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+@import "compass/css3";
+* {
+    box-sizing: border-box;
+}
+
+#wrap {
+    width: 960px;
+    margin: 0 auto;
+}
+
+#choice_product {
+    select {
+        margin-bottom: 1em;
+    }
+    select,
+    input,
+    button {
+        width: 100%;
+        display: block;
+    }
+}
+
+#product_list {
+
+    li{
+        margin-bottom: 0.5em;
+    }
+
+    img {
+        width: 100%;
+        display: block;
+        margin-bottom: 0.5em;
+    }
+
+    h4 {
+        width: 100%;
+        height: 2em;
+        overflow: hidden;
+    }
+
+    .no_img{
+        display: block;
+        width: 130px;
+        height: 130px;
+         margin-bottom: 0.5em;
+    }
+
+}
