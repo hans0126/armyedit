@@ -15,9 +15,12 @@
 }
 
 #choice_product {
-    select {
-        margin-bottom: 1em;
+    
+    > .row{
+        padding-bottom: 1em;
     }
+
+  
     select,
     input,
     button {
@@ -27,6 +30,8 @@
 }
 
 #product_list {
+
+
 
     li{
         margin-bottom: 0.5em;
@@ -39,7 +44,7 @@
     }
 
     h4 {
-        width: 100%;
+     //   width: 100%;
         height: 2em;
         overflow: hidden;
     }

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body ng-app="myApp">
+    <div ng-controller="bb">
+        <div test-abc></div>
+        <div>
+            <div ng-repeat='key in re' pd='{{listtype}}' ng-bind-html='tests(listtype,key.title)'></div>
+        </div>
+        <button ng-click="asa()">ccc</button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script>
+    var app = angular.module('myApp', []);
+
+    app.controller("bb", ['$scope', '$sce', function($scope, $sce) {
+        $scope.re = [{
+            title: "A",
+            age: 12
+        }, {
+            title: "B",
+            age: 15
+        }];
+        $scope.sa = "TEST";
+
+        $scope.asa = function() {
+
+            $scope.listtype = "2";
+        }
+
+        $scope.listtype = "1";
+
+        $scope.tests = function(bb, tt) {
+            var t = '';
+            if (bb == 1) {
+                t = "<h1 bbb>" + tt + "</h1>";
+            } else {
+                t = "<h6>" + tt + "</h6>";
+            }
+
+
+            return $sce.trustAsHtml(t);
+
+        }
+
+
+        $scope.a=1;
+        $scope.b=2;
+        $scope.pd=function(parm1, parm2) { console.log(parm1 + ": " + parm2); } 
+
+        /* $scope.myHtml = "<h1>test</h1>";
+
+         $scope.myHtml =  $sce.trustAsHtml($scope.myHtml);*/
+        /*$scope.$watch("listtype", function() {
+
+        })*/
+
+    }])
+
+    app.directive('bbb', function($compile) {
+        console.log("AAA");
+        return {
+            restrict: "A",
+            link: function() {
+                console.log("A");
+            }
+
+        }
+    })
+
+
+    app.directive('sss', function($compile) {
+        return {
+            restrict: "A",
+            scope:{
+                pd:"=" 
+            },
+            link: function(scope) {
+
+                // '=' function need call
+                // '&' already has value in dom , auto execution
+
+             //   console.log(scope)
+                //console.log(scope);
+
+            //    scope.pd(5,8);
+
+            }
+        }
+    })
+
+    app.directive('testAbc', function($compile) {
+
+        return {
+            restrict: "A",
+            link: function(scope, element, attr) {
+                var _a = "";
+
+          
+
+                scope.$watch("listtype", function() {
+                    if (scope.listtype == 1) {
+                        element.html("<div ng-repeat='key in re' sss  pd='pd'>{{key.title}}</div>");
+
+                    } else {
+                        element.html("<div ng-repeat='key in re' sss  pd='pd'>{{key.age}}</div>");
+                    }
+                    $compile(element.contents())(scope);
+
+                })
+            }
+
+
+        }
+
+    })
+    </script>
+</body>
+
+</html>
