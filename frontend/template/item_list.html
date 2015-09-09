@@ -1,0 +1,9 @@
+<li class='{{itemDisplay.row}} {{itemSelect.selectClass}}' ng-repeat='value in returnArmy' item-select _id='{{value._id}}'>
+    <div class="row">
+        <div class='{{itemDisplay.img}} imgArea  {{value.hasSelect}}'>
+            <img ng-src='http://privateerpress.com/files/imagecache/3up_square/products/{{value.img}}' imageonload>
+            <i class='fa {{value.icon}} fa-2x'></i>
+        </div>
+        <h4 class='{{itemDisplay.title}}'>{{value.title}}</h4>
+    </div>
+</li>

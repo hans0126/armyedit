@@ -6,11 +6,11 @@
     <title>army list</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
     <script src="https://code.angularjs.org/1.2.9/angular-mocks.js"></script>
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/default.css">
 </head>
 
@@ -55,14 +55,21 @@
                         <button ng-click="dataDisplayBtn.changeType('dataList')" ng-disabled="dataDisplayBtn.displayBtn.dataList">data list</button>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <button ng-click="itemSelect.selectTrigger()" ng-disabled="itemSelect.selectDisable">{{itemSelect.selectText}}</button>
+                    </div>
+                    <div class="col-xs-6">
+                    </div>
+                </div>
             </div>
             <div class="col-xs-8">
             </div>
         </div>
         <div class="row">
-            <ul id="product_list" product-list ng-show="dataDisplayBtn.displayArea.imgList">
+            <ul id="product_list" class="col-xs-6 row" product-list>
             </ul>
-            <ul id="product_list" product-list-data ng-show="dataDisplayBtn.displayArea.dataList">
+            <ul id="selected_list" class="col-xs-6 row" selected-list>
             </ul>
         </div>
         <div ng-click="testa()">bbbbbbbbb</div>
@@ -70,12 +77,62 @@
     <script>
     var app = angular.module('myApp', []);
 
-    app.controller('main', function($scope, $http) {
+    app.controller('main', function($scope, $http, $sce) {
 
         var pageshow = 10;
         var currentPage = 0;
 
         $scope.returnArmy = [];
+
+        $scope.$watch("returnArmy", function(_new) {
+            if (_new.length > 0) {
+                $scope.itemSelect.selectDisable = false;
+            }
+        })
+
+
+
+        $scope.itemSelect = {
+            selectMode: false,
+            selectDisable: true,
+            selectClass: "",
+            selectText: "select",
+            selected: [],
+            selectedArmy: [],
+            selectTrigger: function() {
+                if (this.selectMode == false) {
+                    this.selectMode = true;
+                    this.selectClass = "selectOn";
+                    this.selectText = "cancel";
+                } else {
+                    this.selectMode = false;
+                    this.selectClass = "";
+                    this.selectText = "select";
+                }
+            },
+            combineSelectToreturnArmy: function() {
+
+                for (var i = 0; i < $scope.returnArmy.length; i++) {
+                    //init value
+                    $scope.returnArmy[i].hasSelect = '';
+                    $scope.returnArmy[i].icon = '';
+                    for (var j = 0; j < this.selected.length; j++) {
+                        if ($scope.returnArmy[i]._id == this.selected[j]) {
+
+                            $scope.returnArmy[i].hasSelect = 'hasSelected';
+                            $scope.returnArmy[i].icon = 'fa-check-circle-o';
+                            break;
+                        }
+
+                    }
+
+                    if (typeof($scope.returnArmy[i].hasSelect) == '') {
+                        $scope.returnArmy[i].hasSelect = '';
+                        $scope.returnArmy[i].icon = 'fa-circle-o';
+                    }
+                }
+            }
+        };
 
         $scope.dataDisplayBtn = {
             displayType: 0, //0:img , 1:data
@@ -83,26 +140,54 @@
                 imgList: true,
                 dataList: false
             },
-            displayArea: {
-                imgList: true,
-                dataList: false,
-            },
+
             changeType: function(_current) {
 
-                for (var key in this.displayBtn) {
-                    if (key == _current) {
-                        this.displayBtn[key] = true;
-                        this.displayArea[key] = true;
-                    } else {
-                        this.displayBtn[key] = false;
-                        this.displayArea[key] = false;
-                    }
+                switch (_current) {
+                    case "imgList":
+
+                        $scope.itemDisplay = {
+                            row: "col-xs-4",
+                            img: "col-xs-12",
+                            title: "col-xs-12"
+                        }
+
+                        break;
+
+                    case "dataList":
+                        $scope.itemDisplay = {
+                            row: "col-xs-12",
+                            img: "col-xs-4",
+                            title: "col-xs-8"
+                        }
+                        break;
                 }
 
+                for (var _key in this.displayBtn) {
+                    if (_current == _key) {
+                        this.displayBtn[_key] = true;
+                    } else {
+                        this.displayBtn[_key] = false;
+                    }
+                }
 
             }
         };
 
+
+        $scope.itemDisplay = {
+            row: "col-xs-4",
+            img: "col-xs-12",
+            title: "col-xs-12"
+        }
+
+
+        /*
+                $scope.checkIcon = {
+                    hasChecked: $sce.trustAsHtml("<i class='fa fa-check-circle-o fa-2x'></i>"),
+                    nonChecked: $sce.trustAsHtml("<i class='fa fa-circle-o fa-2x'></i>")
+                }
+        */
 
         $scope.search = function() {
 
@@ -120,9 +205,8 @@
                 pageshow: pageshow,
                 currentPage: currentPage
             }).then(function(response) {
-
                 $scope.returnArmy = response.data;
-
+                $scope.itemSelect.combineSelectToreturnArmy();
 
             })
 
@@ -186,6 +270,57 @@
 
     })
 
+    app.directive('itemSelect', function($compile) {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+
+                var _r = angular.element(element[0].getElementsByClassName('imgArea'));
+
+                _r.bind('click', function() {
+
+                    if (!scope.itemSelect.selectMode) {
+                        return false
+                    };
+
+                    var _i = this.find('i');
+                    if (!this.hasClass('hasSelected')) {
+
+                        if (scope.itemSelect.selected.indexOf(element.attr('_id')) == -1) {
+                            scope.itemSelect.selected.push(element.attr('_id'));
+
+                            for (var i = 0; i < scope.returnArmy.length; i++) {
+                                if (scope.returnArmy[i]._id == element.attr('_id')) {
+                                    scope.itemSelect.selectedArmy.push(scope.returnArmy[i]);
+                                }
+                            }
+
+                        }
+
+                    } else {
+
+                        scope.itemSelect.selected.splice(scope.itemSelect.selected.indexOf(element.attr('_id')), 1);
+
+                        for (var i = 0; i < scope.itemSelect.selectedArmy.length; i++) {
+
+                            if (scope.itemSelect.selectedArmy[i]._id == element.attr('_id')) {
+                                scope.itemSelect.selectedArmy.splice(i, 1);
+                            }
+                        }
+
+
+                    }
+
+                    scope.itemSelect.combineSelectToreturnArmy();
+                    scope.$apply()
+
+                }.bind(_r))
+
+
+            }
+        }
+    })
+
     app.directive('imageonload', function($compile) {
         return {
             restrict: 'A',
@@ -200,39 +335,25 @@
         };
     });
 
-    app.directive('productList', ["$compile","dataTemplates",function($compile,dataTemplates) {
+    app.directive('productList', ["$compile", "dataTemplates", function($compile, dataTemplates) {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
-                /* console.log(scope);
-                 element.html(_u[0]);
-                 $compile(element.contents())(scope);*/
-            },
-            template: dataTemplates.imgList
+            templateUrl: dataTemplates.imgList
         }
-
-
     }])
 
-    app.directive('productListData', ["$compile","dataTemplates",function($compile,dataTemplates) {
+    app.directive('selectedList', ["$compile", "dataTemplates", function($compile, dataTemplates) {
         return {
             restrict: 'A',
-            link: function(scope, element, attrs) {
-                /* console.log(scope);
-                 element.html(_u[0]);
-                 $compile(element.contents())(scope);*/
-            },
-            template: dataTemplates.dataList
+            templateUrl: dataTemplates.selectedList
         }
-
-
     }])
 
-    app.factory('dataTemplates',function(){
 
+    app.factory('dataTemplates', function() {
         return {
-            imgList:"<li class='col-xs-2' ng-repeat='value in returnArmy'><img ng-src='http://privateerpress.com/files/imagecache/3up_square/products/{{value.img}}' alt='' imageonload><h4>{{value.title}}</h4></li>",
-            dataList:"<li class='col-xs-12 row' ng-repeat='value in returnArmy'><div class='col-xs-2'><img ng-src = 'http://privateerpress.com/files/imagecache/3up_square/products/{{value.img}}' alt = '' imageonload></div><h4 class='col-xs-10'>{{value.title}}</h4></li>"
+            imgList: "template/item_list.html",
+            selectedList: "template/selected_list.html"
         }
     })
     </script>
