@@ -5,6 +5,7 @@ var assert = require('assert'); //單元測試
 var util = require('util'); //繼承object
 var events = require('events'); //事件
 var fs = require('fs');
+var http = require('http');
 
 var app = express();
 
@@ -22,13 +23,13 @@ app.use(bodyParser.urlencoded({
 
 
 
-global.appRoot = path.resolve(__dirname+'/frontend/');
+global.appRoot = path.resolve(__dirname + '/frontend/');
 
 app.use(express.static(global.appRoot));
 
 app.get('/', function(req, res) {
-   // res.sendFile(path.join(__dirname + '/frontend/index.html'));
-   res.sendFile(global.appRoot +'/index.html');
+    // res.sendFile(path.join(__dirname + '/frontend/index.html'));
+    res.sendFile(global.appRoot + '/index.html');
 });
 
 app.post('/getData', function(req, res) {
@@ -82,11 +83,11 @@ app.post('/getData', function(req, res) {
                     req.body.faction,
                     req.body.category
                 ],
-                keyword:req.body.keyword,
-                currentPage:req.body.currentPage,
-                pageshow:req.body.pageshow
+                keyword: req.body.keyword,
+                currentPage: req.body.currentPage,
+                pageshow: req.body.pageshow
             });
-        
+
 
             getArmyList.on("ok", function(re) {
                 res.send(re, 200);
@@ -105,11 +106,15 @@ app.get('/p', function(req, res) {
     var parser = require("./my_modules/parser.js");
     var pF = new parser.parserFaction();
 
-    pF.startParser();
 
-    pF.on("save complete", function() {
-        console.log("this ok");
-    })
+
+     // pF.startParser();
+     //pF.checkHasImg();
+     //pF.getNoHasImg();
+      /*
+      pF.on("save complete", function() {
+          console.log("this ok");
+      })*/
 
     /*var ca = new parser.createCategory2DB();
     ca.start();*/
@@ -128,6 +133,18 @@ app.get('/i', function(req, res) {
     });
 
 })
+
+
+app.get('/getImg', function(req, res) {
+
+
+    var parser = require("./my_modules/parser.js");
+    var pF = new parser.parserFaction();
+    pF.getImg("33088_KommanderHarkevichWEB.jpg");
+    res.send("A");
+
+})
+
 
 app.get('/m', function(req, res) {
 

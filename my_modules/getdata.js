@@ -70,8 +70,16 @@ getArmyList.prototype.getData = function(_field) {
         _product.find(_dbq, {relation:0}).sort({
             "order": 1,
             "title": 1
-        }).skip(_field.pageshow*_field.currentPage).limit(_field.pageshow).toArray(function(err, re) {
-            this.emit("ok", re);
+        }).skip(_field.pageshow*_field.currentPage).limit(_field.pageshow).toArray(function(err, re) {           
+           
+
+
+            _product.find(_dbq).count(function(err,count){
+                this.emit("ok", {data:re,count:count});
+             
+            }.bind(this))
+
+
         }.bind(this))
 
     }.bind(this));

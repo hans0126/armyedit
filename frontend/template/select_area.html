@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col-xs-12">
+        <select ng-model="itemSearch.selectGroup.series.default_value" ng-change="itemSearch.seriesSelect()" ng-options="sel.title for sel in itemSearch.selectGroup.series.data track by sel._id">
+            <option value="">--</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <select ng-model="itemSearch.selectGroup.faction.default_value" ng-options="sel.title for sel in itemSearch.selectGroup.faction.data track by sel._id">
+            <option value="">--</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <select ng-model="itemSearch.selectGroup.category.default_value" ng-options="sel.title for sel in itemSearch.selectGroup.category.data track by sel._id">
+            <option value="">--</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-8">
+        <input type="text" ng-model="itemSearch.keyword.default_value">
+    </div>
+    <div class="col-xs-4">
+        <button ng-click="itemSearch.search()">search</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <button ng-click="dataDisplayBtn.changeType('imgList')" ng-disabled="dataDisplayBtn.displayBtn.imgList">img list</button>
+    </div>
+    <div class="col-xs-6">
+        <button ng-click="dataDisplayBtn.changeType('dataList')" ng-disabled="dataDisplayBtn.displayBtn.dataList">data list</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <button ng-click="itemSelect.selectTrigger()" ng-disabled="itemSelect.selectDisable">{{itemSelect.selectText}}</button>
+    </div>
+    <div class="col-xs-6">
+    </div>
+</div>

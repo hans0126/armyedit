@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="js/lib/radar-chart-d3-master/src/radar-chart.css">
+</head>
+
+<body ng-app="myApp">
+    <div class="chart-container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+    <script src="js/lib/radar-chart-d3-master/src/radar-chart.min.js"></script>
+    <script>
+    var data = [{
+        className: 'germany', // optional can be used for styling
+        axes: [{
+            axis: "SPD",
+            value: 5,
+            yOffset: 10
+        }, {
+            axis: "MAT",
+            value: 7
+        }, {
+            axis: "RAT",
+            value: 9
+        }, {
+            axis: "DEF",
+            value: 1
+        }, {
+            axis: "ARM",
+            value: 5,
+            xOffset: -20
+        }, {
+            axis: "Damage",
+            value: 5,
+            xOffset: -20
+        }, {
+            axis: "Cost",
+            value: 2,
+            xOffset: -20
+        }]
+    },{
+        className: 'germanys', // optional can be used for styling
+        axes: [{
+            axis: "SPD",
+            value: 2,
+            yOffset: 10
+        }, {
+            axis: "MAT",
+            value: 5
+        }, {
+            axis: "RAT",
+            value: 1
+        }, {
+            axis: "DEF",
+            value: 1
+        }, {
+            axis: "ARM",
+            value: 10,
+            xOffset: -20
+        }, {
+            axis: "Damage",
+            value: 5,
+            xOffset: -20
+        }, {
+            axis: "Cost",
+            value: 2,
+            xOffset: -20
+        }]
+    }];
+
+
+
+
+
+    RadarChart.draw(".chart-container", data);
+    </script>
+</body>
+
+</html>
