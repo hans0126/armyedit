@@ -19,12 +19,9 @@ requirejs.config({
 });
 
 // Start the main app logic.
-requirejs(['main_app', 'angular'], function(app) {
+requirejs(['main_app','angular'], function( app) {
 
-    angular.element(document).ready(function() {
-        angular.bootstrap(document, ['myApp']);
-    })
-
+  
 
 
 });

@@ -3,7 +3,7 @@ define([], function() {
     function itemSearch($compile, $http) {
 
         var itemSearch = {
-            pageshow: 10,
+            pageshow: 20,
             currentPage: 0,
             returnArmy: [],
             selectGroup: {

@@ -1,8 +1,10 @@
-define(['directive', 'controller', 'factory'],function(directive,controller,factory){
+define(['angular','directive', 'controller', 'factory'], function(angular,directive, controller, factory) {
+
+    angular.element(document).ready(function() {
+        angular.bootstrap(document, ['myApp']);
+    })
 
 
-
-  
     var app = angular.module('myApp', []);
 
     app.controller('main', controller.main);
@@ -20,6 +22,7 @@ define(['directive', 'controller', 'factory'],function(directive,controller,fact
         //console.log( $scope.testChange);
         $scope.apps = "a";
     })
+
 
 
 })
