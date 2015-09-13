@@ -1,3 +1,12 @@
+<div>
+    <div class="col-xs-4">
+        <button ng-click="itemSearch.prev()">Prev</button>
+    </div>
+    <div class="col-xs-4">{{itemSearch.currentPage+1}}/{{itemSearch.totalPageCount}}</div>
+    <div class="col-xs-4">
+        <button ng-click="itemSearch.next()">Next</button>
+    </div>
+</div>
 <ul id="product_list">
     <li class='{{itemDisplay.row}} {{itemSelect.selectClass}}' ng-repeat='value in itemSearch.returnArmy' item-select _id='{{value._id}}'>
         <div class="row">
@@ -5,7 +14,29 @@
                 <img ng-src='images/army/thumb/{{value.image_name}}' imageonload>
                 <i class='fa {{value.icon}} fa-2x'></i>
             </div>
-            <h4 class='{{itemDisplay.title}}'>{{value.title}}</h4>
+            <div class='{{itemDisplay.title}}'>
+                <h4>{{value.title}}</h4>
+                <div class="{{itemDisplay.status}}">
+                    <table class="table">
+                        <tr>
+                            <td>SPD:</td>
+                            <td>{{value.status.spd}}</td>
+                            <td>STR:</td>
+                            <td>{{value.status.str}}</td>
+                            <td>MAT:</td>
+                            <td>{{value.status.mat}}</td>
+                        </tr>
+                        <tr>
+                            <td>RAT:</td>
+                            <td>{{value.status.rat}}</td>
+                            <td>DEF:</td>
+                            <td>{{value.status.def}}</td>
+                            <td>ARM:</td>
+                            <td>{{value.status.arm}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </li>
 </ul>

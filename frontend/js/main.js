@@ -7,21 +7,28 @@ requirejs.config({
         directive: 'app/directive',
         controller: 'app/controller',
         factory: 'app/factory',
-        main_app: 'app/main_app'
+        main_app: 'app/main_app',
+        d3: 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min',
+        d3_radar: 'lib/radar-chart-d3-master/src/radar-chart.min'
+
 
     },
     shim: {
         angular: {
             exports: 'angular'
+        },
+        d3_radar: {
+            deps: ['d3'],
+            exports: 'd3_radar'
         }
 
     }
 });
 
 // Start the main app logic.
-requirejs(['main_app','angular'], function( app) {
+requirejs(['main_app', 'angular'], function(app) {
 
-  
+
 
 
 });

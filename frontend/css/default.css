@@ -54,7 +54,7 @@ a img {
   border: none;
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
 
@@ -114,4 +114,12 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   right: 25px;
   display: block;
   color: #aaa;
+}
+
+.hide {
+  display: block;
+}
+
+.show {
+  display: none;
 }

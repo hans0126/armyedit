@@ -4,21 +4,17 @@ define([], function() {
 
     function main($scope, $http, $sce) {
 
-        var pageshow = 10;
-        var currentPage = 0;
 
-        $scope.returnArmy = [];
-
-        $scope.$watch("returnArmy", function(_new) {
-            if (_new.length > 0) {
-                $scope.itemSelect.selectDisable = false;
-            }
-        })
 
         $scope.testChange = "test";
 
+        // select mode  1: multiple select = multiple_select 2. radar = radar
+        // if multiple select  they has  selectStart {boolean}
+
+        
         $scope.itemSelect = {
-            selectMode: false,
+            selectMode: "radar",
+            selectStart: false,
             selectDisable: true,
             selectClass: "",
             selectText: "select",
@@ -26,37 +22,48 @@ define([], function() {
             selectedArmy: [],
             selectTrigger: function() {
 
-                if (this.selectMode == false) {
-                    this.selectMode = true;
-                    this.selectClass = "selectOn";
-                    this.selectText = "cancel";
-                    $scope.testChange = "selectedList";
-                } else {
-                    this.selectMode = false;
-                    this.selectClass = "";
-                    this.selectText = "select";
-                    $scope.testChange = "test";
+              
+                switch(this.selectMode) {
+                      case "radar":
+
+                        this.selectMode = "multiple_select";
+                        this.selectClass = "selectOn";
+                        this.selectText = "cancel";
+
+
+                        break;
+
+                    case "multiple_select":
+                        this.selectClass = "";
+                        this.selectText = "select";
+                        this.selectMode = "radar";
+
+
+                        break;
                 }
+
+
             },
             combineSelectToreturnArmy: function() {
+              
 
-                for (var i = 0; i < $scope.returnArmy.length; i++) {
+                for (var i = 0; i < $scope.itemSearch.returnArmy.length; i++) {
                     //init value
-                    $scope.returnArmy[i].hasSelect = '';
-                    $scope.returnArmy[i].icon = '';
+                    $scope.itemSearch.returnArmy[i].hasSelect = '';
+                    $scope.itemSearch.returnArmy[i].icon = '';
                     for (var j = 0; j < this.selected.length; j++) {
-                        if ($scope.returnArmy[i]._id == this.selected[j]) {
+                        if ($scope.itemSearch.returnArmy[i]._id == this.selected[j]) {
 
-                            $scope.returnArmy[i].hasSelect = 'hasSelected';
-                            $scope.returnArmy[i].icon = 'fa-check-circle-o';
+                            $scope.itemSearch.returnArmy[i].hasSelect = 'hasSelected';
+                            $scope.itemSearch.returnArmy[i].icon = 'fa-check-circle-o';
                             break;
                         }
 
                     }
 
-                    if ($scope.returnArmy[i].hasSelect == '') {
-                        $scope.returnArmy[i].hasSelect = '';
-                        $scope.returnArmy[i].icon = 'fa-circle-o';
+                    if ($scope.itemSearch.returnArmy[i].hasSelect == '') {
+                        $scope.itemSearch.returnArmy[i].hasSelect = '';
+                        $scope.itemSearch.returnArmy[i].icon = 'fa-circle-o';
                     }
                 }
             }
@@ -77,7 +84,9 @@ define([], function() {
                         $scope.itemDisplay = {
                             row: "col-xs-4",
                             img: "col-xs-12",
-                            title: "col-xs-12"
+                            title: "col-xs-12",
+                            status: "hide"
+
                         }
 
                         break;
@@ -86,7 +95,8 @@ define([], function() {
                         $scope.itemDisplay = {
                             row: "col-xs-12",
                             img: "col-xs-4",
-                            title: "col-xs-8"
+                            title: "col-xs-8",
+                            status: "show"
                         }
                         break;
                 }
@@ -106,13 +116,14 @@ define([], function() {
         $scope.itemDisplay = {
             row: "col-xs-4",
             img: "col-xs-12",
-            title: "col-xs-12"
+            title: "col-xs-12",
+            status: "hide"
         }
     }
 
 
     return {
-        main:main
+        main: main
     }
 
 

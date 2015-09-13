@@ -1,10 +1,12 @@
-define([], function() {
+define(['d3', 'd3_radar'], function(d3, radar) {
 
     function itemSearch($compile, $http) {
 
         var itemSearch = {
-            pageshow: 20,
+            pageshow: 10,
             currentPage: 0,
+            totalPageCount: 0,
+            totalItemCount: 0,
             returnArmy: [],
             selectGroup: {
                 series: {
@@ -59,7 +61,14 @@ define([], function() {
 
                 }.bind(this))
             },
-            search: function() {
+            search: function(_newSearch) {
+
+                if (typeof(_newSearch) != "undefined") {
+                    this.currentPage = 0;
+                    this.totalPageCount = 0;
+                    this.totalItemCount = 0;
+                }
+
                 var searchQuery = {
                     type: "search",
                     pageshow: this.pageshow,
@@ -75,18 +84,46 @@ define([], function() {
 
                 $http.post("getData", searchQuery).then(function(response) {
                     this.returnArmy = response.data.data;
-                    // scope.itemSelect.combineSelectToreturnArmy();
+                    this.totalItemCount = response.data.count;
+                    this.totalPageCount = Math.floor(response.data.count / this.pageshow);
+                    if (response.data.count % this.pageshow > 0) {
+                        this.totalPageCount++;
+                    }
+
 
                 }.bind(this))
+            },
+            prev: function() {
+                if (this.currentPage > 0) {
+                    this.currentPage--;
+                    this.search();
+                }
+
+            },
+            next: function() {
+                if (this.currentPage < this.totalPageCount - 1) {
+                    this.currentPage++;
+                    this.search();
+                }
             }
         }
 
         return {
             restrict: 'A',
             link: function(scope, element, attr) {
+
+
                 scope.itemSearch = itemSearch;
 
                 scope.itemSearch.init();
+
+                scope.$watch("itemSearch.returnArmy", function(_new) {
+
+                    if (_new.length > 0) {
+                        scope.itemSelect.selectDisable = false;
+
+                    }
+                })
 
             },
             templateUrl: 'template/select_area.html'
@@ -113,44 +150,103 @@ define([], function() {
             restrict: 'A',
             link: function(scope, element, attrs) {
 
+
+
                 var _r = angular.element(element[0].getElementsByClassName('imgArea'));
 
                 _r.bind('click', function() {
 
-                    if (!scope.itemSelect.selectMode) {
-                        return false
-                    };
+                    switch (scope.itemSelect.selectMode) {
 
-                    var _i = this.find('i');
-                    if (!this.hasClass('hasSelected')) {
+                        case "multiple_select":
 
-                        if (scope.itemSelect.selected.indexOf(element.attr('_id')) == -1) {
-                            scope.itemSelect.selected.push(element.attr('_id'));
+                            console.log("A");
+                            var _i = this.find('i');
+                            if (!this.hasClass('hasSelected')) {
 
-                            for (var i = 0; i < scope.returnArmy.length; i++) {
-                                if (scope.returnArmy[i]._id == element.attr('_id')) {
-                                    scope.itemSelect.selectedArmy.push(scope.returnArmy[i]);
+                                if (scope.itemSelect.selected.indexOf(element.attr('_id')) == -1) {
+                                    scope.itemSelect.selected.push(element.attr('_id'));
+
+                                    for (var i = 0; i < scope.itemSearch.returnArmy.length; i++) {
+                                        if (scope.itemSearch.returnArmy[i]._id == element.attr('_id')) {
+                                            scope.itemSelect.selectedArmy.push(scope.itemSearch.returnArmy[i]);
+                                        }
+                                    }
+
+                                }
+
+                            } else {
+
+                                scope.itemSelect.selected.splice(scope.itemSelect.selected.indexOf(element.attr('_id')), 1);
+
+                                for (var i = 0; i < scope.itemSelect.selectedArmy.length; i++) {
+
+                                    if (scope.itemSelect.selectedArmy[i]._id == element.attr('_id')) {
+                                        scope.itemSelect.selectedArmy.splice(i, 1);
+                                    }
+                                }
+
+
+                            }
+
+                            scope.itemSelect.combineSelectToreturnArmy();
+                            scope.$apply()
+                            break;
+
+                        case "radar":
+
+                            for (var i = 0; i < scope.itemSearch.returnArmy.length; i++) {
+                                if (scope.itemSearch.returnArmy[i]._id == element.attr('_id')) {
+
+
+
+                                    if (typeof(scope.itemSearch.returnArmy[i].status) != "undefined") {
+                                        console.log(scope.radar);
+
+
+                                        var _data = [{
+                                            className: 'germany', // optional can be used for styling
+                                            axes: [{
+                                                axis: "SPD",
+                                                value: scope.itemSearch.returnArmy[i].status.spd,
+                                                yOffset: 10
+                                            }, {
+                                                axis: "STR",
+                                                value: scope.itemSearch.returnArmy[i].status.str
+                                            }, {
+                                                axis: "MAT",
+                                                value: scope.itemSearch.returnArmy[i].status.mat
+                                            }, {
+                                                axis: "RAT",
+                                                value: scope.itemSearch.returnArmy[i].status.rat
+                                            }, {
+                                                axis: "DEF",
+                                                value: scope.itemSearch.returnArmy[i].status.def,
+                                                xOffset: -20
+                                            }, {
+                                                axis: "ARM",
+                                                value: scope.itemSearch.returnArmy[i].status.arm,
+                                                xOffset: -20
+                                            }]
+                                        }];
+
+
+
+                                        scope.radar.data = _data;
+
+                                        scope.radar.render();
+
+                                    }
+
+                                    //scope.radar.data[scope.radar.currentIndex]
                                 }
                             }
 
-                        }
-
-                    } else {
-
-                        scope.itemSelect.selected.splice(scope.itemSelect.selected.indexOf(element.attr('_id')), 1);
-
-                        for (var i = 0; i < scope.itemSelect.selectedArmy.length; i++) {
-
-                            if (scope.itemSelect.selectedArmy[i]._id == element.attr('_id')) {
-                                scope.itemSelect.selectedArmy.splice(i, 1);
-                            }
-                        }
-
+                            break;
 
                     }
 
-                    scope.itemSelect.combineSelectToreturnArmy();
-                    scope.$apply()
+
 
                 }.bind(_r))
 
@@ -166,7 +262,7 @@ define([], function() {
         }
     }
 
-    function selectedList($compile, dataTemplates, $http, $templateCache, $parse) {
+    function subContent($compile, dataTemplates, $http, $templateCache, $parse) {
 
         return {
             restrict: 'A',
@@ -180,11 +276,75 @@ define([], function() {
         }
     }
 
+    function radar() {
+
+
+
+        var _data = [{
+            className: 'germany', // optional can be used for styling
+            axes: [{
+                axis: "SPD",
+                value: 1,
+                yOffset: 10
+            }, {
+                axis: "STR",
+                value: 1
+            }, {
+                axis: "MAT",
+                value: 1
+            }, {
+                axis: "RAT",
+                value: 1
+            }, {
+                axis: "DEF",
+                value: 5,
+                xOffset: -20
+            }, {
+                axis: "ARM",
+                value: 1,
+                xOffset: -20
+            }]
+        }]
+
+
+
+
+        var radar_chart = {
+            data: _data,
+            currentIndex: 0,
+            target: null,
+            render: function() {
+                RadarChart.draw(this.target, this.data);
+            }
+        }
+
+
+        return {
+            restrict: 'A',
+            link: function(scope, element, attr) {
+                var _scope = scope;
+                if (scope.$$childTail == null) {
+                    var _scope = scope.$parent;
+                }
+
+
+                _scope.radar = radar_chart;
+                _scope.radar.target = element[0];
+                _scope.radar.render();
+             
+
+            }
+
+        }
+    }
+
     return {
         itemSearch: itemSearch,
         imageonload: imageonload,
         itemSelect: itemSelect,
         productList: productList,
-        selectedList: selectedList
+        subContent: subContent,
+        radar: radar
+
     }
 });

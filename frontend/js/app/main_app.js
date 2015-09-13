@@ -1,4 +1,4 @@
-define(['angular','directive', 'controller', 'factory'], function(angular,directive, controller, factory) {
+define(['angular', 'directive', 'controller', 'factory'], function(angular, directive, controller, factory) {
 
     angular.element(document).ready(function() {
         angular.bootstrap(document, ['myApp']);
@@ -13,7 +13,9 @@ define(['angular','directive', 'controller', 'factory'], function(angular,direct
     app.directive('itemSearch', directive.itemSearch);
     app.directive('imageonload', directive.imageonload);
     app.directive('productList', ["$compile", "dataTemplates", directive.productList])
-    app.directive('selectedList', ["$compile", "dataTemplates", "$http", "$templateCache", "$parse", directive.selectedList])
+    app.directive('subContent', ["$compile", "dataTemplates", "$http", "$templateCache", "$parse", directive.subContent])
+
+    app.directive('radar', directive.radar);
 
 
     app.factory('dataTemplates', factory.dataTemplates);
