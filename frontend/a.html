@@ -13,6 +13,7 @@
             <div ng-repeat='key in re' pd='{{listtype}}' ng-bind-html='tests(listtype,key.title)'></div>
         </div>
         <button ng-click="asa()">ccc</button>
+        <div ng-include="testUrl"></div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
     <script>
@@ -49,9 +50,13 @@
         }
 
 
-        $scope.a=1;
-        $scope.b=2;
-        $scope.pd=function(parm1, parm2) { console.log(parm1 + ": " + parm2); } 
+        $scope.a = 1;
+        $scope.b = 2;
+        $scope.pd = function(parm1, parm2) {
+            console.log(parm1 + ": " + parm2);
+        }
+
+        $scope.testUrl = "template/test.html"
 
         /* $scope.myHtml = "<h1>test</h1>";
 
@@ -77,18 +82,18 @@
     app.directive('sss', function($compile) {
         return {
             restrict: "A",
-            scope:{
-                pd:"=" 
+            scope: {
+                pd: "="
             },
             link: function(scope) {
 
                 // '=' function need call
                 // '&' already has value in dom , auto execution
 
-             //   console.log(scope)
+                //   console.log(scope)
                 //console.log(scope);
 
-            //    scope.pd(5,8);
+                //    scope.pd(5,8);
 
             }
         }
@@ -101,7 +106,7 @@
             link: function(scope, element, attr) {
                 var _a = "";
 
-          
+
 
                 scope.$watch("listtype", function() {
                     if (scope.listtype == 1) {
@@ -119,6 +124,17 @@
         }
 
     })
+
+    app.directive('sa',[function() {
+        
+
+        return {
+            scope:false,
+            link: function($scope) {
+                console.log($scope);
+            }
+        }
+    }])
     </script>
 </body>
 

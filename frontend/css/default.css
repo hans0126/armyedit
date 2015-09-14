@@ -54,7 +54,7 @@ a img {
   border: none;
 }
 
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
 
@@ -67,13 +67,23 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   margin: 0 auto;
 }
 
-#choice_product > .row {
-  padding-bottom: 1em;
+#choice_product {
+  /*  > .row {
+      padding-bottom: 1em;
+  }
+  select,
+  input,
+  button {
+      width: 100%;
+      display: block;
+  }*/
 }
-#choice_product select,
-#choice_product input,
-#choice_product button {
-  width: 100%;
+
+.radar-chart {
+  padding: 20px;
+  width: 350px;
+  height: 350px;
+  margin: 0 auto;
   display: block;
 }
 
@@ -117,9 +127,21 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 
 .hide {
-  display: block;
+  display: none;
 }
 
 .show {
-  display: none;
+  display: block;
+}
+
+.show_inline {
+  display: inline-block;
+}
+
+.w80 {
+  width: 100px !important;
+}
+
+button > .fa {
+  margin-right: 0.4em;
 }

@@ -4,7 +4,8 @@ define([], function() {
         return {
             imgList: "template/item_list.html",
             selectedList: "template/selected_list.html",
-            test: "template/d3.html"
+            detail: "template/detail.html",
+            test2:"template/test.html"
         }
     }
 

@@ -9,6 +9,7 @@ define(['angular', 'directive', 'controller', 'factory'], function(angular, dire
 
     app.controller('main', controller.main);
 
+
     app.directive('itemSelect', directive.itemSelect);
     app.directive('itemSearch', directive.itemSearch);
     app.directive('imageonload', directive.imageonload);
@@ -16,6 +17,7 @@ define(['angular', 'directive', 'controller', 'factory'], function(angular, dire
     app.directive('subContent', ["$compile", "dataTemplates", "$http", "$templateCache", "$parse", directive.subContent])
 
     app.directive('radar', directive.radar);
+    app.directive('detailStatus', directive.detailStatus);
 
 
     app.factory('dataTemplates', factory.dataTemplates);

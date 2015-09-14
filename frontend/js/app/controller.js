@@ -2,18 +2,25 @@ define([], function() {
 
 
 
-    function main($scope, $http, $sce) {
+    function main($scope, $http, $sce, dataTemplates) {
 
 
 
-        $scope.testChange = "test";
+        $scope.testChange = "detail";
 
+        $scope.getContentUrl = function() {
+            return dataTemplates[$scope.testChange];
+        }
+
+        $scope.getContentUrl();
+
+        $scope.currentSelectedUnit = {};
         // select mode  1: multiple select = multiple_select 2. radar = radar
         // if multiple select  they has  selectStart {boolean}
 
-        
+
         $scope.itemSelect = {
-            selectMode: "radar",
+            selectMode: "detail",
             selectStart: false,
             selectDisable: true,
             selectClass: "",
@@ -22,9 +29,9 @@ define([], function() {
             selectedArmy: [],
             selectTrigger: function() {
 
-              
-                switch(this.selectMode) {
-                      case "radar":
+
+                switch (this.selectMode) {
+                    case "detail":
 
                         this.selectMode = "multiple_select";
                         this.selectClass = "selectOn";
@@ -36,7 +43,7 @@ define([], function() {
                     case "multiple_select":
                         this.selectClass = "";
                         this.selectText = "select";
-                        this.selectMode = "radar";
+                        this.selectMode = "detail";
 
 
                         break;
@@ -45,7 +52,7 @@ define([], function() {
 
             },
             combineSelectToreturnArmy: function() {
-              
+
 
                 for (var i = 0; i < $scope.itemSearch.returnArmy.length; i++) {
                     //init value
@@ -120,6 +127,9 @@ define([], function() {
             status: "hide"
         }
     }
+
+
+
 
 
     return {

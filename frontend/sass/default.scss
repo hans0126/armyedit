@@ -15,7 +15,7 @@
 }
 
 #choice_product {
-    > .row {
+    /*  > .row {
         padding-bottom: 1em;
     }
     select,
@@ -23,14 +23,21 @@
     button {
         width: 100%;
         display: block;
-    }
+    }*/
+}
+
+.radar-chart {
+    padding: 20px;
+    width: 350px;
+    height: 350px;
+    margin: 0 auto;
+    display: block;
 }
 
 #product_list {
     li {
         margin-bottom: 0.5em;
-
-        i{
+        i {
             display: none;
         }
     }
@@ -52,34 +59,43 @@
     }
     .selectOn {
         .imgArea {
-            position: relative;        
-
-            &.hasSelected{
+            position: relative;
+            &.hasSelected {
                 > img {
-                    border: 3px solid green; 
+                    border: 3px solid green;
                 }
-
                 > i {
-                    color:green;
+                    color: green;
                 }
             }
-
             > i {
                 position: absolute;
                 z-index: 999;
                 bottom: 10px;
                 right: 25px;
                 display: block;
-                color:#aaa;
+                color: #aaa;
             }
         }
     }
 }
 
-.hide{
-    display: block;
+.hide {
+    display: none;
 }
 
 .show {
-    display: none;
+    display: block;
+}
+
+.show_inline {
+    display:inline-block;
+}
+
+.w80 {
+    width: 100px !important;
+}
+
+button > .fa {
+    margin-right: 0.4em;
 }

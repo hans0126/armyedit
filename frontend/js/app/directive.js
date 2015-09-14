@@ -3,7 +3,7 @@ define(['d3', 'd3_radar'], function(d3, radar) {
     function itemSearch($compile, $http) {
 
         var itemSearch = {
-            pageshow: 10,
+            pageshow: 9,
             currentPage: 0,
             totalPageCount: 0,
             totalItemCount: 0,
@@ -137,7 +137,7 @@ define(['d3', 'd3_radar'], function(d3, radar) {
             link: function(scope, element, attrs) {
                 element.bind('error', function() {
                     console.log("err");
-                    var html = '<div class="no_img">I should not be red</div>';
+                    var html = '<img src="http://fakeimg.pl/120x120/?text=img&font=lobster"/>';
                     var e = $compile(html)(scope);
                     element.replaceWith(e);
                 });
@@ -150,8 +150,6 @@ define(['d3', 'd3_radar'], function(d3, radar) {
             restrict: 'A',
             link: function(scope, element, attrs) {
 
-
-
                 var _r = angular.element(element[0].getElementsByClassName('imgArea'));
 
                 _r.bind('click', function() {
@@ -160,9 +158,11 @@ define(['d3', 'd3_radar'], function(d3, radar) {
 
                         case "multiple_select":
 
-                            console.log("A");
+
                             var _i = this.find('i');
                             if (!this.hasClass('hasSelected')) {
+
+
 
                                 if (scope.itemSelect.selected.indexOf(element.attr('_id')) == -1) {
                                     scope.itemSelect.selected.push(element.attr('_id'));
@@ -193,44 +193,19 @@ define(['d3', 'd3_radar'], function(d3, radar) {
                             scope.$apply()
                             break;
 
-                        case "radar":
+                        case "detail":
 
                             for (var i = 0; i < scope.itemSearch.returnArmy.length; i++) {
                                 if (scope.itemSearch.returnArmy[i]._id == element.attr('_id')) {
 
-
+                                    scope.$parent.currentSelectedUnit = scope.itemSearch.returnArmy[i];
 
                                     if (typeof(scope.itemSearch.returnArmy[i].status) != "undefined") {
-                                        console.log(scope.radar);
 
 
-                                        var _data = [{
-                                            className: 'germany', // optional can be used for styling
-                                            axes: [{
-                                                axis: "SPD",
-                                                value: scope.itemSearch.returnArmy[i].status.spd,
-                                                yOffset: 10
-                                            }, {
-                                                axis: "STR",
-                                                value: scope.itemSearch.returnArmy[i].status.str
-                                            }, {
-                                                axis: "MAT",
-                                                value: scope.itemSearch.returnArmy[i].status.mat
-                                            }, {
-                                                axis: "RAT",
-                                                value: scope.itemSearch.returnArmy[i].status.rat
-                                            }, {
-                                                axis: "DEF",
-                                                value: scope.itemSearch.returnArmy[i].status.def,
-                                                xOffset: -20
-                                            }, {
-                                                axis: "ARM",
-                                                value: scope.itemSearch.returnArmy[i].status.arm,
-                                                xOffset: -20
-                                            }]
-                                        }];
+                                        var _data = [];
 
-
+                                        _data.push(scope.radar.transferData(scope.itemSearch.returnArmy[i].status));
 
                                         scope.radar.data = _data;
 
@@ -238,7 +213,9 @@ define(['d3', 'd3_radar'], function(d3, radar) {
 
                                     }
 
-                                    //scope.radar.data[scope.radar.currentIndex]
+                                    scope.$apply();
+
+
                                 }
                             }
 
@@ -267,11 +244,10 @@ define(['d3', 'd3_radar'], function(d3, radar) {
         return {
             restrict: 'A',
             link: function(scope, element, attr) {
-                scope.getContentUrl = function() {
-                    return dataTemplates[scope.testChange];
-                }
-            },
-            template: '<div ng-include="getContentUrl()"></div>'
+                /* scope.getContentUrl = function() {
+                     return dataTemplates[scope.testChange];
+                 }*/
+            }
 
         }
     }
@@ -280,41 +256,70 @@ define(['d3', 'd3_radar'], function(d3, radar) {
 
 
 
-        var _data = [{
+        var _data = []
+
+        var _orignal_data = {
             className: 'germany', // optional can be used for styling
             axes: [{
                 axis: "SPD",
                 value: 1,
-                yOffset: 10
+                yOffset: -10
             }, {
                 axis: "STR",
-                value: 1
+                value: 1,
+                yOffset: -10,
+                xOffset: -10
             }, {
                 axis: "MAT",
-                value: 1
+                value: 1,
+                yOffset: 10,
+                xOffset: -10
             }, {
                 axis: "RAT",
-                value: 1
+                value: 1,
+                yOffset: 10
             }, {
                 axis: "DEF",
-                value: 5,
-                xOffset: -20
+                value: 1,
+                yOffset: 10,
+                xOffset: 10
             }, {
                 axis: "ARM",
                 value: 1,
-                xOffset: -20
+                yOffset: -10,
+                xOffset: 10
             }]
-        }]
+        }
 
+        _data.push(_orignal_data);
 
 
 
         var radar_chart = {
             data: _data,
             currentIndex: 0,
+            orignal_data: _orignal_data,
             target: null,
             render: function() {
+                RadarChart.defaultConfig.w = 300;
+                RadarChart.defaultConfig.h = 300;
                 RadarChart.draw(this.target, this.data);
+            },
+            transferData: function(_data) {
+
+                var _to = angular.copy(this.orignal_data);
+
+                for (var j = 0; j < _to.axes.length; j++) {
+                    for (var key in _data) {
+                        if (_to.axes[j].axis == key.toUpperCase()) {
+                            _to.axes[j].value = _data[key];
+                            break;
+                        }
+                    }
+                }
+
+                return _to;
+
             }
         }
 
@@ -322,21 +327,67 @@ define(['d3', 'd3_radar'], function(d3, radar) {
         return {
             restrict: 'A',
             link: function(scope, element, attr) {
-                var _scope = scope;
-                if (scope.$$childTail == null) {
-                    var _scope = scope.$parent;
-                }
+                var _scope = scope.$parent;
 
 
                 _scope.radar = radar_chart;
                 _scope.radar.target = element[0];
                 _scope.radar.render();
-             
+
 
             }
 
         }
     }
+
+    function detailStatus() {
+
+        var editCtrl = {
+            edit: false,
+            numShow: "show_inline",
+            inputShow: "hide",
+            editBtnText:"Edit",
+            currentStatus: {},
+            getStatusValue: function(_data) {              
+                for (var key in _data) {
+                    this.currentStatus[key] = _data[key];
+              
+                }
+            }
+        }
+
+
+        return {
+            restrict: 'A',
+            link: function(scope) {
+
+                scope.editCtrl = editCtrl;
+
+
+                scope.editStatus = function() {                 
+
+
+                    if (scope.editCtrl.edit == false) {
+
+                        scope.editCtrl.getStatusValue(scope.currentSelectedUnit.status);                     
+
+                        scope.editCtrl.edit = true;
+                        scope.editCtrl.numShow = "hide";
+                        scope.editCtrl.inputShow = "show_inline";
+                        scope.editCtrl.editBtnText ="Cancel";
+
+                    } else {
+                        scope.editCtrl.edit = false;
+                        scope.editCtrl.numShow = "show_inline";
+                        scope.editCtrl.inputShow = "hide";
+                        scope.editCtrl.editBtnText = "Edit";
+                    }
+                }
+            }
+        }
+    }
+
+
 
     return {
         itemSearch: itemSearch,
@@ -344,7 +395,8 @@ define(['d3', 'd3_radar'], function(d3, radar) {
         itemSelect: itemSelect,
         productList: productList,
         subContent: subContent,
-        radar: radar
+        radar: radar,
+        detailStatus: detailStatus
 
     }
 });
