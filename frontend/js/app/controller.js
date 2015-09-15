@@ -4,7 +4,7 @@ define([], function() {
 
     function main($scope, $http, $sce, dataTemplates) {
 
-
+        //$anchorScrollProvider.disableAutoScrolling();
 
         $scope.testChange = "detail";
 
@@ -15,6 +15,10 @@ define([], function() {
         $scope.getContentUrl();
 
         $scope.currentSelectedUnit = {};
+
+
+
+
         // select mode  1: multiple select = multiple_select 2. radar = radar
         // if multiple select  they has  selectStart {boolean}
 

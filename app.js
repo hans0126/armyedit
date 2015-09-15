@@ -35,7 +35,9 @@ app.get('/', function(req, res) {
 app.post('/getData', function(req, res) {
 
     var getData = require("./my_modules/getdata.js");
+    var saveData = require("./my_modules/savedata.js");
     var getSelectData = new getData.getSelect();
+    var save = new saveData.saveData();
 
     switch (req.body.type) {
         case "series":
@@ -95,6 +97,16 @@ app.post('/getData', function(req, res) {
 
             break;
 
+        case "save_status":
+            save.saveSingle(req.body);
+
+            save.on("save ok",function(){              
+                res.send(JSON.stringify({result:"ok"}),200)
+            })
+
+
+            break;
+
     }
 
 });
@@ -108,13 +120,13 @@ app.get('/p', function(req, res) {
 
 
 
-     // pF.startParser();
-     //pF.checkHasImg();
-     //pF.getNoHasImg();
-      /*
-      pF.on("save complete", function() {
-          console.log("this ok");
-      })*/
+    // pF.startParser();
+    //pF.checkHasImg();
+    //pF.getNoHasImg();
+    /*
+    pF.on("save complete", function() {
+        console.log("this ok");
+    })*/
 
     /*var ca = new parser.createCategory2DB();
     ca.start();*/

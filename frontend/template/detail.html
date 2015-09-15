@@ -4,28 +4,30 @@
     <div class="form-group form-inline">
         <label for="">SPD:</label>
         <span class="{{editCtrl.numShow}} w80">{{currentSelectedUnit.status.spd}}</span>
-        <input type="number" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.spd">
+        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.spd">
         <label for="">STR:</label>
         <span class="{{editCtrl.numShow}} w80">{{currentSelectedUnit.status.str}}</span>
-        <input type="number" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.str">
+        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.str">
         <label for="">MAT:</label>
         <span class="{{editCtrl.numShow}} w80">{{currentSelectedUnit.status.mat}}</span>
-        <input type="number" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.mat">
+        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.mat">
     </div>
 <hr>
     <div class="form-group form-inline">
         <label for="">RAT:</label>
         <span class="{{editCtrl.numShow}} w80">{{currentSelectedUnit.status.rat}}</span>
-        <input type="number" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.rat">
+        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.rat">
         <label for="">DEF:</label>
         <span class="{{editCtrl.numShow}} w80">{{currentSelectedUnit.status.def}}</span>
-        <input type="number" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.def">
+        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.def">
         <label for="">ARM:</label>
         <span class="{{editCtrl.numShow}} w80">{{currentSelectedUnit.status.arm}}</span>
-        <input type="number" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.arm">
+        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.arm">
     </div>
 
     <div class="form-group form-inline">
         <button ng-click="editStatus();" class="btn btn-primary">{{editCtrl.editBtnText}}</button>
+        <button ng-click="saveStatus();" class="btn btn-primary {{editCtrl.saveBtnShow}}">Save</button>
     </div>
+    <p class="text-success">Save complete</p>
 </div>

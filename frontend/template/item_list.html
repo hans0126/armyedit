@@ -7,6 +7,17 @@
         <button ng-click="itemSearch.next()">Next</button>
     </div>
 </div>
+<ul class="pagination">
+    <li class="pagination-first"><a href ng-click="itemSearch.prev()">Prev</a></li>
+    <li class="pagination-page"><a href>100</a></li>
+    <li class="pagination-page"><a href>100</a></li>
+    <li class="pagination-page"><a href>100</a></li>
+    <li class="pagination-page"><a href>100</a></li>
+    <li class="pagination-page"><a href>100</a></li>
+    <li class="pagination-page"><a href>100</a></li>   
+    <li class="pagination-last"><a ng-click="itemSearch.next()">Next</a></li>
+</ul>
+<pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></pagination>
 <ul id="product_list">
     <li class='{{itemDisplay.row}} {{itemSelect.selectClass}}' ng-repeat='value in itemSearch.returnArmy' item-select _id='{{value._id}}'>
         <div class="row">

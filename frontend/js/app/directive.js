@@ -8,6 +8,7 @@ define(['d3', 'd3_radar'], function(d3, radar) {
             totalPageCount: 0,
             totalItemCount: 0,
             returnArmy: [],
+            status_avg: {},
             selectGroup: {
                 series: {
                     data: null,
@@ -86,12 +87,17 @@ define(['d3', 'd3_radar'], function(d3, radar) {
                     this.returnArmy = response.data.data;
                     this.totalItemCount = response.data.count;
                     this.totalPageCount = Math.floor(response.data.count / this.pageshow);
+                    this.status_avg = response.data.status_avg
+
+
                     if (response.data.count % this.pageshow > 0) {
                         this.totalPageCount++;
                     }
 
 
                 }.bind(this))
+
+
             },
             prev: function() {
                 if (this.currentPage > 0) {
@@ -99,12 +105,17 @@ define(['d3', 'd3_radar'], function(d3, radar) {
                     this.search();
                 }
 
+
             },
             next: function() {
                 if (this.currentPage < this.totalPageCount - 1) {
                     this.currentPage++;
                     this.search();
                 }
+
+
+
+
             }
         }
 
@@ -195,18 +206,55 @@ define(['d3', 'd3_radar'], function(d3, radar) {
 
                         case "detail":
 
+
                             for (var i = 0; i < scope.itemSearch.returnArmy.length; i++) {
                                 if (scope.itemSearch.returnArmy[i]._id == element.attr('_id')) {
-
+                                    // console.log(scope.currentSelectedUnit);
                                     scope.$parent.currentSelectedUnit = scope.itemSearch.returnArmy[i];
 
                                     if (typeof(scope.itemSearch.returnArmy[i].status) != "undefined") {
 
 
+                                        var test = {
+                                            className: 'germanyss', // optional can be used for styling
+                                            axes: [{
+                                                axis: "SPD",
+                                                value: scope.itemSearch.status_avg.spd*10,
+                                                yOffset: -10
+                                            }, {
+                                                axis: "STR",
+                                                value: scope.itemSearch.status_avg.str*10,
+                                                yOffset: -10,
+                                                xOffset: -10
+                                            }, {
+                                                axis: "MAT",
+                                                value: scope.itemSearch.status_avg.mat*10,
+                                                yOffset: 10,
+                                                xOffset: -10
+                                            }, {
+                                                axis: "RAT",
+                                                value: scope.itemSearch.status_avg.rat*10,
+                                                yOffset: 10
+                                            }, {
+                                                axis: "DEF",
+                                                value: scope.itemSearch.status_avg.def*10,
+                                                yOffset: 10,
+                                                xOffset: 10
+                                            }, {
+                                                axis: "ARM",
+                                                value: scope.itemSearch.status_avg.arm*10,
+                                                yOffset: -10,
+                                                xOffset: 10
+                                            }]
+                                        }
+
+
+
                                         var _data = [];
 
-                                        _data.push(scope.radar.transferData(scope.itemSearch.returnArmy[i].status));
 
+                                        _data.push(scope.radar.transferData(scope.itemSearch.returnArmy[i].status));
+                                        _data.push(test);
                                         scope.radar.data = _data;
 
                                         scope.radar.render();
@@ -306,7 +354,7 @@ define(['d3', 'd3_radar'], function(d3, radar) {
                 RadarChart.draw(this.target, this.data);
             },
             transferData: function(_data) {
-
+               
                 var _to = angular.copy(this.orignal_data);
 
                 for (var j = 0; j < _to.axes.length; j++) {
@@ -329,29 +377,41 @@ define(['d3', 'd3_radar'], function(d3, radar) {
             link: function(scope, element, attr) {
                 var _scope = scope.$parent;
 
-
+                radar_chart.target = element[0];
                 _scope.radar = radar_chart;
-                _scope.radar.target = element[0];
-                _scope.radar.render();
-
 
             }
 
         }
     }
 
-    function detailStatus() {
+    function detailStatus($http, $timeout) {
 
         var editCtrl = {
             edit: false,
             numShow: "show_inline",
             inputShow: "hide",
-            editBtnText:"Edit",
+            saveBtnShow: "hide",
+            editBtnText: "Edit",
             currentStatus: {},
-            getStatusValue: function(_data) {              
+            getStatusValue: function(_data) {
                 for (var key in _data) {
                     this.currentStatus[key] = _data[key];
-              
+                }
+            },
+            editMode: function(va) {
+                if (va) {
+                    this.edit = true;
+                    this.numShow = "hide";
+                    this.inputShow = "show_inline";
+                    this.editBtnText = "Cancel";
+                    this.saveBtnShow = "show_inline";
+                } else {
+                    this.edit = false;
+                    this.numShow = "show_inline";
+                    this.inputShow = "hide";
+                    this.editBtnText = "Edit";
+                    this.saveBtnShow = "hide";
                 }
             }
         }
@@ -362,26 +422,44 @@ define(['d3', 'd3_radar'], function(d3, radar) {
             link: function(scope) {
 
                 scope.editCtrl = editCtrl;
+                //    $timeout( function(){ alert("A") }, 1000);
 
-
-                scope.editStatus = function() {                 
-
-
+                scope.editStatus = function() {
                     if (scope.editCtrl.edit == false) {
-
-                        scope.editCtrl.getStatusValue(scope.currentSelectedUnit.status);                     
-
-                        scope.editCtrl.edit = true;
-                        scope.editCtrl.numShow = "hide";
-                        scope.editCtrl.inputShow = "show_inline";
-                        scope.editCtrl.editBtnText ="Cancel";
-
+                        scope.editCtrl.getStatusValue(scope.currentSelectedUnit.status);
+                        scope.editCtrl.editMode(true);
                     } else {
-                        scope.editCtrl.edit = false;
-                        scope.editCtrl.numShow = "show_inline";
-                        scope.editCtrl.inputShow = "hide";
-                        scope.editCtrl.editBtnText = "Edit";
+                        scope.editCtrl.editMode(false);
                     }
+                }
+
+                scope.saveStatus = function() {
+                    // console.log(scope.currentSelectedUnit._id); 
+                    if (typeof(scope.currentSelectedUnit._id) == "undefined") {
+                        return false;
+                    }
+
+                    scope.editCtrl.editMode(false);
+
+                    scope.currentSelectedUnit.status = scope.editCtrl.currentStatus;
+
+                    var _data = {
+                        id: scope.currentSelectedUnit._id,
+                        data: scope.editCtrl.currentStatus,
+                        type: "save_status"
+                    }
+
+                    $http.post("getData", _data).then(function(response) {
+
+                        var _d = [];
+
+                        _d.push(scope.radar.transferData(scope.currentSelectedUnit.status));
+
+                        scope.radar.data = _d;
+
+                        scope.radar.render();
+
+                    }.bind(this))
                 }
             }
         }

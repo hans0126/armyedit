@@ -12,6 +12,7 @@ requirejs.config({
         d3_radar: 'lib/radar-chart-d3-master/src/radar-chart.min'
 
 
+
     },
     shim: {
         angular: {
