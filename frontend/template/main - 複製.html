@@ -1,0 +1,12 @@
+<div class=" row" ng-controller="main">
+    <div class="col-xs-4">
+        <div  id="choice_product" item-search></div>
+        <div  product-list></div>
+    </div>
+    <div class="col-xs-8">
+        <div sub-content ng-include="getContentUrl()"></div>
+    </div>
+
+    <div ng-controller="sub"></div>
+  
+</div>

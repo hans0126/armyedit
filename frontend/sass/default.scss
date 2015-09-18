@@ -6,13 +6,11 @@
 @import "compass/reset";
 @import "compass/css3";
 * {
-    box-sizing: border-box;
+    box-sizing: border-box;    
 }
 
-
 #wrap {
-    width: 960px;
-    margin: 0 auto;
+    width: 1024px;
 }
 
 #choice_product {
@@ -90,7 +88,7 @@
 }
 
 .show_inline {
-    display:inline-block;
+    display: inline-block;
 }
 
 .w80 {
@@ -105,6 +103,14 @@ button > .fa {
     display: block;
 }
 
-.germanyss{
+.germanyss {
     display: none;
+}
+
+#navi {
+    @include background-image(linear-gradient(white, #cccccc, #aaaaaa));
+    >ul{
+        width: 1024px;
+        padding: 1em 0;
+    }
 }

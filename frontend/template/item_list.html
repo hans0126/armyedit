@@ -9,45 +9,16 @@
 </div>
 <ul class="pagination">
     <li class="pagination-first"><a href ng-click="itemSearch.prev()">Prev</a></li>
-    <li class="pagination-page"><a href>100</a></li>
-    <li class="pagination-page"><a href>100</a></li>
-    <li class="pagination-page"><a href>100</a></li>
-    <li class="pagination-page"><a href>100</a></li>
-    <li class="pagination-page"><a href>100</a></li>
-    <li class="pagination-page"><a href>100</a></li>   
     <li class="pagination-last"><a ng-click="itemSearch.next()">Next</a></li>
 </ul>
-<pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></pagination>
-<ul id="product_list">
-    <li class='{{itemDisplay.row}} {{itemSelect.selectClass}}' ng-repeat='value in itemSearch.returnArmy' item-select _id='{{value._id}}'>
-        <div class="row">
-            <div class='{{itemDisplay.img}} imgArea  {{value.hasSelect}}'>
-                <img ng-src='images/army/thumb/{{value.image_name}}' imageonload>
-                <i class='fa {{value.icon}} fa-2x'></i>
-            </div>
-            <div class='{{itemDisplay.title}}'>
-                <h4>{{value.title}}</h4>
-                <div class="{{itemDisplay.status}}">
-                    <table class="table">
-                        <tr>
-                            <td>SPD:</td>
-                            <td>{{value.status.spd}}</td>
-                            <td>STR:</td>
-                            <td>{{value.status.str}}</td>
-                            <td>MAT:</td>
-                            <td>{{value.status.mat}}</td>
-                        </tr>
-                        <tr>
-                            <td>RAT:</td>
-                            <td>{{value.status.rat}}</td>
-                            <td>DEF:</td>
-                            <td>{{value.status.def}}</td>
-                            <td>ARM:</td>
-                            <td>{{value.status.arm}}</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+<ul id="product_list" class="row">
+    <li class='col-xs-4 {{itemSelect.selectClass}}' ng-repeat='value in itemSearch.returnArmy' >
+        <div class=' imgArea  {{value.hasSelect}}' item-select  _id='{{value._id}}'>
+            <img ng-src='images/army/thumb/{{value.image_name}}' imageonload>
+            <i class='fa {{value.icon}} fa-2x'></i>
+        </div>
+        <div>
+            <h4>{{value.title}}</h4>
         </div>
     </li>
 </ul>

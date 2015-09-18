@@ -1,27 +1,26 @@
 define([], function() {
 
-
-
     function main($scope, $http, $sce, dataTemplates) {
 
-        //$anchorScrollProvider.disableAutoScrolling();
 
-        $scope.testChange = "detail";
+
+        $scope.ChangeArea = "detail";
 
         $scope.getContentUrl = function() {
-            return dataTemplates[$scope.testChange];
+            return dataTemplates[$scope.ChangeArea];
         }
 
         $scope.getContentUrl();
 
+
         $scope.currentSelectedUnit = {};
 
+        $scope.searchList = [];
 
 
 
         // select mode  1: multiple select = multiple_select 2. radar = radar
         // if multiple select  they has  selectStart {boolean}
-
 
         $scope.itemSelect = {
             selectMode: "detail",
@@ -32,32 +31,21 @@ define([], function() {
             selected: [],
             selectedArmy: [],
             selectTrigger: function() {
-
-
                 switch (this.selectMode) {
                     case "detail":
-
                         this.selectMode = "multiple_select";
                         this.selectClass = "selectOn";
                         this.selectText = "cancel";
-
-
                         break;
 
                     case "multiple_select":
                         this.selectClass = "";
                         this.selectText = "select";
                         this.selectMode = "detail";
-
-
                         break;
                 }
-
-
             },
             combineSelectToreturnArmy: function() {
-
-
                 for (var i = 0; i < $scope.itemSearch.returnArmy.length; i++) {
                     //init value
                     $scope.itemSearch.returnArmy[i].hasSelect = '';
@@ -122,7 +110,6 @@ define([], function() {
 
             }
         };
-
 
         $scope.itemDisplay = {
             row: "col-xs-4",

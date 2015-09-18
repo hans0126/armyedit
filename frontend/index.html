@@ -16,18 +16,16 @@
 </head>
 
 <body>
-    <div class="container-fluid row" ng-controller="main" id="wrap">
-        <div class="row">
-            <div class="col-xs-4 " id="choice_product" item-search></div>
-        </div>
-        <div class="row">
-            <div class="col-xs-6 row" product-list></div>
-           <div class="col-xs-6 row" sub-content ng-include="getContentUrl()"></div>
-
-        </div>
-        
+    <div id="navi" class="row">
+        <ul class="center-block">
+            <li> <button class="btn btn-default">Product</button>  </li>
+        </ul>
     </div>
-    <div class="container-fluid row" ng-controller="b"></div>
+    <div class="center-block container-fluid" id="wrap">
+        <div ng-view></div>
+    </div>
+
+   
 </body>
 
 </html>

@@ -1,130 +1,12 @@
 define(['d3', 'd3_radar'], function(d3, radar) {
 
     function itemSearch($compile, $http) {
-
-        var itemSearch = {
-            pageshow: 9,
-            currentPage: 0,
-            totalPageCount: 0,
-            totalItemCount: 0,
-            returnArmy: [],
-            status_avg: {},
-            selectGroup: {
-                series: {
-                    data: null,
-                    default_value: null,
-                    selected_value: null
-                },
-                faction: {
-                    data: null,
-                    default_value: null,
-                    selected_value: null
-                },
-                category: {
-                    data: null,
-                    default_value: null,
-                    selected_value: null
-                }
-            },
-            keyword: {
-                default_value: "",
-                selected_value: null
-            },
-            seriesSelect: function() {
-                if (this.selectGroup.series.default_value != null) {
-
-                    $http.post("getData", {
-                        type: "faction",
-                        id: this.selectGroup.series.default_value._id
-                    }).then(function(response) {
-                        this.selectGroup.faction = {
-                            data: response.data
-                        }
-                    }.bind(this))
-
-                    $http.post("getData", {
-                        type: "category",
-                        id: this.selectGroup.series.default_value._id
-                    }).then(function(response) {
-                        this.selectGroup.category = {
-                            data: response.data
-                        }
-                    }.bind(this))
-                }
-            },
-            init: function() {
-                $http.post("getData", {
-                    type: "series"
-                }).then(function(response) {
-                    this.selectGroup.series = {
-                        data: response.data
-                    }
-
-                }.bind(this))
-            },
-            search: function(_newSearch) {
-
-                if (typeof(_newSearch) != "undefined") {
-                    this.currentPage = 0;
-                    this.totalPageCount = 0;
-                    this.totalItemCount = 0;
-                }
-
-                var searchQuery = {
-                    type: "search",
-                    pageshow: this.pageshow,
-                    currentPage: this.currentPage
-                }
-
-                for (var key in this.selectGroup) {
-                    searchQuery[key] = this.selectGroup[key].selected_value = (this.selectGroup[key].default_value == null) ? null : this.selectGroup[key].default_value._id;
-
-                }
-
-                searchQuery.keyword = this.keyword.selected_value = (this.keyword.default_value == "") ? null : this.keyword.default_value;
-
-                $http.post("getData", searchQuery).then(function(response) {
-                    this.returnArmy = response.data.data;
-                    this.totalItemCount = response.data.count;
-                    this.totalPageCount = Math.floor(response.data.count / this.pageshow);
-                    this.status_avg = response.data.status_avg
-
-
-                    if (response.data.count % this.pageshow > 0) {
-                        this.totalPageCount++;
-                    }
-
-
-                }.bind(this))
-
-
-            },
-            prev: function() {
-                if (this.currentPage > 0) {
-                    this.currentPage--;
-                    this.search();
-                }
-
-
-            },
-            next: function() {
-                if (this.currentPage < this.totalPageCount - 1) {
-                    this.currentPage++;
-                    this.search();
-                }
-
-
-
-
-            }
-        }
-
         return {
             restrict: 'A',
             link: function(scope, element, attr) {
 
 
-                scope.itemSearch = itemSearch;
+                // scope.itemSearch = itemSearch;
 
                 scope.itemSearch.init();
 
@@ -137,7 +19,122 @@ define(['d3', 'd3_radar'], function(d3, radar) {
                 })
 
             },
-            templateUrl: 'template/select_area.html'
+            templateUrl: 'template/select_area.html',
+            controller: function($scope) {
+                
+                $scope.itemSearch = {
+                    pageshow: 9,
+                    currentPage: 0,
+                    totalPageCount: 0,
+                    totalItemCount: 0,
+                    returnArmy: [],
+                    status_avg: {},
+                    selectGroup: {
+                        series: {
+                            data: null,
+                            default_value: null,
+                            selected_value: null
+                        },
+                        faction: {
+                            data: null,
+                            default_value: null,
+                            selected_value: null
+                        },
+                        category: {
+                            data: null,
+                            default_value: null,
+                            selected_value: null
+                        }
+                    },
+                    keyword: {
+                        default_value: "",
+                        selected_value: null
+                    },
+                    seriesSelect: function() {
+
+                        if (this.selectGroup.series.default_value != null) {
+                            $http.post("getData", {
+                                type: "faction",
+                                id: this.selectGroup.series.default_value._id
+                            }).then(function(response) {
+                                this.selectGroup.faction = {
+                                    data: response.data
+                                }
+                            }.bind(this))
+
+                            $http.post("getData", {
+                                type: "category",
+                                id: this.selectGroup.series.default_value._id
+                            }).then(function(response) {
+                                this.selectGroup.category = {
+                                    data: response.data
+                                }
+                            }.bind(this))
+                        }
+                    },
+                    init: function() {
+                        $http.post("getData", {
+                            type: "series"
+                        }).then(function(response) {
+                            this.selectGroup.series = {
+                                data: response.data
+                            }
+
+                        }.bind(this))
+                    },
+                    search: function(_newSearch) {
+
+                        if (typeof(_newSearch) != "undefined") {
+                            this.currentPage = 0;
+                            this.totalPageCount = 0;
+                            this.totalItemCount = 0;
+                        }
+
+                        var searchQuery = {
+                            type: "search",
+                            pageshow: this.pageshow,
+                            currentPage: this.currentPage
+                        }
+
+                        for (var key in this.selectGroup) {
+                            searchQuery[key] = this.selectGroup[key].selected_value = (this.selectGroup[key].default_value == null) ? null : this.selectGroup[key].default_value._id;
+
+                        }
+
+                        searchQuery.keyword = this.keyword.selected_value = (this.keyword.default_value == "") ? null : this.keyword.default_value;
+
+                        $http.post("getData", searchQuery).then(function(response) {
+                            this.returnArmy = response.data.data;
+                            this.totalItemCount = response.data.count;
+                            this.totalPageCount = Math.floor(response.data.count / this.pageshow);
+                            this.status_avg = response.data.status_avg
+
+
+                            if (response.data.count % this.pageshow > 0) {
+                                this.totalPageCount++;
+                            }
+
+
+                        }.bind(this))
+
+
+                    },
+                    prev: function() {
+                        if (this.currentPage > 0) {
+                            this.currentPage--;
+                            this.search();
+                        }
+
+
+                    },
+                    next: function() {
+                        if (this.currentPage < this.totalPageCount - 1) {
+                            this.currentPage++;
+                            this.search();
+                        }
+                    }
+                }
+            }
         }
 
     }
@@ -169,11 +166,8 @@ define(['d3', 'd3_radar'], function(d3, radar) {
 
                         case "multiple_select":
 
-
                             var _i = this.find('i');
                             if (!this.hasClass('hasSelected')) {
-
-
 
                                 if (scope.itemSelect.selected.indexOf(element.attr('_id')) == -1) {
                                     scope.itemSelect.selected.push(element.attr('_id'));
@@ -201,7 +195,7 @@ define(['d3', 'd3_radar'], function(d3, radar) {
                             }
 
                             scope.itemSelect.combineSelectToreturnArmy();
-                            scope.$apply()
+                            scope.$apply();
                             break;
 
                         case "detail":
@@ -216,39 +210,37 @@ define(['d3', 'd3_radar'], function(d3, radar) {
 
 
                                         var test = {
-                                            className: 'germanyss', // optional can be used for styling
+                                            className: 'hide', // optional can be used for styling
                                             axes: [{
                                                 axis: "SPD",
-                                                value: scope.itemSearch.status_avg.spd*10,
+                                                value: scope.itemSearch.status_avg.spd * 10,
                                                 yOffset: -10
                                             }, {
                                                 axis: "STR",
-                                                value: scope.itemSearch.status_avg.str*10,
+                                                value: scope.itemSearch.status_avg.str * 10,
                                                 yOffset: -10,
                                                 xOffset: -10
                                             }, {
                                                 axis: "MAT",
-                                                value: scope.itemSearch.status_avg.mat*10,
+                                                value: scope.itemSearch.status_avg.mat * 10,
                                                 yOffset: 10,
                                                 xOffset: -10
                                             }, {
                                                 axis: "RAT",
-                                                value: scope.itemSearch.status_avg.rat*10,
+                                                value: scope.itemSearch.status_avg.rat * 10,
                                                 yOffset: 10
                                             }, {
                                                 axis: "DEF",
-                                                value: scope.itemSearch.status_avg.def*10,
+                                                value: scope.itemSearch.status_avg.def * 10,
                                                 yOffset: 10,
                                                 xOffset: 10
                                             }, {
                                                 axis: "ARM",
-                                                value: scope.itemSearch.status_avg.arm*10,
+                                                value: scope.itemSearch.status_avg.arm * 10,
                                                 yOffset: -10,
                                                 xOffset: 10
                                             }]
                                         }
-
-
 
                                         var _data = [];
 
@@ -268,14 +260,8 @@ define(['d3', 'd3_radar'], function(d3, radar) {
                             }
 
                             break;
-
                     }
-
-
-
                 }.bind(_r))
-
-
             }
         }
     }
@@ -302,46 +288,42 @@ define(['d3', 'd3_radar'], function(d3, radar) {
 
     function radar() {
 
-
-
         var _data = []
 
         var _orignal_data = {
             className: 'germany', // optional can be used for styling
             axes: [{
                 axis: "SPD",
-                value: 1,
+                value: 0,
                 yOffset: -10
             }, {
                 axis: "STR",
-                value: 1,
+                value: 0,
                 yOffset: -10,
                 xOffset: -10
             }, {
                 axis: "MAT",
-                value: 1,
+                value: 0,
                 yOffset: 10,
                 xOffset: -10
             }, {
                 axis: "RAT",
-                value: 1,
+                value: 0,
                 yOffset: 10
             }, {
                 axis: "DEF",
-                value: 1,
+                value: 0,
                 yOffset: 10,
                 xOffset: 10
             }, {
                 axis: "ARM",
-                value: 1,
+                value: 0,
                 yOffset: -10,
                 xOffset: 10
             }]
         }
 
         _data.push(_orignal_data);
-
-
 
         var radar_chart = {
             data: _data,
@@ -354,7 +336,7 @@ define(['d3', 'd3_radar'], function(d3, radar) {
                 RadarChart.draw(this.target, this.data);
             },
             transferData: function(_data) {
-               
+
                 var _to = angular.copy(this.orignal_data);
 
                 for (var j = 0; j < _to.axes.length; j++) {
@@ -365,12 +347,9 @@ define(['d3', 'd3_radar'], function(d3, radar) {
                         }
                     }
                 }
-
                 return _to;
-
             }
         }
-
 
         return {
             restrict: 'A',
