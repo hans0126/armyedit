@@ -92,6 +92,9 @@ define(function(require) {
                     this.totalItemCount = response.data.count;
                     this.totalPageCount = Math.floor(response.data.count / this.pageshow);
                     this.status_avg = response.data.status_avg
+
+
+
                     this.scope.searchReturn = response.data.data;
 
                     if (response.data.count % this.pageshow > 0) {
@@ -168,14 +171,29 @@ define(function(require) {
             currentIndex: 0,
             orignal_data: _orignal_data,
             target: null,
+            sample_data: null,
             render: function(target) {
+                var _sData = this.transferData(this.sample_data, true);
+                if (_sData) {
+                    this.data.push(_sData);
+                }
                 RadarChart.defaultConfig.w = 300;
                 RadarChart.defaultConfig.h = 300;
                 RadarChart.draw(target, this.data);
             },
-            transferData: function(_data) {
+            transferData: function(_data, _sample) {
 
                 var _to = angular.copy(this.orignal_data);
+
+                if (typeof(_sample) == "undefined") {
+                    _to.className = "show";
+                } else {
+                    if (this.sample_data == null) {
+                        return false;
+                    }
+                    _to.className = "hide";
+                }
+
 
                 for (var j = 0; j < _to.axes.length; j++) {
                     for (var key in _data) {
@@ -185,6 +203,14 @@ define(function(require) {
                         }
                     }
                 }
+
+                if (typeof(_sample) == "undefined") {
+                    _to.className = "show";
+                } else {
+                    _to.className = "hide";
+                }
+
+
                 return _to;
             }
         }
@@ -195,87 +221,84 @@ define(function(require) {
 
     })
 
+    app.factory('editCtrl', function() {
+        var editCtrl = {
+            edit: false,
+            numShow: "show_inline",
+            inputShow: "hide",
+            saveBtnShow: "hide",
+            editBtnText: "Edit",
+            currentStatus: {},
+            getStatusValue: function(_data) {
+                for (var key in _data) {
 
-    app.factory('itemSelect', function() {
-            //console.log( $scope.itemSearch);
-
-            var _obj = {
-
-                onSelect: function(scope, element) {
-
-
-                    for (var i = 0; i < scope.itemSearch.returnArmy.length; i++) {
-                        if (scope.itemSearch.returnArmy[i]._id == element.attr('_id')) {
-                            console.log( scope);
-                            scope.currentProduct = scope.itemSearch.returnArmy[i];
-                           
-                        // console.log(scope.currentSelectedUnit);
-
-                        /*
-                        scope.$parent.currentSelectedUnit = scope.itemSearch.returnArmy[i];
-
-                        if (typeof(scope.itemSearch.returnArmy[i].status) != "undefined") {
-
-                            var test = {
-                                className: 'hide', // optional can be used for styling
-                                axes: [{
-                                    axis: "SPD",
-                                    value: scope.itemSearch.status_avg.spd * 10,
-                                    yOffset: -10
-                                }, {
-                                    axis: "STR",
-                                    value: scope.itemSearch.status_avg.str * 10,
-                                    yOffset: -10,
-                                    xOffset: -10
-                                }, {
-                                    axis: "MAT",
-                                    value: scope.itemSearch.status_avg.mat * 10,
-                                    yOffset: 10,
-                                    xOffset: -10
-                                }, {
-                                    axis: "RAT",
-                                    value: scope.itemSearch.status_avg.rat * 10,
-                                    yOffset: 10
-                                }, {
-                                    axis: "DEF",
-                                    value: scope.itemSearch.status_avg.def * 10,
-                                    yOffset: 10,
-                                    xOffset: 10
-                                }, {
-                                    axis: "ARM",
-                                    value: scope.itemSearch.status_avg.arm * 10,
-                                    yOffset: -10,
-                                    xOffset: 10
-                                }]
-                            }
-
-                            var _data = [];
-
-
-                            _data.push(scope.radar.transferData(scope.itemSearch.returnArmy[i].status));
-                            _data.push(test);
-                            scope.radar.data = _data;
-
-                            scope.radar.render();
-
-                        }
-
-                        scope.$apply();*/
-                           // scope.$apply();  
-                        break;
-                    }
+                    this.currentStatus[key] = _data[key];
                 }
+            },
+            editMode: function(va) {
+                if (va) {
+                    this.edit = true;
+                    this.numShow = "hide";
+                    this.inputShow = "show_inline";
+                    this.editBtnText = "Cancel";
+                    this.saveBtnShow = "show_inline";
+                } else {
+                    this.edit = false;
+                    this.numShow = "show_inline";
+                    this.inputShow = "hide";
+                    this.editBtnText = "Edit";
+                    this.saveBtnShow = "hide";
+                    this.currentStatus = {};
+                }
+            },
+            editStatus: function(status) {
+
+                if (this.edit == false) {
+                    this.getStatusValue(status);
+                    this.editMode(true);
+                } else {
+                    this.editMode(false);
+                }
+            },
+            saveStatus: function() {
+                console.log($http);
+                // console.log(scope.currentSelectedUnit._id); 
+               /* if (typeof(scope.currentSelectedUnit._id) == "undefined") {
+                    return false;
+                }
+
+                scope.editCtrl.editMode(false);
+
+                scope.currentSelectedUnit.status = scope.editCtrl.currentStatus;
+
+                var _data = {
+                    id: scope.currentSelectedUnit._id,
+                    data: scope.editCtrl.currentStatus,
+                    type: "save_status"
+                }
+
+                $http.post("getData", _data).then(function(response) {
+
+                    var _d = [];
+
+                    _d.push(scope.radar.transferData(scope.currentSelectedUnit.status));
+
+                    scope.radar.data = _d;
+
+                    scope.radar.render();
+
+                }.bind(this))*/
             }
 
         }
 
+        return editCtrl;
 
-
-
-
-        return _obj
 
     })
+
+
+
 
 
 

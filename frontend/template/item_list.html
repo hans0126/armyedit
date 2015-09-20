@@ -12,8 +12,8 @@
     <li class="pagination-last"><a ng-click="itemSearch.next()">Next</a></li>
 </ul>
 <ul id="product_list" class="row">
-    <li class='col-xs-4 {{itemSelect.selectClass}}' ng-repeat='value in itemSearch.returnArmy' >
-        <div class=' imgArea  {{value.hasSelect}}' item-select  _id='{{value._id}}'>
+    <li class='col-xs-4 {{itemSelect.selectClass}}' ng-repeat='value in itemSearch.returnArmy'>
+        <div class=' imgArea  {{value.hasSelect}}' ng-click="getThisItem(value._id)">
             <img ng-src='images/army/thumb/{{value.image_name}}' imageonload>
             <i class='fa {{value.icon}} fa-2x'></i>
         </div>

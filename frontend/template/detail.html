@@ -25,7 +25,7 @@
     </div>
 
     <div class="form-group form-inline">
-        <button ng-click="editStatus();" class="btn btn-primary">{{editCtrl.editBtnText}}</button>
+        <button ng-click="editCtrl.editStatus(currentProduct.status);" class="btn btn-primary">{{editCtrl.editBtnText}}</button>
         <button ng-click="saveStatus();" class="btn btn-primary {{editCtrl.saveBtnShow}}">Save</button>
     </div>
     <p class="text-success">Save complete</p>

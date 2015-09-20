@@ -79,6 +79,7 @@ getArmyList.prototype.getData = function(_field) {
                var status_avg = db.collection('status_avg');
 
                status_avg.find({},{status:1}).toArray(function(err,re2){
+               
                   this.emit("ok", {data:re,count:count,status_avg:re2[0].status});
                }.bind(this));
              

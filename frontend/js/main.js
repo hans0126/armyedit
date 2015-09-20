@@ -7,7 +7,7 @@ requirejs.config({
         angularRoute: 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular-route.min',
         angularAMD :'http://cdn.jsdelivr.net/angular.amd/0.2/angularAMD.min',
         directive: 'app/directive',          
-        d3: 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min',
+        d3: 'lib/d3.min',
         d3_radar: 'lib/radar-chart-d3-master/src/radar-chart.min',
         app: 'apps/module/main_module',
         main_app: 'apps/main_app'
