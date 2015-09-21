@@ -44,6 +44,7 @@
         width: 100%;
         display: block;
         margin-bottom: 0.5em;
+        cursor: pointer;
     }
     h4 {
         //   width: 100%;
@@ -112,5 +113,10 @@ button > .fa {
     >ul{
         width: 1024px;
         padding: 1em 0;
+        > li{
+            float:left;
+            margin-right: 10px;
+        }
     }
+    margin-bottom: 20px;
 }

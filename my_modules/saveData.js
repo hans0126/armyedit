@@ -20,6 +20,7 @@ saveData.prototype.saveSingle = function(_field) {
 
         products.update({_id:ObjectID(_field.id)},{$set:_d},function(err,re){
             this.emit("save ok");
+       
         }.bind(this));
       
     }.bind(this));

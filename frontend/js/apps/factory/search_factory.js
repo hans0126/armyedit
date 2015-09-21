@@ -127,87 +127,74 @@ define(function(require) {
 
     })
 
-    app.factory('radar', function() {
-
-        var _data = []
+    app.factory('radar', function() {       
 
         var _orignal_data = {
             className: 'hide', // optional can be used for styling
             axes: [{
                 axis: "SPD",
-                value: 1,
+                value: 100,
                 yOffset: -10
             }, {
                 axis: "STR",
-                value: 1,
+                value: 100,
                 yOffset: -10,
                 xOffset: -10
             }, {
                 axis: "MAT",
-                value: 1,
+                value: 100,
                 yOffset: 10,
                 xOffset: -10
             }, {
                 axis: "RAT",
-                value: 1,
+                value: 100,
                 yOffset: 10
             }, {
                 axis: "DEF",
-                value: 1,
+                value: 100,
                 yOffset: 10,
                 xOffset: 10
             }, {
                 axis: "ARM",
-                value: 1,
+                value: 100,
                 yOffset: -10,
                 xOffset: 10
             }]
         }
-
-        _data.push(_orignal_data);
-
+ 
         var radarTemp = {
-            data: _data,
+            data: [],
             currentIndex: 0,
             orignal_data: _orignal_data,
             target: null,
             sample_data: null,
             render: function(target) {
-                var _sData = this.transferData(this.sample_data, true);
-                if (_sData) {
-                    this.data.push(_sData);
-                }
+
+                this.data.push(this.orignal_data);
+
                 RadarChart.defaultConfig.w = 300;
                 RadarChart.defaultConfig.h = 300;
                 RadarChart.draw(target, this.data);
             },
-            transferData: function(_data, _sample) {
+            transferData: function(_data,_avg ,_sample) {
 
                 var _to = angular.copy(this.orignal_data);
 
                 if (typeof(_sample) == "undefined") {
                     _to.className = "show";
                 } else {
-                    if (this.sample_data == null) {
-                        return false;
-                    }
                     _to.className = "hide";
                 }
-
 
                 for (var j = 0; j < _to.axes.length; j++) {
                     for (var key in _data) {
+                        //console.log(_avg);
+
                         if (_to.axes[j].axis == key.toUpperCase()) {
-                            _to.axes[j].value = _data[key];
+                            _to.axes[j].value = _data[key]*_avg[key];
                             break;
                         }
                     }
-                }
-
-                if (typeof(_sample) == "undefined") {
-                    _to.className = "show";
-                } else {
-                    _to.className = "hide";
                 }
 
 
@@ -222,7 +209,10 @@ define(function(require) {
     })
 
     app.factory('editCtrl', function() {
+
+
         var editCtrl = {
+            http: null,
             edit: false,
             numShow: "show_inline",
             inputShow: "hide",
@@ -259,35 +249,6 @@ define(function(require) {
                 } else {
                     this.editMode(false);
                 }
-            },
-            saveStatus: function() {
-                console.log($http);
-                // console.log(scope.currentSelectedUnit._id); 
-               /* if (typeof(scope.currentSelectedUnit._id) == "undefined") {
-                    return false;
-                }
-
-                scope.editCtrl.editMode(false);
-
-                scope.currentSelectedUnit.status = scope.editCtrl.currentStatus;
-
-                var _data = {
-                    id: scope.currentSelectedUnit._id,
-                    data: scope.editCtrl.currentStatus,
-                    type: "save_status"
-                }
-
-                $http.post("getData", _data).then(function(response) {
-
-                    var _d = [];
-
-                    _d.push(scope.radar.transferData(scope.currentSelectedUnit.status));
-
-                    scope.radar.data = _d;
-
-                    scope.radar.render();
-
-                }.bind(this))*/
             }
 
         }

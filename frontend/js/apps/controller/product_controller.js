@@ -14,7 +14,7 @@ define(function(require) {
         $scope.itemSearch.scope = $scope;
         $scope.itemSearch.init();
 
-
+        //edit
         $scope.editCtrl = editCtrl;
 
 
@@ -26,13 +26,9 @@ define(function(require) {
 
         $scope.getThisItem = function(id) {
             for (var i = 0; i < $scope.itemSearch.returnArmy.length; i++) {
-
-
-
                 if ($scope.itemSearch.returnArmy[i]._id == id) {
 
                     if ($scope.currentProduct != null) {
-
                         if ($scope.currentProduct._id == id) {
                             return false;
                         }
@@ -48,15 +44,39 @@ define(function(require) {
                     $scope.radar.sample_data = $scope.itemSearch.status_avg;
                     $scope.radar.data = [];
                     if (typeof($scope.currentProduct.status) != "undefined") {
-                        $scope.radar.data.push($scope.radar.transferData($scope.currentProduct.status))
+                        $scope.radar.data.push($scope.radar.transferData($scope.currentProduct.status, $scope.status_data.simple_data))
                     }
                     $scope.radar.render($scope.radarElement);
-
-
-
                 }
             }
         }
+
+        //save status
+
+        $scope.saveStatus = function() {                       
+
+            $scope.currentProduct.status = $scope.editCtrl.currentStatus;
+
+            var _data = {
+                id: $scope.currentProduct._id,
+                data: $scope.editCtrl.currentStatus,
+                type: "save_status"
+            }
+
+            $http.post("getData", _data).then(function(response) {
+
+                $scope.radar.data = [];
+
+                $scope.radar.data.push($scope.radar.transferData($scope.editCtrl.currentStatus, $scope.status_data.simple_data))
+
+                $scope.radar.render($scope.radarElement);
+
+                $scope.editCtrl.editMode(false);              
+
+            })
+
+        }
+
     })
 
 

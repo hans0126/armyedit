@@ -15,17 +15,22 @@
     <link rel="stylesheet" href="js/lib/radar-chart-d3-master/src/radar-chart.css">
 </head>
 
-<body>
+<body  ng-controller = "m">
     <div id="navi">
         <ul class="center-block">
-            <li> <button class="btn btn-default">Product</button>  </li>
+            <li>
+                <button class="btn btn-default" ng-click="go('/')">Product</button>
+            </li>
+            <li>
+                <button class="btn btn-default"  ng-click="go('/db_data')">Db data</button>
+            </li>
+
+            <br clear="all">
         </ul>
     </div>
     <div class="center-block container-fluid" id="wrap">
         <div ng-view></div>
     </div>
-
-   
 </body>
 
 </html>

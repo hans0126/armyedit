@@ -96,6 +96,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   width: 100%;
   display: block;
   margin-bottom: 0.5em;
+  cursor: pointer;
 }
 #product_list h4 {
   height: 2em;
@@ -160,8 +161,13 @@ button > .fa {
   background-image: -moz-linear-gradient(#ffffff, #cccccc, #aaaaaa);
   background-image: -webkit-linear-gradient(#ffffff, #cccccc, #aaaaaa);
   background-image: linear-gradient(#ffffff, #cccccc, #aaaaaa);
+  margin-bottom: 20px;
 }
 #navi > ul {
   width: 1024px;
   padding: 1em 0;
+}
+#navi > ul > li {
+  float: left;
+  margin-right: 10px;
 }

@@ -100,8 +100,10 @@ app.post('/getData', function(req, res) {
         case "save_status":
             save.saveSingle(req.body);
 
-            save.on("save ok",function(){              
-                res.send(JSON.stringify({result:"ok"}),200)
+            save.on("save ok", function() {
+                res.send(JSON.stringify({
+                    result: "ok"
+                }), 200)
             })
 
 
@@ -110,6 +112,44 @@ app.post('/getData', function(req, res) {
     }
 
 });
+
+app.post('/mapreduce', function(req, res) {
+
+    var reduce_module = require("./my_modules/mapreduce.js");
+
+    var reduce = new reduce_module.reduce();
+
+    //  reduce.status_avg();
+
+    switch (req.body.type) {
+        case "get_status":
+            reduce.get_status();
+            reduce.on('get status data', function(arr) {
+                res.send(arr, 200);
+            })
+
+            break;
+
+        case "update_status":
+            reduce.status_avg();
+            reduce.on("status avg ok", function() {
+                reduce.get_status();
+            })
+            reduce.on('get status data', function(arr) {
+                res.send(arr, 200);
+                console.log("OKOK");
+            })
+
+
+
+
+            break;
+    }
+
+
+
+    // res.send("a", 200);
+})
 
 
 
