@@ -34,66 +34,77 @@ define(function(require) {
                 default_value: "",
                 selected_value: null
             },
-            seriesSelect: function($http) {
+            seriesSelect: function(category) {            
 
-                if (this.selectGroup.series.default_value != null) {
-                    this.http.post("getData", {
-                        type: "faction",
-                        id: this.selectGroup.series.default_value._id
-                    }).then(function(response) {
-                        this.selectGroup.faction = {
-                            data: response.data
-                        }
-                    }.bind(this))
+                var _faction = [];
 
-                    this.http.post("getData", {
-                        type: "category",
-                        id: this.selectGroup.series.default_value._id
-                    }).then(function(response) {
-                        this.selectGroup.category = {
-                            data: response.data
-                        }
-                    }.bind(this))
+                for (var i = 0; i < category.faction.length; i++) {
+                    if (category.faction[i].parent == this.selectGroup.series.default_value._id) {
+                        _faction.push(category.faction[i]);
+                    }
                 }
-            },
-            init: function() {
-                this.http.post("getData", {
-                    type: "series"
-                }).then(function(response) {
-                    this.selectGroup.series = {
-                        data: response.data
+                this.selectGroup.faction = {
+                    data: _faction
+                }
+
+                var _category = [];
+
+                for (var i = 0; i < category.category.length; i++) {
+
+                    for (var j = 0; j < category.category[i].relation.length; j++) {
+
+                        if (category.category[i].relation[j] == this.selectGroup.series.default_value._id) {
+                            _category.push(category.category[i]);
+                            break;
+                        }
                     }
 
-                }.bind(this))
+                }
+
+                this.selectGroup.category = {
+                    data: _category
+                }               
+            },
+            init: function(category) {
+
+                this.selectGroup.series = {
+                    data: category
+                }
             },
             search: function(_newSearch) {
+
+                var searchQuery = {
+                    type: "search",
+                    pageshow: this.pageshow
+                }
 
                 if (typeof(_newSearch) != "undefined") {
                     this.currentPage = 0;
                     this.totalPageCount = 0;
                     this.totalItemCount = 0;
+                    for (var key in this.selectGroup) {
+                        searchQuery[key] = this.selectGroup[key].selected_value = (this.selectGroup[key].default_value == null) ? null : this.selectGroup[key].default_value._id;
+
+                    }
+
+                    searchQuery.keyword = this.keyword.selected_value = (this.keyword.default_value == "") ? null : this.keyword.default_value;
+
+                } else {
+                    for (var key in this.selectGroup) {
+                        searchQuery[key] = this.selectGroup[key].selected_value;
+
+                    }
+
+                    searchQuery.keyword = this.keyword.selected_value;
                 }
 
-                var searchQuery = {
-                    type: "search",
-                    pageshow: this.pageshow,
-                    currentPage: this.currentPage
-                }
-
-                for (var key in this.selectGroup) {
-                    searchQuery[key] = this.selectGroup[key].selected_value = (this.selectGroup[key].default_value == null) ? null : this.selectGroup[key].default_value._id;
-
-                }
-
-                searchQuery.keyword = this.keyword.selected_value = (this.keyword.default_value == "") ? null : this.keyword.default_value;
+                searchQuery["currentPage"] = this.currentPage;
 
                 this.http.post("getData", searchQuery).then(function(response) {
                     this.returnArmy = response.data.data;
                     this.totalItemCount = response.data.count;
                     this.totalPageCount = Math.floor(response.data.count / this.pageshow);
-                    this.status_avg = response.data.status_avg
-
-
+                    this.status_avg = response.data.status_avg;
 
                     this.scope.searchReturn = response.data.data;
 
@@ -105,6 +116,16 @@ define(function(require) {
                 }.bind(this))
 
 
+            },
+            clear: function() {
+                for (var key in this.selectGroup) {
+                    this.selectGroup[key].default_value = null;
+
+                }
+
+                this.keyword = {
+                    default_value: ""
+                }
             },
             prev: function() {
                 if (this.currentPage > 0) {
@@ -127,7 +148,7 @@ define(function(require) {
 
     })
 
-    app.factory('radar', function() {       
+    app.factory('radar', function() {
 
         var _orignal_data = {
             className: 'hide', // optional can be used for styling
@@ -161,7 +182,7 @@ define(function(require) {
                 xOffset: 10
             }]
         }
- 
+
         var radarTemp = {
             data: [],
             currentIndex: 0,
@@ -176,7 +197,7 @@ define(function(require) {
                 RadarChart.defaultConfig.h = 300;
                 RadarChart.draw(target, this.data);
             },
-            transferData: function(_data,_avg ,_sample) {
+            transferData: function(_data, _avg, _sample) {
 
                 var _to = angular.copy(this.orignal_data);
 
@@ -191,7 +212,7 @@ define(function(require) {
                         //console.log(_avg);
 
                         if (_to.axes[j].axis == key.toUpperCase()) {
-                            _to.axes[j].value = _data[key]*_avg[key];
+                            _to.axes[j].value = _data[key] * _avg[key];
                             break;
                         }
                     }
@@ -219,9 +240,9 @@ define(function(require) {
             saveBtnShow: "hide",
             editBtnText: "Edit",
             currentStatus: {},
+            category: [],
             getStatusValue: function(_data) {
                 for (var key in _data) {
-
                     this.currentStatus[key] = _data[key];
                 }
             },
@@ -241,14 +262,34 @@ define(function(require) {
                     this.currentStatus = {};
                 }
             },
-            editStatus: function(status) {
+            editStatus: function(obj, mapping) {
 
                 if (this.edit == false) {
-                    this.getStatusValue(status);
+
+                    this.getStatusValue(obj.status);
+                    // this.mappingCategory(obj.relation, mapping)
+
                     this.editMode(true);
                 } else {
                     this.editMode(false);
                 }
+            },
+            mappingCategory: function(_data, mapping) {
+
+                var _d = [];
+
+                for (var i = 0; i < _data.length; i++) {
+                    if (typeof(mapping[_data[i]]) != "undefined") {
+                        _d.push(mapping[_data[i]]);
+                    }
+                }
+
+                _d.sort(function(a, b) {
+                    return a.sort - b.sort
+                });
+
+                this.category = _d;            
+
             }
 
         }

@@ -1,24 +1,18 @@
-<div>
-    <div class="col-xs-4">
-        <button ng-click="itemSearch.prev()">Prev</button>
-    </div>
-    <div class="col-xs-4">{{itemSearch.currentPage+1}}/{{itemSearch.totalPageCount}}</div>
-    <div class="col-xs-4">
-        <button ng-click="itemSearch.next()">Next</button>
-    </div>
-</div>
+
 <ul class="pagination">
-    <li class="pagination-first"><a href ng-click="itemSearch.prev()">Prev</a></li>
-    <li class="pagination-last"><a ng-click="itemSearch.next()">Next</a></li>
+    <li class=""><a href ng-click="itemSearch.prev()" >Prev</a></li>
+     <li><span>{{itemSearch.currentPage+1}}/{{itemSearch.totalPageCount}}</span></li>
+    <li class=""><a ng-click="itemSearch.next()">Next</a></li>
+   
 </ul>
-<ul id="product_list" class="row">
+<ul id="product_list" class="list-inline">
     <li class='col-xs-4 {{itemSelect.selectClass}}' ng-repeat='value in itemSearch.returnArmy'>
         <div class=' imgArea  {{value.hasSelect}}' ng-click="getThisItem(value._id)">
             <img ng-src='images/army/thumb/{{value.image_name}}' imageonload>
             <i class='fa {{value.icon}} fa-2x'></i>
         </div>
-        <div>
-            <h4>{{value.title}}</h4>
-        </div>
+       
+            <h5>{{value.title}}</h5>
+       
     </li>
 </ul>

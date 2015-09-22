@@ -108,6 +108,17 @@ app.post('/getData', function(req, res) {
 
 
             break;
+            
+        case "getCategory":
+
+            getSelectData.getCategory();
+            getSelectData.on('category get complete', function(re) {
+                res.send(re, 200);
+            })
+
+            break;
+
+
 
     }
 

@@ -12,7 +12,10 @@ define(function(require) {
         $scope.itemSearch = search;
         $scope.itemSearch.http = $http;
         $scope.itemSearch.scope = $scope;
-        $scope.itemSearch.init();
+       
+       $scope.$on("category complete",function(){
+            $scope.itemSearch.init($scope.category.series)
+       })
 
         //edit
         $scope.editCtrl = editCtrl;
@@ -34,10 +37,10 @@ define(function(require) {
                         }
                     }
 
-
-                    $scope.editCtrl.editMode(false);
                     $scope.currentProduct = $scope.itemSearch.returnArmy[i];
-
+                    
+                    $scope.editCtrl.editMode(false);                    
+                    $scope.editCtrl.mappingCategory($scope.currentProduct.relation,$scope.categoryMapping);
 
 
                     //radar

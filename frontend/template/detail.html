@@ -1,5 +1,5 @@
-
 <div detail-status>
+    <h2>{{currentProduct.title}}</h2>
     <div class="form-group form-inline">
         <label for="">SPD:</label>
         <span class="{{editCtrl.numShow}} w80">{{currentProduct.status.spd}}</span>
@@ -11,7 +11,7 @@
         <span class="{{editCtrl.numShow}} w80">{{currentProduct.status.mat}}</span>
         <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.mat">
     </div>
-<hr>
+    <hr>
     <div class="form-group form-inline">
         <label for="">RAT:</label>
         <span class="{{editCtrl.numShow}} w80">{{currentProduct.status.rat}}</span>
@@ -23,9 +23,21 @@
         <span class="{{editCtrl.numShow}} w80">{{currentProduct.status.arm}}</span>
         <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.arm">
     </div>
+    
+    <div>
+        <ul>
+            <li ng-repeat = "val in editCtrl.category">{{val.title}}</li>
+        </ul>
+        
+
+    </div>
+    
+
+
+
 
     <div class="form-group form-inline">
-        <button ng-click="editCtrl.editStatus(currentProduct.status);" class="btn btn-primary">{{editCtrl.editBtnText}}</button>
+        <button ng-click="editCtrl.editStatus(currentProduct);" class="btn btn-primary">{{editCtrl.editBtnText}}</button>
         <button ng-click="saveStatus();" class="btn btn-primary {{editCtrl.saveBtnShow}}">Save</button>
     </div>
     <p class="text-success">Save complete</p>

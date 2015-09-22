@@ -67,22 +67,28 @@ getArmyList.prototype.getData = function(_field) {
     MongoClient.connect(global.dbUrl, function(err, db) {
 
         var _product = db.collection('products');
-        _product.find(_dbq, {relation:0}).sort({
+        _product.find(_dbq).sort({
             "order": 1,
             "title": 1
-        }).skip(_field.pageshow*_field.currentPage).limit(_field.pageshow).toArray(function(err, re) {           
-           
+        }).skip(_field.pageshow * _field.currentPage).limit(_field.pageshow).toArray(function(err, re) {
 
 
-            _product.find(_dbq).count(function(err,count){
-               // this.emit("ok", {data:re,count:count});
-               var status_avg = db.collection('status_avg');
 
-               status_avg.find({},{status:1}).toArray(function(err,re2){
-               
-                  this.emit("ok", {data:re,count:count,status_avg:re2[0].status});
-               }.bind(this));
-             
+            _product.find(_dbq).count(function(err, count) {
+                // this.emit("ok", {data:re,count:count});
+                var status_avg = db.collection('status_avg');
+
+                status_avg.find({}, {
+                    status: 1
+                }).toArray(function(err, re2) {
+
+                    this.emit("ok", {
+                        data: re,
+                        count: count,
+                        status_avg: re2[0].status
+                    });
+                }.bind(this));
+
             }.bind(this))
 
 
@@ -91,6 +97,22 @@ getArmyList.prototype.getData = function(_field) {
     }.bind(this));
 }
 
+
+getSelectData.prototype.getCategory = function() {
+
+    var _self = this;
+
+    MongoClient.connect(global.dbUrl, function(err, db) {
+
+        var category = db.collection('category');
+
+        category.find().toArray(function(err, re) {
+            _self.emit("category get complete", re)
+        })
+
+    })
+
+}
 
 
 module.exports = {
