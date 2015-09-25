@@ -5,8 +5,8 @@ define(function(require) {
     app.directive("radar", function() {
         return {
             link: function(scope, element) {
-                scope.radarElement = element[0];
-                scope.radar.render(element[0]);
+               // scope.radarElement = element[0];
+                //scope.radar.render(element[0]);
             }
         }
     })

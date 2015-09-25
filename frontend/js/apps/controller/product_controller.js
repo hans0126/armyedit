@@ -5,10 +5,10 @@ define(function(require) {
     require('d3_radar');
 
 
-    app.controller("main", function($scope, $http, search, radar, editCtrl) {
+    app.controller("main", ["$scope", "$http", "search", "radar", "editCtrl","statusAvgService",function($scope, $http, search, radar, editCtrl ,statusAvgService) {
 
         //search
-
+      
         $scope.itemSearch = search;
         $scope.itemSearch.http = $http;
         $scope.itemSearch.scope = $scope;
@@ -47,7 +47,7 @@ define(function(require) {
                     $scope.radar.sample_data = $scope.itemSearch.status_avg;
                     $scope.radar.data = [];
                     if (typeof($scope.currentProduct.status) != "undefined") {
-                        $scope.radar.data.push($scope.radar.transferData($scope.currentProduct.status, $scope.status_data.simple_data))
+                        $scope.radar.data.push($scope.radar.transferData($scope.currentProduct.status, statusAvgService.simple_data))
                     }
                     $scope.radar.render($scope.radarElement);
                 }
@@ -80,7 +80,7 @@ define(function(require) {
 
         }
 
-    })
+    }])
 
 
 

@@ -15,14 +15,14 @@
     <link rel="stylesheet" href="js/lib/radar-chart-d3-master/src/radar-chart.css">
 </head>
 
-<body  ng-controller = "m">
+<body  ng-controller = "mainCtrl as mCtrl">
     <div id="navi">
         <ul class="center-block list-inline">
             <li>
-                <button class="btn btn-default" ng-click="go('/')">Product</button>
+                <button class="btn btn-default" ng-click="mCtrl.go('/')">Product</button>
             </li>
             <li>
-                <button class="btn btn-default"  ng-click="go('/db_data')">Db data</button>
+                <button class="btn btn-default"  ng-click="mCtrl.go('/db_data')">Db data</button>
             </li>
 
             <br clear="all">

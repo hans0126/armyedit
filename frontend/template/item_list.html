@@ -1,12 +1,11 @@
-
 <ul class="pagination">
-    <li class=""><a href ng-click="itemSearch.prev()" >Prev</a></li>
-     <li><span>{{itemSearch.currentPage+1}}/{{itemSearch.totalPageCount}}</span></li>
-    <li class=""><a ng-click="itemSearch.next()">Next</a></li>
+    <li class=""><a href ng-click="product.search.prev()" >Prev</a></li>
+     <li><span>{{product.search.currentPage+1}}/{{product.search.totalPageCount}}</span></li>
+    <li class=""><a ng-click="product.search.next()">Next</a></li>
    
 </ul>
 <ul id="product_list" class="list-inline">
-    <li class='col-xs-4 {{itemSelect.selectClass}}' ng-repeat='value in itemSearch.returnArmy'>
+    <li class='col-xs-4 {{product.search.selectClass}}' ng-repeat='value in product.search.returnArmy'>
         <div class=' imgArea  {{value.hasSelect}}' ng-click="getThisItem(value._id)">
             <img ng-src='images/army/thumb/{{value.image_name}}' imageonload>
             <i class='fa {{value.icon}} fa-2x'></i>

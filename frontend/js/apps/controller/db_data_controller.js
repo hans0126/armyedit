@@ -4,11 +4,13 @@ define(function(require) {
 
 
 
-    app.controller("db_data", function($scope, $http) {
+    app.controller("db_data", ["$scope", "$http", "statusAvgService",function($scope, $http,statusAvgService) {
 
+        var _self = this;
 
-
-
+        _self.statusAvg = statusAvgService;
+    
+        /*
         $scope.status_update = function() {
             $http.post("mapreduce", {
                 type: "update_status"
@@ -17,10 +19,10 @@ define(function(require) {
                 $scope.status_data.dataTranslate();
             })
 
-        }
+        }*/
 
 
-    })
+    }])
 
 
 

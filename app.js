@@ -108,7 +108,7 @@ app.post('/getData', function(req, res) {
 
 
             break;
-            
+
         case "getCategory":
 
             getSelectData.getCategory();
@@ -148,11 +148,8 @@ app.post('/mapreduce', function(req, res) {
             })
             reduce.on('get status data', function(arr) {
                 res.send(arr, 200);
-                console.log("OKOK");
+                console.log("OK");
             })
-
-
-
 
             break;
     }

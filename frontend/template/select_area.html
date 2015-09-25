@@ -1,24 +1,28 @@
+
 <div class="form-group">
-    <select ng-model="itemSearch.selectGroup.series.default_value" ng-change="itemSearch.seriesSelect(category)" ng-options="sel.title for sel in itemSearch.selectGroup.series.data track by sel._id" class="form-control">
-        <option value="">-series-</option>
-    </select>
+    <div>
+      <select ng-model="product.search.selectGroup.series.default_value" ng-change="product.search.seriesSelect(mCtrl.category.category)" ng-options="sel.title for sel in  mCtrl.category.category.series track by sel._id" class="form-control">
+          <option value="">-series-</option>
+      </select>
+    </div>
 </div>
 <div class="form-group">
-    <select ng-model="itemSearch.selectGroup.faction.default_value" ng-options="sel.title for sel in itemSearch.selectGroup.faction.data track by sel._id" class="form-control">
+    <select ng-model="product.search.selectGroup.faction.default_value" ng-options="sel.title for sel in product.search.selectGroup.faction.data track by sel._id" class="form-control">
         <option value="">-faction-</option>
     </select>
 </div>
 <div class="form-group">
-    <select ng-model="itemSearch.selectGroup.category.default_value" ng-options="sel.title for sel in itemSearch.selectGroup.category.data track by sel._id" class="form-control">
+    <select ng-model="product.search.selectGroup.category.default_value" ng-options="sel.title for sel in product.search.selectGroup.category.data track by sel._id" class="form-control">
         <option value="">-category-</option>
     </select>
 </div>
 <div class="form-group">
-    <input type="text" class="form-control" ng-model="itemSearch.keyword.default_value" placeholder="keyword">
+    <input type="text" class="form-control" ng-model="product.search.keyword.default_value" placeholder="keyword">
 </div>
 <div class="form-group form-inline">
-    <button ng-click="itemSearch.clear()" class="btn btn-primary "></i>clear</button>
-    <button ng-click="itemSearch.search(true)" class="btn btn-primary "><i class="fa fa-search"></i>search</button>
+    <button ng-click="product.search.clear()" class="btn btn-primary ">
+        </i>clear</button>
+    <button ng-click="product.search.search(true)" class="btn btn-primary "><i class="fa fa-search"></i>search</button>
 </div>
 <!--
 <div class="form-group form-inline">
@@ -31,3 +35,4 @@
       <button ng-click="itemSelect.selectTrigger()" ng-disabled="itemSelect.selectDisable" class="btn btn-primary btn-block">{{itemSelect.selectText}}</button>
 </div>
 -->
+

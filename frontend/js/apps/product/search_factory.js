@@ -2,15 +2,16 @@ define(function(require) {
 
     var app = require("app");
 
-    app.factory('search', function() {
+    app.factory('search',['$http', function($http) {
 
-        var itemSearch = {          
+        itemSearch = {
+
+            scope: null,
             pageshow: 9,
             currentPage: 0,
             totalPageCount: 0,
             totalItemCount: 0,
-            returnArmy: [],
-            status_avg: {},
+            returnArmy: [],          
             selectGroup: {
                 series: {
                     data: null,
@@ -33,6 +34,9 @@ define(function(require) {
                 selected_value: null
             },
             seriesSelect: function(category) {
+
+                console.log(this.selectGroup.faction.data);
+
 
                 var _faction = [];
 
@@ -63,12 +67,7 @@ define(function(require) {
                     data: _category
                 }
             },
-            init: function(category) {
-
-                this.selectGroup.series = {
-                    data: category
-                }
-            },
+           
             search: function(_newSearch) {
 
                 var searchQuery = {
@@ -98,13 +97,10 @@ define(function(require) {
 
                 searchQuery["currentPage"] = this.currentPage;
 
-                this.http.post("getData", searchQuery).then(function(response) {
+                $http.post("getData", searchQuery).then(function(response) {
                     this.returnArmy = response.data.data;
                     this.totalItemCount = response.data.count;
-                    this.totalPageCount = Math.floor(response.data.count / this.pageshow);
-                    this.status_avg = response.data.status_avg;
-
-                    this.scope.searchReturn = response.data.data;
+                    this.totalPageCount = Math.floor(response.data.count / this.pageshow);                    
 
                     if (response.data.count % this.pageshow > 0) {
                         this.totalPageCount++;
@@ -112,13 +108,10 @@ define(function(require) {
 
 
                 }.bind(this))
-
-
             },
             clear: function() {
                 for (var key in this.selectGroup) {
                     this.selectGroup[key].default_value = null;
-
                 }
 
                 this.keyword = {
@@ -130,8 +123,6 @@ define(function(require) {
                     this.currentPage--;
                     this.search();
                 }
-
-
             },
             next: function() {
                 if (this.currentPage < this.totalPageCount - 1) {
@@ -142,9 +133,7 @@ define(function(require) {
         }
 
         return itemSearch;
-
-
-    })
+    }])
 
     app.factory('radar', function() {
 
