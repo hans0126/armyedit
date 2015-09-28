@@ -6,7 +6,7 @@
 </ul>
 <ul id="product_list" class="list-inline">
     <li class='col-xs-4 {{product.search.selectClass}}' ng-repeat='value in product.search.returnArmy'>
-        <div class=' imgArea  {{value.hasSelect}}' ng-click="getThisItem(value._id)">
+        <div class=' imgArea  {{value.hasSelect}}' ng-click="product.editCtrl.getThisItem(value)">
             <img ng-src='images/army/thumb/{{value.image_name}}' imageonload>
             <i class='fa {{value.icon}} fa-2x'></i>
         </div>

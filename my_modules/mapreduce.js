@@ -17,73 +17,49 @@ reduce.prototype.status_avg = function(_field) {
         var products = db.collection('products');
         var temp_collection = db.collection('temp_collection');
 
+        //map
+        function _map() {
+            for(var key in this.status){
+                emit(key, this.status[key]);
+            }
 
-        temp_collection.drop(function(err) {
+           // emit(this.status_key, this.status_value);
+        }
+        //reduce
+        function _reduce(_key, _values) {
+            var _max = _values.sort(function(a, b) {
+                return b - a
+            })[0];
 
-            products.distinct("status", {
-                status: {
-                    $exists: true
-                }
-            }, function(err, doc) {
+            var _min = _values.sort(function(a, b) {
+                return a - b
+            })[0];
 
-                var _arr_temp = [];
+            var _avg = Math.floor(100 / _max) // parseInt((100 / _max).toFixed(2));
 
-                for (var i = 0; i < doc.length; i++) {
-                    for (key in doc[i]) {
-                        if (key != "_id") {
-                            _arr_temp.push({
-                                status_key: key,
-                                status_value: doc[i][key]
-                            })
-                        }
-                    }
-                }
+            var _ob = {
+                max: _max,
+                min: _min,
+                avg: _avg
+            }
 
-                temp_collection.insert(_arr_temp, function(err, re) {
+            return _ob;
 
-                    //mapreduce start
-                    //map
-                    function _map() {
-                        emit(this.status_key, this.status_value);
-                    }
-                    //reduce
-                    function _reduce(_key, _values) {
-                        var _max = _values.sort(function(a, b) {
-                            return b - a
-                        })[0];
+        }
+        //finalize
+        var _query = {
+            out: "status_range_value"
+        }
 
-                        var _min = _values.sort(function(a, b) {
-                            return a - b
-                        })[0];
+        products.mapReduce(_map, _reduce, _query, function(err, re) {
+            if (err) throw err;
 
-                        var _avg = Math.floor(100 / _max) // parseInt((100 / _max).toFixed(2));
+            _self.emit("status avg ok");
 
-                        var _ob = {
-                            max: _max,
-                            min: _min,
-                            avg: _avg
-                        }
+            //temp_collection.drop();
 
-                        return _ob;
-
-                    }
-                    //finalize
-                    var _query = {
-                        out: "status_range_value"
-                    }
-
-                    temp_collection.mapReduce(_map, _reduce, _query, function(err, re) {
-                        if (err) throw err;
-
-                        _self.emit("status avg ok");
-
-                        temp_collection.drop();
-
-                    })
-                })
-            })
-        });
-
+        })
+        
     });
 }
 
@@ -95,7 +71,7 @@ reduce.prototype.get_status = function() {
         status_range_value.find().toArray(function(err, re) {
             if (err) throw err;
 
-            _self.emit("get status data",re);
+            _self.emit("get status data", re);
 
         })
     })

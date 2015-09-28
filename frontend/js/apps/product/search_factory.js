@@ -2,7 +2,7 @@ define(function(require) {
 
     var app = require("app");
 
-    app.factory('search',['$http', function($http) {
+    app.factory('search', ['$http', function($http) {
 
         itemSearch = {
 
@@ -11,20 +11,17 @@ define(function(require) {
             currentPage: 0,
             totalPageCount: 0,
             totalItemCount: 0,
-            returnArmy: [],          
+            returnArmy: [],
             selectGroup: {
                 series: {
-                    data: null,
                     default_value: null,
                     selected_value: null
                 },
                 faction: {
-                    data: null,
                     default_value: null,
                     selected_value: null
                 },
                 category: {
-                    data: null,
                     default_value: null,
                     selected_value: null
                 }
@@ -33,41 +30,7 @@ define(function(require) {
                 default_value: "",
                 selected_value: null
             },
-            seriesSelect: function(category) {
 
-                console.log(this.selectGroup.faction.data);
-
-
-                var _faction = [];
-
-                for (var i = 0; i < category.faction.length; i++) {
-                    if (category.faction[i].parent == this.selectGroup.series.default_value._id) {
-                        _faction.push(category.faction[i]);
-                    }
-                }
-                this.selectGroup.faction = {
-                    data: _faction
-                }
-
-                var _category = [];
-
-                for (var i = 0; i < category.category.length; i++) {
-
-                    for (var j = 0; j < category.category[i].relation.length; j++) {
-
-                        if (category.category[i].relation[j] == this.selectGroup.series.default_value._id) {
-                            _category.push(category.category[i]);
-                            break;
-                        }
-                    }
-
-                }
-
-                this.selectGroup.category = {
-                    data: _category
-                }
-            },
-           
             search: function(_newSearch) {
 
                 var searchQuery = {
@@ -100,7 +63,7 @@ define(function(require) {
                 $http.post("getData", searchQuery).then(function(response) {
                     this.returnArmy = response.data.data;
                     this.totalItemCount = response.data.count;
-                    this.totalPageCount = Math.floor(response.data.count / this.pageshow);                    
+                    this.totalPageCount = Math.floor(response.data.count / this.pageshow);
 
                     if (response.data.count % this.pageshow > 0) {
                         this.totalPageCount++;
@@ -134,169 +97,5 @@ define(function(require) {
 
         return itemSearch;
     }])
-
-    app.factory('radar', function() {
-
-        var _orignal_data = {
-            className: 'hide', // optional can be used for styling
-            axes: [{
-                axis: "SPD",
-                value: 100,
-                yOffset: -10
-            }, {
-                axis: "STR",
-                value: 100,
-                yOffset: -10,
-                xOffset: -10
-            }, {
-                axis: "MAT",
-                value: 100,
-                yOffset: 10,
-                xOffset: -10
-            }, {
-                axis: "RAT",
-                value: 100,
-                yOffset: 10
-            }, {
-                axis: "DEF",
-                value: 100,
-                yOffset: 10,
-                xOffset: 10
-            }, {
-                axis: "ARM",
-                value: 100,
-                yOffset: -10,
-                xOffset: 10
-            }]
-        }
-
-        var radarTemp = {
-            data: [],
-            currentIndex: 0,
-            orignal_data: _orignal_data,
-            target: null,
-            sample_data: null,
-            render: function(target) {
-
-                this.data.push(this.orignal_data);
-
-                RadarChart.defaultConfig.w = 300;
-                RadarChart.defaultConfig.h = 300;
-                RadarChart.draw(target, this.data);
-            },
-            transferData: function(_data, _avg, _sample) {
-
-                var _to = angular.copy(this.orignal_data);
-
-                if (typeof(_sample) == "undefined") {
-                    _to.className = "show";
-                } else {
-                    _to.className = "hide";
-                }
-
-                for (var j = 0; j < _to.axes.length; j++) {
-                    for (var key in _data) {
-                        //console.log(_avg);
-
-                        if (_to.axes[j].axis == key.toUpperCase()) {
-                            _to.axes[j].value = _data[key] * _avg[key];
-                            break;
-                        }
-                    }
-                }
-
-
-                return _to;
-            }
-        }
-
-        return radarTemp;
-
-
-
-    })
-
-    app.factory('editCtrl', function() {
-
-
-        var editCtrl = {
-            http: null,
-            edit: false,
-            numShow: "show_inline",
-            inputShow: "hide",
-            saveBtnShow: "hide",
-            editBtnText: "Edit",
-            currentStatus: {},
-            category: [],
-            getStatusValue: function(_data) {
-                for (var key in _data) {
-                    this.currentStatus[key] = _data[key];
-                }
-            },
-            editMode: function(va) {
-                if (va) {
-                    this.edit = true;
-                    this.numShow = "hide";
-                    this.inputShow = "show_inline";
-                    this.editBtnText = "Cancel";
-                    this.saveBtnShow = "show_inline";
-                } else {
-                    this.edit = false;
-                    this.numShow = "show_inline";
-                    this.inputShow = "hide";
-                    this.editBtnText = "Edit";
-                    this.saveBtnShow = "hide";
-                    this.currentStatus = {};
-                }
-            },
-            editStatus: function(obj, mapping) {
-
-                if (this.edit == false) {
-
-                    this.getStatusValue(obj.status);
-                    // this.mappingCategory(obj.relation, mapping)
-
-                    this.editMode(true);
-                } else {
-                    this.editMode(false);
-                }
-            },
-            mappingCategory: function(_data, mapping) {
-
-                var _d = [];
-
-                for (var i = 0; i < _data.length; i++) {
-                    if (typeof(mapping[_data[i]]) != "undefined") {
-                        _d.push(mapping[_data[i]]);
-                    }
-                }
-
-                _d.sort(function(a, b) {
-                    return a.sort - b.sort
-                });
-
-                this.category = _d;
-
-            }
-
-        }
-
-        return editCtrl;
-
-
-    })
-
-    app.factory('getStatusAvg', ['$http', function($http) {
-        return $http.post("mapreduce", {
-            type: "get_status"
-        })
-    }])
-
-   
-
-
-
-
-
 
 })

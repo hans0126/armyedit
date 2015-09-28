@@ -6,42 +6,55 @@ define(function(require) {
 
 
     app.controller("product", [
-        "$scope",      
+        "$scope",
         "search",
-        "radar",
-        "editCtrl",
         "statusAvgService",
         "getCategoryService",
-        function($scope, search, radar, editCtrl, statusAvgService) {
-
-          
+        "productDetailFactory",
+        "radarFactory",
+        function($scope, search, statusAvgService, getCategoryService, productDetailFactory, radarFactory) {
 
             var _self = this;
 
+            var radarElement = document.getElementById("radar");
+
             _self.search = search;
 
-            console.log($scope.category);
+            _self.radar = radarFactory;
+
+            _self.radar.render(radarElement);
+
+            _self.editCtrl = productDetailFactory;
+
+            _self.statusAvgService = statusAvgService;
+
+            
+            //console.log(statusAvgService.simple_data);
+
+           
+
+
 
             //  console.log( _self.search.selectGroup.series);
 
             // _self.search.selectGroup.series.data = getCategoryService.category.series;
 
-             _self.search.selectGroup.series.data = $scope.category
-            
-  /*
-          
-
-            _self.search.selectGroup.series.data = $scope.category.category.series;
-          
-
-            console.log($scope.category.category.series);*/
-
-         
-
-           
 
 
-           
+            /*
+                    
+
+                      _self.search.selectGroup.series.data = $scope.category.category.series;
+                    
+
+                      console.log($scope.category.category.series);*/
+
+
+
+
+
+
+
 
 
 
@@ -92,32 +105,7 @@ define(function(require) {
                 }
             }
 
-            //save status
-
-            $scope.saveStatus = function() {
-
-                $scope.currentProduct.status = $scope.editCtrl.currentStatus;
-
-                var _data = {
-                    id: $scope.currentProduct._id,
-                    data: $scope.editCtrl.currentStatus,
-                    type: "save_status"
-                }
-
-                $http.post("getData", _data).then(function(response) {
-
-                    $scope.radar.data = [];
-
-                    $scope.radar.data.push($scope.radar.transferData($scope.editCtrl.currentStatus, $scope.status_data.simple_data))
-
-                    $scope.radar.render($scope.radarElement);
-
-                    $scope.editCtrl.editMode(false);
-
-                })
-
-            }
-
+         
 
             */
 

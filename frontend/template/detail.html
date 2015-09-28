@@ -1,44 +1,44 @@
+{{product.statusAvgService.data}}
 <div detail-status>
     <h2>{{currentProduct.title}}</h2>
-    <div class="form-group form-inline">
-        <label for="">SPD:</label>
-        <span class="{{editCtrl.numShow}} w80">{{currentProduct.status.spd}}</span>
-        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.spd">
-        <label for="">STR:</label>
-        <span class="{{editCtrl.numShow}} w80">{{currentProduct.status.str}}</span>
-        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.str">
-        <label for="">MAT:</label>
-        <span class="{{editCtrl.numShow}} w80">{{currentProduct.status.mat}}</span>
-        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.mat">
-    </div>
-    <hr>
-    <div class="form-group form-inline">
-        <label for="">RAT:</label>
-        <span class="{{editCtrl.numShow}} w80">{{currentProduct.status.rat}}</span>
-        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.rat">
-        <label for="">DEF:</label>
-        <span class="{{editCtrl.numShow}} w80">{{currentProduct.status.def}}</span>
-        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.def">
-        <label for="">ARM:</label>
-        <span class="{{editCtrl.numShow}} w80">{{currentProduct.status.arm}}</span>
-        <input type="number" min="0" class="form-control {{editCtrl.inputShow}} w80" ng-model="editCtrl.currentStatus.arm">
-    </div>
+    <span ng-repeat="value in product.statusAvgService.data">
+        <label for="">{{value._id}}</label>
+        <span class="{{product.editCtrl.numShow}} w80">{{product.editCtrl.currentProduct.status[value._id]}}</span>
+    <input type="number" min="0" class="form-control {{product.editCtrl.inputShow}} w80" ng-model="product.editCtrl.currentStatus.spd">
+    </span>
     
+
+    <span>
+        <label for="">SPD:</label>
+        <span class="{{product.editCtrl.numShow}} w80">{{product.editCtrl.currentProduct.status.spd}}</span>
+    <input type="number" min="0" class="form-control {{product.editCtrl.inputShow}} w80" ng-model="product.editCtrl.currentStatus.spd">
+    </span>
+    <span>
+        <label for="">STR:</label>
+        <span class="{{product.editCtrl.numShow}} w80">{{product.editCtrl.currentProduct.status.str}}</span>
+    <input type="number" min="0" class="form-control {{product.editCtrl.inputShow}} w80" ng-model="product.editCtrl.currentStatus.str">
+    </span>
+    <label for="">MAT:</label>
+    <span class="{{product.editCtrl.numShow}} w80">{{product.editCtrl.currentProduct.status.mat}}</span>
+    <input type="number" min="0" class="form-control {{product.editCtrl.inputShow}} w80" ng-model="product.editCtrl.currentStatus.mat">
+    <hr>
+    <label for="">RAT:</label>
+    <span class="{{product.editCtrl.numShow}} w80">{{product.editCtrl.currentProduct.status.rat}}</span>
+    <input type="number" min="0" class="form-control {{product.editCtrl.inputShow}} w80" ng-model="product.editCtrl.currentStatus.rat">
+    <label for="">DEF:</label>
+    <span class="{{product.editCtrl.numShow}} w80">{{product.editCtrl.currentProduct.status.def}}</span>
+    <input type="number" min="0" class="form-control {{product.editCtrl.inputShow}} w80" ng-model="product.editCtrl.currentStatus.def">
+    <label for="">ARM:</label>
+    <span class="{{product.editCtrl.numShow}} w80">{{product.editCtrl.currentProduct.status.arm}}</span>
+    <input type="number" min="0" class="form-control {{product.editCtrl.inputShow}} w80" ng-model="product.editCtrl.currentStatus.arm">
     <div>
         <ul>
-            <li ng-repeat = "val in editCtrl.category">{{val.title}}</li>
+            <li ng-repeat="val in product.editCtrl.category">{{val.title}}</li>
         </ul>
-        
-
     </div>
-    
-
-
-
-
     <div class="form-group form-inline">
-        <button ng-click="editCtrl.editStatus(currentProduct);" class="btn btn-primary">{{editCtrl.editBtnText}}</button>
-        <button ng-click="saveStatus();" class="btn btn-primary {{editCtrl.saveBtnShow}}">Save</button>
+        <button ng-click="product.editCtrl.editStatus(product.editCtrl.currentProduct);" class="btn btn-primary">{{product.editCtrl.editBtnText}}</button>
+        <button ng-click="product.editCtrl.saveStatus(product.editCtrl.currentProduct);" class="btn btn-primary {{product.editCtrl.saveBtnShow}}">Save</button>
     </div>
     <p class="text-success">Save complete</p>
 </div>
