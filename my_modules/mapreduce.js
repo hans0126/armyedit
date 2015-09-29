@@ -17,16 +17,28 @@ reduce.prototype.status_avg = function(_field) {
         var products = db.collection('products');
         var temp_collection = db.collection('temp_collection');
 
+
+
         //map
         function _map() {
-            for(var key in this.status){
+            for (var key in this.status) {
                 emit(key, this.status[key]);
             }
 
-           // emit(this.status_key, this.status_value);
+            // emit(this.status_key, this.status_value);
         }
         //reduce
         function _reduce(_key, _values) {
+
+            var fieldSort = {
+                spd: 0,
+                str: 1,
+                mat: 2,
+                rat: 3,
+                def: 4,
+                arm: 5
+            }
+
             var _max = _values.sort(function(a, b) {
                 return b - a
             })[0];
@@ -37,10 +49,17 @@ reduce.prototype.status_avg = function(_field) {
 
             var _avg = Math.floor(100 / _max) // parseInt((100 / _max).toFixed(2));
 
+            var sort = 99;
+
+            if (typeof(fieldSort[_key] != "undefined")) {
+                sort = fieldSort[_key];
+            }
+
             var _ob = {
                 max: _max,
                 min: _min,
-                avg: _avg
+                avg: _avg,
+                sort: sort
             }
 
             return _ob;
@@ -59,7 +78,7 @@ reduce.prototype.status_avg = function(_field) {
             //temp_collection.drop();
 
         })
-        
+
     });
 }
 
@@ -68,9 +87,9 @@ reduce.prototype.get_status = function() {
     var _self = this;
     MongoClient.connect(global.dbUrl, function(err, db) {
         var status_range_value = db.collection('status_range_value');
-        status_range_value.find().toArray(function(err, re) {
+        status_range_value.find({},{"value.sort":0}).sort({"value.sort":1}).toArray(function(err, re) {
             if (err) throw err;
-
+         
             _self.emit("get status data", re);
 
         })

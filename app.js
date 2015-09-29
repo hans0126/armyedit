@@ -87,7 +87,8 @@ app.post('/getData', function(req, res) {
                 ],
                 keyword: req.body.keyword,
                 currentPage: req.body.currentPage,
-                pageshow: req.body.pageshow
+                pageshow: req.body.pageshow,
+                keywordLogic:req.body.keywordLogic
             });
 
 

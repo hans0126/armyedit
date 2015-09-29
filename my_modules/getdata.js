@@ -39,6 +39,8 @@ getArmyList.prototype.getData = function(_field) {
     var _keyword = [];
     var _nullCount = 0;
 
+    console.log(_field.keywordLogic);
+
     for (var i = 0; i < _field.field.length; i++) {
         if (_field.field[i] != null) {
             _query.push(ObjectID(_field.field[i]));
@@ -59,9 +61,17 @@ getArmyList.prototype.getData = function(_field) {
             _keyword.push(new RegExp(_k[i], "i"));
         }
 
-        _dbq.title = {
-            $all: _keyword
+        if (_field.keywordLogic == "and") {
+            _dbq.title = {
+                $all: _keyword
+            }
+        } else {
+            _dbq.title = {
+                $in: _keyword
+            }
         }
+
+       
     }
 
     MongoClient.connect(global.dbUrl, function(err, db) {

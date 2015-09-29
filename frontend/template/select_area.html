@@ -1,36 +1,52 @@
-<div class="form-group">
-    <div>
-        <select ng-model="product.search.selectGroup.series.default_value" ng-options="sel.title for sel in mCtrl.category.series" class="form-control">
-            <option value="">-series-</option>
+<div ng-controller = "search_controller as search">
+    <div class="form-group">
+        <div>
+            <select ng-model="search.s.selectGroup.series.default_value" ng-options="sel.title for sel in mCtrl.category.series" class="form-control">
+                <option value="">-series-</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <select ng-model="search.s.selectGroup.faction.default_value" ng-options="sel.title for sel in mCtrl.category.faction | filter: {parent: search.s.selectGroup.series.default_value._id} | orderBy:'order'" class="form-control">
+            <option value="">-faction-</option>
         </select>
     </div>
+    <div class="form-group">
+        <select ng-model="search.s.selectGroup.category.default_value" ng-options="sel.title for sel in mCtrl.category.category  | filter: {relation: search.s.selectGroup.series.default_value._id} | orderBy:'order'" class="form-control">
+            <option value="">-category-</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" ng-model="search.s.keyword.default_value" placeholder="keyword">
+    </div>
+    <div class="form-group">
+        <span>keyword logic disjunction:</span>
+        <label>
+            <input type="radio" ng-model="search.s.keyword.keywordLogic" value="and"> AND
+        </label>
+        <label>
+            <input type="radio" ng-model="search.s.keyword.keywordLogic" value="or"> OR
+        </label>
+    </div>
+    <div class="form-group form-inline">
+        <button ng-click="search.s.search(true)" class="btn btn-primary "><i class="fa fa-search"></i>search</button>
+        <button ng-click="search.s.clear()" class="btn btn-primary ">
+            </i>clear</button>
+    </div>
+    <!-- pager -->
+    <ul class="pagination">
+        <li class=""><a href ng-click="search.s.prev()">Prev</a></li>
+        <li><span>{{search.s.currentPage+1}}/{{search.s.totalPageCount}}</span></li>
+        <li class=""><a ng-click="search.s.next()">Next</a></li>
+    </ul>
+    <!-- list -->
+    <ul id="product_list" class="list-inline">
+        <li class='col-xs-4' ng-repeat='value in search.s.returnArmy'>
+            <div class='imgArea' ng-click="search.s.itemSelect(value)">
+                <img ng-src='images/army/thumb/{{value.image_name}}' imageonload>
+                <i class='fa {{value.icon}} fa-2x'></i>
+            </div>
+            <h5 ng-bind-html="value.title | highlightFilter"></h5>
+        </li>
+    </ul>
 </div>
-<div class="form-group">
-    <select ng-model="product.search.selectGroup.faction.default_value" ng-options="sel.title for sel in mCtrl.category.faction | filter: {parent: product.search.selectGroup.series.default_value._id} | orderBy:'order'" class="form-control">
-        <option value="">-faction-</option>
-    </select>
-</div>
-<div class="form-group">
-    <select ng-model="product.search.selectGroup.category.default_value" ng-options="sel.title for sel in mCtrl.category.category  | filter: {relation: product.search.selectGroup.series.default_value._id} | orderBy:'order'" class="form-control">
-        <option value="">-category-</option>
-    </select>
-</div>
-<div class="form-group">
-    <input type="text" class="form-control" ng-model="product.search.keyword.default_value" placeholder="keyword">
-</div>
-<div class="form-group form-inline">
-    <button ng-click="product.search.clear()" class="btn btn-primary ">
-        </i>clear</button>
-    <button ng-click="product.search.search(true)" class="btn btn-primary "><i class="fa fa-search"></i>search</button>
-</div>
-<!--
-<div class="form-group form-inline">
-     <button ng-click="dataDisplayBtn.changeType('imgList')" ng-disabled="dataDisplayBtn.displayBtn.imgList" class="btn btn-primary">img list</button>
-     <button ng-click="dataDisplayBtn.changeType('dataList')" ng-disabled="dataDisplayBtn.displayBtn.dataList" class="btn btn-primary">data list</button>
-     <br clear="all">
-</div>
-
-<div class="form-group form-inline">
-      <button ng-click="itemSelect.selectTrigger()" ng-disabled="itemSelect.selectDisable" class="btn btn-primary btn-block">{{itemSelect.selectText}}</button>
-</div>
--->

@@ -7,16 +7,17 @@ define(function(require) {
         var _self = this;
         _self.data = []
         _self.simple_data = {}
-        _self.dataTranslate = function(data) {          
+
+        _self.dataTranslate = function(data) {
             _obj = {};
-            
+
             for (var i = 0; i < data.length; i++) {
                 _obj[data[i]._id] = data[i].value;
             }
             _self.simple_data = _obj;
         }
 
-        _self.getData = function() {         
+        _self.getData = function() {
 
             $http.post("mapreduce", {
                 type: "get_status"
@@ -25,10 +26,11 @@ define(function(require) {
                 _self.data = response.data;
 
 
+
             });
         }
 
-         _self.updateData = function() {           
+        _self.updateData = function() {
 
             $http.post("mapreduce", {
                 type: "update_status"
@@ -36,9 +38,11 @@ define(function(require) {
                 _self.dataTranslate(response.data);
                 _self.data = response.data;
 
-               
+
             });
         }
+
+        //_self.fieldSort = ["spd", "str", "mat", "rat", "def", "arm"];
 
     }])
 

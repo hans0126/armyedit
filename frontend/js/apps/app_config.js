@@ -13,7 +13,12 @@ define(function(require) {
             when('/db_data', angularAMD.route({
                 templateUrl: 'template/db_data.html',
                 controller: 'db_data as dbData',
-                controllerUrl: 'js/apps/controller/db_data_controller.js'
+                controllerUrl: 'js/apps/db_data/db_data_controller.js'
+            })).
+             when('/list', angularAMD.route({
+                templateUrl: 'template/list.html',
+                controller: 'list as lists',
+                controllerUrl: 'js/apps/list/list_controller.js'
             })).
             otherwise({
                 redirectTo: '/'

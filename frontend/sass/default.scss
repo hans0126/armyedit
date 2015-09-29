@@ -5,7 +5,7 @@
 
 @import "compass/css3";
 * {
-    box-sizing: border-box;    
+    box-sizing: border-box;
 }
 
 #wrap {
@@ -93,6 +93,7 @@
 
 .w80 {
     width: 100px !important;
+    display: inline-block !important;
 }
 
 button > .fa {
@@ -109,13 +110,22 @@ button > .fa {
 
 #navi {
     @include background-image(linear-gradient(white, #cccccc, #aaaaaa));
-    >ul{
+    >ul {
         width: 1024px;
         padding: 1em 0;
-        > li{
-            float:left;
+        > li {
+            float: left;
             margin-right: 10px;
         }
     }
     margin-bottom: 20px;
+}
+
+.highlightedText {
+    background: yellow;
+}
+
+#popup_search {
+    position: absolute;
+    z-index: 999;
 }

@@ -27,15 +27,15 @@ requirejs.config({
     },
     deps: ['angularRoute',
         'd3_radar',
-        'apps/factory/search_factory',
-        'apps/directive/radar_directive',
-        'apps/controller/radar_controller',
         'apps/init/status-avg_service',
         'apps/init/get-category_service',
         'apps/init/main_controller',
         'apps/product/search_factory',
         'apps/product/product-detail_factory',
         'apps/product/radar_factory',
+        'apps/filter/highlight_filter',
+        'apps/directive/image-onload_directive',
+        'apps/search/search_controller',
         'apps/app_config'
     ]
 });

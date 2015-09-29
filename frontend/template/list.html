@@ -1,0 +1,16 @@
+<div class="row">
+    <div class='col-xs-4' id="popup_search">
+        <div ng-include="'template/select_area.html'" ng-if="lists.searchBtn.open"></div>
+        <button class="btn" ng-click="lists.searchBtn.trigger()">{{lists.searchBtn.text}}</button>
+    </div>
+    <div class='col-xs-12'>
+        <div class='col-xs-6' ng-repeat='val in lists.selected'>
+            <div class='imgArea'>
+                <img ng-src='images/army/thumb/{{val.image_name}}' imageonload>
+            </div>
+            <h5>{{val.title}}</h5>
+			<div radar status="val.status"></div>
+
+        </div>
+    </div>
+</div>

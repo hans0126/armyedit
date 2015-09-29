@@ -5,13 +5,12 @@ define(function(require) {
     app.factory('search', ['$http', function($http) {
 
         itemSearch = {
-
-            scope: null,
             pageshow: 9,
             currentPage: 0,
             totalPageCount: 0,
             totalItemCount: 0,
             returnArmy: [],
+            keywordLogic: "and",
             selectGroup: {
                 series: {
                     default_value: null,
@@ -28,16 +27,18 @@ define(function(require) {
             },
             keyword: {
                 default_value: "",
-                selected_value: null
+                selected_value: null,
+                keywordLogic: "and",
+                keywordLogic_selected: null
             },
 
             search: function(_newSearch) {
-
+               
                 var searchQuery = {
-                    type: "search",
-                    pageshow: this.pageshow
-                }
-
+                        type: "search",
+                        pageshow: this.pageshow
+                    }
+                    // if new search
                 if (typeof(_newSearch) != "undefined") {
                     this.currentPage = 0;
                     this.totalPageCount = 0;
@@ -46,7 +47,7 @@ define(function(require) {
                         searchQuery[key] = this.selectGroup[key].selected_value = (this.selectGroup[key].default_value == null) ? null : this.selectGroup[key].default_value._id;
 
                     }
-
+                    searchQuery.keywordLogic = this.keyword.keywordLogic_selected = this.keyword.keywordLogic
                     searchQuery.keyword = this.keyword.selected_value = (this.keyword.default_value == "") ? null : this.keyword.default_value;
 
                 } else {
@@ -54,9 +55,10 @@ define(function(require) {
                         searchQuery[key] = this.selectGroup[key].selected_value;
 
                     }
-
+                    searchQuery.keywordLogic = this.keyword.keywordLogic_selected;
                     searchQuery.keyword = this.keyword.selected_value;
                 }
+
 
                 searchQuery["currentPage"] = this.currentPage;
 
@@ -69,7 +71,6 @@ define(function(require) {
                         this.totalPageCount++;
                     }
 
-
                 }.bind(this))
             },
             clear: function() {
@@ -77,9 +78,7 @@ define(function(require) {
                     this.selectGroup[key].default_value = null;
                 }
 
-                this.keyword = {
-                    default_value: ""
-                }
+                this.keyword.default_value = "";
             },
             prev: function() {
                 if (this.currentPage > 0) {
@@ -92,7 +91,28 @@ define(function(require) {
                     this.currentPage++;
                     this.search();
                 }
-            }
+            },
+            init: function() {
+                //category select reset
+                for (var key in this.selectGroup) {
+                    for (var key2 in this.selectGroup[key]) {
+                        this.selectGroup[key][key2] = null;
+                    }
+                }
+                //keyword reset
+                this.keyword = {
+                    default_value: "",
+                    selected_value: null,
+                    keywordLogic: "and",
+                    keywordLogic_selected: null
+                }
+                //data reset
+                this.currentPage = 0;
+                this.totalPageCount = 0;
+                this.totalItemCount = 0;
+                this.returnArmy = [];
+            },
+            itemSelect:null
         }
 
         return itemSearch;

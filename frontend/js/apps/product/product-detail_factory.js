@@ -2,12 +2,14 @@ define(function(require) {
 
     var app = require("app");
 
-
     app.factory('productDetailFactory', [
         "$http",
+        "$timeout",
         "radarFactory",
         "statusAvgService",
-        function($http, radarFactory, statusAvgService) {
+        "getCategoryService",
+
+        function($http, $timeout, radarFactory, statusAvgService, getCategoryService) {
 
             var editCtrl = {
                 edit: false,
@@ -16,8 +18,9 @@ define(function(require) {
                 saveBtnShow: "hide",
                 editBtnText: "Edit",
                 currentStatus: {},
-                category: [],
-                currentProduct: {},
+                category: "A",
+                currentProduct: null,
+                msg: false,
                 getStatusValue: function(_data) {
                     for (var key in _data) {
                         this.currentStatus[key] = _data[key];
@@ -26,49 +29,43 @@ define(function(require) {
                 editMode: function(va) {
                     if (va) {
                         this.edit = true;
-                        this.numShow = "hide";
-                        this.inputShow = "show_inline";
                         this.editBtnText = "Cancel";
-                        this.saveBtnShow = "show_inline";
+
                     } else {
                         this.edit = false;
-                        this.numShow = "show_inline";
-                        this.inputShow = "hide";
                         this.editBtnText = "Edit";
-                        this.saveBtnShow = "hide";
                         this.currentStatus = {};
                     }
                 },
                 editStatus: function(obj, mapping) {
 
+                    if (this.currentProduct == null) {
+                        return false;
+                    }
+
                     if (this.edit == false) {
-
                         this.getStatusValue(obj.status);
-                        // this.mappingCategory(obj.relation, mapping)
-
                         this.editMode(true);
                     } else {
                         this.editMode(false);
                     }
                 },
                 mappingCategory: function(_data, mapping) {
-
-                    var _d = [];
+                    var _d = {};
 
                     for (var i = 0; i < _data.length; i++) {
                         if (typeof(mapping[_data[i]]) != "undefined") {
-                            _d.push(mapping[_data[i]]);
+                            //_d.push(mapping[_data[i]]);
+                            _d[mapping[_data[i]].type] = {
+                                title: mapping[_data[i]].title,
+                                sort: mapping[_data[i]].sort
+                            }
                         }
                     }
-
-                    _d.sort(function(a, b) {
-                        return a.sort - b.sort
-                    });
-
-                    this.category = _d;
+               
+                    this.category = _d;              
 
                 },
-
                 saveStatus: function(currentProduct) {
                     var _self = this;
                     // currentProduct.status = this.currentStatus;
@@ -81,53 +78,39 @@ define(function(require) {
 
                     $http.post("getData", _data).then(function(response) {
 
-                        var radar = radarFactory;
-                        var radarElement = document.getElementById("radar");
-
-                        radar.init();
-                        radar.data.push(radar.transferData(_self.currentStatus, statusAvgService.simple_data))
-                        radar.render(radarElement);
-
                         currentProduct.status = _self.currentStatus
                         _self.editMode(false);
+                        _self.renderRadar();
+                        _self.msg = true;
+                        $timeout(function() {
+                            _self.msg = false;
+                        }, 2000)
 
                     })
 
                 },
                 getThisItem: function(_obj) {
-                    var _self = this;
-                    if (_self.currentProduct != null) {
-                        if (_self.currentProduct == _obj) {
+
+                    if (this.currentProduct != null) {
+                        if (this.currentProduct == _obj) {
                             return false;
                         }
-                    }
+                    }                    
 
-                    _self.currentProduct = _obj;
-
-                    _self.editMode(false);
-
+                    this.currentProduct = _obj;
+                    this.mappingCategory(this.currentProduct.relation, getCategoryService.categoryMapping);
+                    this.editMode(false);
+                    this.renderRadar();
+                },
+                renderRadar: function() {
                     var radar = radarFactory;
                     var radarElement = document.getElementById("radar");
-
                     radar.init();
-
-                    radar.data.push(radar.transferData(_self.currentProduct.status, statusAvgService.simple_data))                   
+                    radar.data.push(radar.transferData(this.currentProduct.status, statusAvgService.simple_data))
                     radar.render(radarElement);
-
                 }
-
-
             }
-
             return editCtrl;
-
-
         }
     ])
-
-
-
-
-
-
 })
