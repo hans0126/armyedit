@@ -18,13 +18,12 @@ define(function(require) {
                 productDetailFactory.getThisItem(_obj);
              }
 
-            var radarElement = document.getElementById("radar");    
 
             _self.statusAvgService = statusAvgService;
-
-            var radar = radarFactory;
+            
             var radarElement = document.getElementById("radar");
-            radar.render(radarElement);
+            radarFactory.init();
+            radarFactory.render(radarElement);
 
         }
     ])

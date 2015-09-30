@@ -17,7 +17,10 @@ define(function(require) {
 
             _self.selected = [];
 
+
             search.itemSelect = function(_obj) {
+
+                if(_self.selected.length>=3) return false;
 
                 var _exists = false;
                 for (var i = 0; i < _self.selected.length; i++) {
@@ -29,6 +32,7 @@ define(function(require) {
 
                 if (!_exists) {
                     _self.selected.push(_obj);
+
                 }
             }
 
@@ -49,27 +53,75 @@ define(function(require) {
                 }
             }
 
-            _self.aa = statusAvgService;
 
         }
     ])
 
 
-    app.directive("radar", [function() {
+    app.directive("smallRadar", ["radarFactory", "statusAvgService", function(radarFactory, statusAvgService) {
 
         return {
             restrict: 'A',
-            scope:{
-                status:"=status"
+            scope: {
+                status: "=status"
             },
             link: function($scope, $element, $attr) {
-                 console.log($scope.status);   
-            }
 
+                var _d = [];
+                if (typeof($scope.status) != "undefined") {
+                    _d.push(radarFactory.transferData($scope.status, statusAvgService.simple_data))
+                }
+                _d.push(radarFactory.orignal_data);
+                RadarChart.defaultConfig.w = 150;
+                RadarChart.defaultConfig.h = 150;
+                RadarChart.defaultConfig.circles = false;
+
+                RadarChart.draw($element[0], _d);
+
+
+
+            }
 
         }
 
     }])
+
+    app.directive("compareRadar", ["radarFactory", "statusAvgService", function(radarFactory, statusAvgService) {
+
+        return {
+            restrict: 'A',  
+             scope: {
+                selected: "=selected"
+            },         
+            link: function($scope, $element, $attr) {
+
+               
+
+                $scope.$watch('selected',function(){
+                    console.log($scope.selected)
+                })
+
+                var _d = [];
+               /* if (typeof($scope.status) != "undefined") {
+                    _d.push(radarFactory.transferData($scope.status, statusAvgService.simple_data))
+                }
+*/
+                RadarChart.defaultConfig.w = 350;
+                RadarChart.defaultConfig.h = 350;
+
+                _d.push(radarFactory.orignal_data)
+                RadarChart.draw($element[0], _d);
+
+
+
+            }
+
+        }
+
+    }])
+
+
+
 
 
 

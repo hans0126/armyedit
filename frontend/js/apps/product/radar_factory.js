@@ -43,10 +43,7 @@ define(function(require) {
             orignal_data: _orignal_data,
             target: null,
             sample_data: null,
-            render: function(target) {
-
-                this.data.push(this.orignal_data);
-
+            render: function(target) {               
                 RadarChart.defaultConfig.w = 300;
                 RadarChart.defaultConfig.h = 300;
                 RadarChart.draw(target, this.data);
@@ -76,6 +73,7 @@ define(function(require) {
             },
             init: function() {
                 this.data = [];
+                this.data.push(this.orignal_data);
                // this.data.push(this.orignal_data);
             }
         }

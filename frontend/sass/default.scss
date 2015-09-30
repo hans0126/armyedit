@@ -24,12 +24,45 @@
     }*/
 }
 
-.radar-chart {
-    padding: 20px;
-    width: 350px;
-    height: 350px;
-    margin: 0 auto;
-    display: block;
+#radar {
+    .radar-chart {
+        padding: 20px;
+        width: 350px;
+        height: 350px;
+        margin: 0 auto;
+        display: block;
+    }
+}
+
+#itemCompare {
+
+    h5 {
+        margin-bottom: 2em;
+    }
+    .small_radar {
+        .radar-chart {
+            padding: 10px;
+            width: 170px;
+            height: 170px;
+            margin: 0 auto;
+            display: block;
+            margin-top: -20px;
+        }
+    }
+    #compare_radar {
+        .radar-chart {
+            padding: 20px;
+            width: 370px;
+            height: 400px;
+            margin: 0 auto;
+            display: block;
+           
+        }
+    }
+    .selectedItem {
+        margin-bottom: 2em;
+        overflow: hidden;
+    }
 }
 
 #product_list {

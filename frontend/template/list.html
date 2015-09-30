@@ -3,14 +3,29 @@
         <div ng-include="'template/select_area.html'" ng-if="lists.searchBtn.open"></div>
         <button class="btn" ng-click="lists.searchBtn.trigger()">{{lists.searchBtn.text}}</button>
     </div>
-    <div class='col-xs-12'>
-        <div class='col-xs-6' ng-repeat='val in lists.selected'>
-            <div class='imgArea'>
-                <img ng-src='images/army/thumb/{{val.image_name}}' imageonload>
+    <div class='row' id="itemCompare">
+        <div class="selectedItem">
+            <div class='col-xs-4' ng-repeat='val in lists.selected'>
+                <h5>{{val.title}}</h5>
+                <div class='imgArea pull-left'>
+                    <img ng-src='images/army/thumb/{{val.image_name}}' imageonload>
+                </div>
+                <div small-radar status="val.status" class="pull-left small_radar"></div>
             </div>
-            <h5>{{val.title}}</h5>
-			<div radar status="val.status"></div>
+        </div>
+     <hr style="clear:both">
+        <div id="compareArea">
+            
+             <div class='col-xs-7'>11</div>
+
+             <div class='col-xs-5'>
+                 
+                    <div compare-radar id="compare_radar" selected="lists.selected"></div>
+
+             </div>
 
         </div>
+       
     </div>
+    
 </div>

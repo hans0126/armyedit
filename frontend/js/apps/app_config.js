@@ -15,7 +15,7 @@ define(function(require) {
                 controller: 'db_data as dbData',
                 controllerUrl: 'js/apps/db_data/db_data_controller.js'
             })).
-             when('/list', angularAMD.route({
+             when('/compare', angularAMD.route({
                 templateUrl: 'template/list.html',
                 controller: 'list as lists',
                 controllerUrl: 'js/apps/list/list_controller.js'
