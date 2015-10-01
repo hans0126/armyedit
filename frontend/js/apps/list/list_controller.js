@@ -2,12 +2,12 @@ define(function(require) {
 
     var app = require("app");
 
-    app.controller("list", [
+    app.controller("list", ["$scope",
         "search",
         "statusAvgService",
         "productDetailFactory",
         "radarFactory",
-        function(search, statusAvgService, productDetailFactory, radarFactory) {
+        function($scope, search, statusAvgService, productDetailFactory, radarFactory) {
 
             var _self = this;
 
@@ -16,11 +16,12 @@ define(function(require) {
             _self.search.init();
 
             _self.selected = [];
-
-
+       
+            _self.statusAvg = statusAvgService;
+          
             search.itemSelect = function(_obj) {
 
-                if(_self.selected.length>=3) return false;
+                if (_self.selected.length >= 3) return false;
 
                 var _exists = false;
                 for (var i = 0; i < _self.selected.length; i++) {
@@ -32,7 +33,7 @@ define(function(require) {
 
                 if (!_exists) {
                     _self.selected.push(_obj);
-
+                   
                 }
             }
 
@@ -89,30 +90,29 @@ define(function(require) {
     app.directive("compareRadar", ["radarFactory", "statusAvgService", function(radarFactory, statusAvgService) {
 
         return {
-            restrict: 'A',  
-             scope: {
+            restrict: 'A',
+            scope: {
                 selected: "=selected"
-            },         
+            },
             link: function($scope, $element, $attr) {
 
-               
+                $scope.$watch('selected.length', function() {
+                    RadarChart.defaultConfig.w = 350;
+                    RadarChart.defaultConfig.h = 350;
+                    RadarChart.defaultConfig.circles = true;
 
-                $scope.$watch('selected',function(){
-                    console.log($scope.selected)
+                    var _d = [];
+                    _d.push(radarFactory.orignal_data)
+                    for (var i = 0; i < $scope.selected.length; i++) {
+                        if (typeof($scope.selected[i].status) != "undefined") {
+                            _d.push(radarFactory.transferData($scope.selected[i].status, statusAvgService.simple_data, "chart_style_" + i))
+                        }
+                    }
+
+                    RadarChart.draw($element[0], _d);
+
+
                 })
-
-                var _d = [];
-               /* if (typeof($scope.status) != "undefined") {
-                    _d.push(radarFactory.transferData($scope.status, statusAvgService.simple_data))
-                }
-*/
-                RadarChart.defaultConfig.w = 350;
-                RadarChart.defaultConfig.h = 350;
-
-                _d.push(radarFactory.orignal_data)
-                RadarChart.draw($element[0], _d);
-
-
 
             }
 

@@ -1,0 +1,16 @@
+<!-- pager -->
+<ul class="pagination">
+    <li class=""><a href ng-click="search.s.prev()">Prev</a></li>
+    <li><span>{{search.s.currentPage+1}}/{{search.s.totalPageCount}}</span></li>
+    <li class=""><a ng-click="search.s.next()">Next</a></li>
+</ul>
+<!-- search result -->
+<ul id="product_list" class="list-inline">
+    <li class='col-xs-4' ng-repeat='value in search.s.returnArmy'>
+        <div class='imgArea' ng-click="search.s.itemSelect(value)">
+            <img ng-src='images/army/thumb/{{value.image_name}}' imageonload>
+            <i class='fa {{value.icon}} fa-2x'></i>
+        </div>
+        <h5 ng-bind-html="value.title | highlightFilter"></h5>
+    </li>
+</ul>

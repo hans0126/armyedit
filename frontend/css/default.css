@@ -22,6 +22,10 @@
   }*/
 }
 
+#templateView {
+  position: relative;
+}
+
 #radar .radar-chart {
   padding: 20px;
   width: 350px;
@@ -145,6 +149,16 @@ button > .fa {
 }
 
 #popup_search {
+  width: 100%;
+  padding: 15px;
   position: absolute;
   z-index: 999;
+  background: #FFF;
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
+  border-radius: 25px;
+  -moz-box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
+  -webkit-box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
+  box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
+  min-height: 630px;
 }
