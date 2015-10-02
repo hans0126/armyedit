@@ -170,3 +170,17 @@ button > .fa {
     @include box-shadow(rgba(blue, 0.2) 0 0 25px);
     min-height: 630px;
 }
+
+//cards
+
+#thumb_img {
+    width: 195px;
+    height: 195px;
+    overflow: hidden;
+    position: relative;
+
+    > img {
+        position: absolute;
+    }
+
+}

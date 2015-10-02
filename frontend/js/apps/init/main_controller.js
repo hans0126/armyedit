@@ -11,7 +11,7 @@ define(function(require) {
         function($scope, $location, getCategoryService, statusAvgService) {
 
             var _self = this;
-            var _category = {};
+         
 
             _self.go = function(path) {
                 $location.path(path);
@@ -19,15 +19,13 @@ define(function(require) {
 
             //get status avg
             statusAvgService.getData();
+            //
+            getCategoryService.getData();
 
-            getCategoryService.getData.then(function(response) {
-                _category = getCategoryService.translate(response.data);
+           // _self.category = getCategoryService;
 
-                _self.category = _category.category;
-                _self.categoryMapping = _category.categoryMapping;
+          
 
-               // console.log( _self.category);
-            });
         }
     ])
 

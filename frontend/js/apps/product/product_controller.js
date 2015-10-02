@@ -2,22 +2,22 @@ define(function(require) {
 
     var app = require("app"); 
 
-    app.controller("product", [      
+    app.controller("product", ["$scope",
         "search",
         "statusAvgService",
         "productDetailFactory",
         "radarFactory",
-        function( search, statusAvgService, productDetailFactory, radarFactory) {
+        function($scope, search, statusAvgService, productDetailFactory, radarFactory) {
 
             var _self = this;
 
-             _self.editCtrl = productDetailFactory;
+            _self.editCtrl = productDetailFactory;
+            //
+            $scope.searchType = "productCategory";
 
-             search.itemSelect = function(_obj){
-              
+             search.itemSelect = function(_obj){              
                 productDetailFactory.getThisItem(_obj);
              }
-
 
             _self.statusAvgService = statusAvgService;
             
@@ -27,9 +27,6 @@ define(function(require) {
 
         }
     ])
-
-
-
 
 
 })

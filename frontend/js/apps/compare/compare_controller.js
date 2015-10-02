@@ -2,7 +2,7 @@ define(function(require) {
 
     var app = require("app");
 
-    app.controller("list", ["$scope",
+    app.controller("compare_controller", ["$scope",
         "search",
         "statusAvgService",
         "productDetailFactory",

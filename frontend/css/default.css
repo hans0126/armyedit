@@ -162,3 +162,13 @@ button > .fa {
   box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
   min-height: 630px;
 }
+
+#thumb_img {
+  width: 195px;
+  height: 195px;
+  overflow: hidden;
+  position: relative;
+}
+#thumb_img > img {
+  position: absolute;
+}
