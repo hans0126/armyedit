@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="c2" style="border:1px solid #F00"></canvas>
+    <div class="img2"></div>
+    <button onclick = 'gets()'>get value</button>
+
+
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="thumbEdit.js"></script>
+    <script>
+    /**/
+    var ii = new thumbEdit();
+    ii.init('c2', 'http://privateerpress.com/files/products/31108_Ace_WEB.jpg', $('.img2'));
+
+    function gets() {
+        console.log(ii.output);
+    }
+    </script>
+</body>
+
+</html>
