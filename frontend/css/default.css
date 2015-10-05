@@ -172,3 +172,13 @@ button > .fa {
 #thumb_img > img {
   position: absolute;
 }
+
+.thumbGroup {
+  clear: both;
+  position: relative;
+}
+.thumbGroup > div {
+  position: absolute;
+  bottom: 5px;
+  left: 330px;
+}

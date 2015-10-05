@@ -184,3 +184,18 @@ button > .fa {
     }
 
 }
+
+.thumbGroup {
+   clear: both;
+   position: relative;
+
+    > div{
+        position: absolute;
+        bottom: 5px;
+        left: 330px;
+    }
+
+
+
+
+}

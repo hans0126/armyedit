@@ -8,7 +8,7 @@
 
 <body>
     <canvas id="c2" style="border:1px solid #F00"></canvas>
-    <div class="img2"></div>
+    <div id="img2"></div>
     <button onclick = 'gets()'>get value</button>
 
 
@@ -18,7 +18,7 @@
     <script>
     /**/
     var ii = new thumbEdit();
-    ii.init('c2', 'http://privateerpress.com/files/products/31108_Ace_WEB.jpg', $('.img2'));
+    ii.init('c2', 'http://privateerpress.com/files/products/31108_Ace_WEB.jpg', 'img2');
 
     function gets() {
         console.log(ii.output);
