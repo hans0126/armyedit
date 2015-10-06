@@ -11,14 +11,33 @@ define(function(require) {
 
             var _self = this;
 
+            //  console.log(getCategoryService);
+
+            statusAvgService.cardStatusFields = ["spd", "str", "mat", "rat", "def", "arm", "cmd", "focus"]
+
             $scope.searchType = "productCategory";
 
             _self.c = getCategoryService;
 
-
-
             search.itemSelect = function(_obj) {
-                _self.editCard.getDuplicate(_obj);
+
+                _self.editCard.reset();
+
+                var _editData = _self.editCard.primaryCard;
+
+                for (var i = 0; i < _obj.relation.length; i++) {
+                    _tc = getCategoryService.simpleMapping[_obj.relation[i]]
+                    _editData[_tc['type']] = _tc['_id'];
+                }
+
+                _editData.title = _obj.title;
+
+                _editData.img = _self.thumbImg = "/images/army/normal/" + _obj.image_name
+
+                _editData.parent_id = _obj._id;
+
+
+
             }
 
             _self.editCard = {
@@ -34,41 +53,46 @@ define(function(require) {
                     num: null
                 }],
                 cardTemplate: {
-                    title: "A",
-                    img: {
-                        normal: null,
-                        thumb: null
-                    },
+                    title: null,
+                    img: null,
                     series: null,
                     faction: null,
                     category: null,
-                    pc: null,
+                    pc: {
+                        min: {
+                            cost: null,
+                            people: null
+                        },
+                        max: {
+                            cost: null,
+                            people: null
+                        }
+                    },
                     fa: null,
                     wj: null,
-                    group: null,
                     actor: []
 
                 },
                 actorTemplate: {
-                    idx:0,
-                    title: 1,
+                    title: null,
                     status: {
-                        spd: 2,
-                        str: 3,
-                        mat: 4,
-                        rat: 5,
-                        def: 6,
-                        arm: 7,
+                        spd: null,
+                        str: null,
+                        mat: null,
+                        rat: null,
+                        def: null,
+                        arm: null,
                         cmd: null,
                         focus: null
                     },
                     img: {
-                        thumb: null
+                        thumb: null,
+                        pX: null,
+                        pY: null
                     }
                 },
                 getDuplicate: function(_obj) {
                     this.reset();
-                    // this.primaryCard.title = "A";
                 },
                 primaryCard: null,
                 reset: function() {
@@ -78,29 +102,29 @@ define(function(require) {
                 init: function() {
                     this.reset();
                 },
-                addActor:function(){
-                     this.primaryCard.actor.push(angular.copy(this.actorTemplate));                     
+                addActor: function() {
+                    this.primaryCard.actor.push(angular.copy(this.actorTemplate));
                 },
-                removeActor:function(key){                  
+                removeActor: function(key) {
                     var _actor = this.primaryCard.actor;
-                    for(var i=0;i<_actor.length;i++){
-                        if(_actor[i].$$hashkey==key){
-                           _actor.splice(i,1);
-                           break; 
+                    for (var i = 0; i < _actor.length; i++) {
+                        if (_actor[i].$$hashkey == key) {
+                            _actor.splice(i, 1);
+                            break;
                         }
                     }
+                },
+                save: function() {
+                    console.log(this.primaryCard);
                 }
-
-
             }
-
 
             _self.editCard.init();
 
             _self.statusAvgService = statusAvgService;
 
             _self.thumbShow = false;
-
+            _self.thumbImg = null;
             //$scope.thumbImg = null;
 
         }
@@ -132,7 +156,7 @@ define(function(require) {
                     reader.onload = function(e) {
                         $scope.thumbImg = e.target.result;
                         $scope.$apply();
-                        _t.init($scope.thumb, e.target.result, $scope.thumbs);
+                        //   _t.init($scope.thumb, e.target.result, $scope.thumbs);
                     };
                     reader.readAsDataURL(event.target.files[0]);
                 };
@@ -146,17 +170,54 @@ define(function(require) {
             restrict: 'A',
             scope: {
                 thumbImg: "=thumbImages",
-                idx: "@"
+                idx: "@",
+                currentActor: "=currentActor"
             },
+            transclude: true,
             link: function(scope, element, attr) {
-                var _b = element.find('button');
-                _b.bind('click', function() {
-                    var _t = new thumbEdit();
-                    _t.init('thumb'+scope.idx, scope.thumbImg, 'thumbs'+scope.idx);
+
+                var _thumbEdit = new thumbEdit();
+
+                scope.edit = false;
+                scope.editText = "Edit Thumb";
+                scope.thumbEditReady = false;
+
+                scope.editBtnClick = function() {
+                    if (!scope.thumbImg) {
+                        return false;
+                    }
+
+                    if (!scope.edit) {
+                        scope.editText = "Cancel"
+                        _thumbEdit.init('thumb' + scope.idx, scope.thumbImg, 'thumbs' + scope.idx);
+                        scope.edit = true;
+                        scope.thumbEditReady = true;
+                    } else {
+                        scope.currentActor.img.pX = 0;
+                        scope.currentActor.img.pY = 0;
+                        scope.editText = "Edit thumb"
+                        scope.edit = false;
+                    }
+                }
+
+                scope.apply = function() {
+                    scope.currentActor.img.pX = _thumbEdit.output.x;
+                    scope.currentActor.img.pY = _thumbEdit.output.y;
+                    scope.editText = "Edit thumb"
+                    scope.edit = false;
+                }
+
+                scope.$watch('thumbImg', function(_value) {
+                    if (_value && scope.thumbEditReady) {
+                        _thumbEdit.renew(_value);
+                    }
                 })
 
-                //  console.log(scope.thumbImg)
-            }
+            },
+            template: "<div ng-show='edit' class='editPopup'>" +
+                "<canvas id='thumb{{idx}}'></canvas>" +
+                "</div><div><button class='btn btn-primary' ng-click='editBtnClick()'>{{editText}}</button> " +
+                "<button class='btn btn-primary' ng-if='edit' ng-click='apply()'>Apply</button></div>"
 
         }
     })

@@ -127,9 +127,15 @@
 }
 
 .w80 {
-    width: 100px !important;
+    width: 80px !important;
     display: inline-block !important;
 }
+.shortField {
+    width: 17% !important;
+    display: inline-block !important;
+}
+
+
 
 button > .fa {
     margin-right: 0.4em;
@@ -194,8 +200,21 @@ button > .fa {
         bottom: 5px;
         left: 330px;
     }
+}
 
+.thumbImg {
+    width: 100px;
+    height: 100px;
+    display: block;
+    border: 1px solid #999;
+}
 
-
-
+.thumbEditArea {
+    position: relative;
+    .editPopup {
+        position: absolute;
+        top: -115px;
+        left: -330px;
+        background: #999;
+    }
 }

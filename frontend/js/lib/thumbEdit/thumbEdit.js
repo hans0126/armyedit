@@ -28,7 +28,7 @@
        var actors = [];
 
        var imageObj = new Image();
-       var outputELement = null; //use jquery
+       var outputELement = null; 
 
        _self.loadData = function(_x, _y) {
            var _baseX = _self.canvasWidth / 2 - _self.crop.w / 2;
@@ -65,8 +65,8 @@
                "width": _self.crop.w + "px",
                "height": _self.crop.h + "px",
                "border": "1px solid #333",
-               "backgroundRepeat": "no-repeat",
-               "backgroundImage": "url(" + imageObj.src + ")"
+               "backgroundRepeat": "no-repeat"
+              
            }
 
            for (var key in thumbCss) {
@@ -100,13 +100,27 @@
            })
        }
 
+       _self.renew = function(_imgUrl) {
+           imageObj.src = _imgUrl;
+       }
 
 
        imageObj.onload = function() {
 
+           for (var i = 0; i < actors.length; i++) {
+               if (actors[i]._id == "main") {
+                   actors.splice(i, 1);
+                   break;
+               }
+           }
+           outputELement.style.backgroundImage = "url(" + imageObj.src + ")";
+
+           imgPos.x = imgPos.y = imgPos.x = imgPos.y = 0;
+
            var _img = new actor();
            _img.zIndex = 10;
            _img.ctx = _self.canvasElement.getContext("2d");
+           _img._id = "main"
            _img.draw = function() {
                if (this.renew) {
                    this.clearRect();
@@ -118,7 +132,7 @@
                this.ctx.drawImage(imageObj, imgPos.x, imgPos.y);
            }
 
-           actors.push(_img);
+           actors.push(_img);         
 
            actors.sort(function(a, b) {
                return a.zIndex - b.zIndex;
@@ -142,7 +156,7 @@
                    this.clearRect()
                }
 
-               this.ctx.strokeStyle = "#333333";
+               this.ctx.strokeStyle = "#00FF00";
                this.ctx.lineWidth = 1;
                this.ctx.strokeRect(_posX, _posY, _self.crop.w, _self.crop.h);
            }
@@ -154,6 +168,7 @@
        function actor() {
            this.zIndex = 0;
            this.draw = function() {};
+           this._id = null;
            this.ctx = {};
            this.renew = true;
            this.clearRect = function() {
