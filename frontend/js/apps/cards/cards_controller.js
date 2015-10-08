@@ -28,6 +28,8 @@ define(function(require) {
                     return false;
                 }
 
+                console.log(_obj);  
+
                 selectedObj = _obj;
 
                 if (selectedObj.copy) {
