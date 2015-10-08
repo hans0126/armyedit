@@ -7,6 +7,12 @@
     <!-- data area -->
     <div class='col-xs-8'>
         <div class="row">
+            <div class="col-xs-12 form-group">
+                {{cards.cardStatusText}}
+                <button class="btn btn-primary" ng-click="cards.editCard.createNew()">Create New</button>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-xs-6">
                 <!-- main title -->
                 <div class="form-group">
@@ -22,26 +28,26 @@
                 </div>
                 <!-- faction select -->
                 <div class="form-group">
-                    <select ng-model="cards.editCard.primaryCard.faction" ng-options="sel._id as sel.title for sel in cards.c.faction  | filter: {parent: cards.editCard.primaryCard.series._id} | orderBy:'order'" class="form-control">
+                    <select ng-model="cards.editCard.primaryCard.faction" ng-options="sel._id as sel.title for sel in cards.c.faction  | filter: {parent: cards.editCard.primaryCard.series} | orderBy:'order'" class="form-control">
                         <option value="">-faction-</option>
                     </select>
                 </div>
                 <!-- category select -->
                 <div class="form-group">
-                    <select ng-model="cards.editCard.primaryCard.category" ng-options="sel._id as sel.title for sel in cards.c['cardCategory']  | filter: {relation: cards.editCard.primaryCard.series._id} | orderBy:'order'" class="form-control">
+                    <select ng-model="cards.editCard.primaryCard.category" ng-options="sel._id as sel.title for sel in cards.c['cardCategory']  | filter: {relation: cards.editCard.primaryCard.series} | orderBy:'order'" class="form-control">
                         <option value="">-category-</option>
                     </select>
                 </div>
                 <!-- primary card value -->
                 <div class="form-group form-inline">
                     <label class="shortField">COST:</label>
-                    <input type="number" min="0" class="form-control w80"  ng-model="cards.editCard.primaryCard.pc.min.cost"> /
-                    <input type="number" min="0" class="form-control w80"  ng-model="cards.editCard.primaryCard.pc.min.people"> (min)
+                    <input type="number" min="0" class="form-control w80" ng-model="cards.editCard.primaryCard.pc.min.cost" placeholder="cost"> /
+                    <input type="number" min="0" class="form-control w80" ng-model="cards.editCard.primaryCard.pc.min.people" placeholder="people"> (min)
                 </div>
-                 <div class="form-group form-inline">
+                <div class="form-group form-inline">
                     <label class="shortField"></label>
-                    <input type="number" min="0" class="form-control w80"  ng-model="cards.editCard.primaryCard.pc.max.cost"> /
-                    <input type="number" min="0" class="form-control w80"  ng-model="cards.editCard.primaryCard.pc.max.cost"> (max)
+                    <input type="number" min="0" class="form-control w80" ng-model="cards.editCard.primaryCard.pc.max.cost" placeholder="cost"> /
+                    <input type="number" min="0" class="form-control w80" ng-model="cards.editCard.primaryCard.pc.max.people" placeholder="people"> (max)
                 </div>
                 <div class="form-group form-inline">
                     <label class="shortField">FA:</label>
@@ -61,7 +67,7 @@
                     <img ng-src="{{cards.thumbImg}}" alt="" style="width:100%;" ng-if="cards.thumbImg">
                 </div>
                 <div class="form-group">
-                    <input type="file" class="form-control" custom-on-change="uploadFile" show-thumb="cards.thumbShow" thumb-img="cards.thumbImg">
+                    <input type="file" class="form-control" custom-on-change="uploadFile" thumb-img="cards.thumbImg" img-file="cards.imgFile">
                 </div>
             </div>
         </div>
@@ -75,7 +81,7 @@
                     <input type="text" class="form-control" ng-model="actor.title">
                 </div>
                 <label for="" ng-repeat-start="(key,value) in cards.statusAvgService.cardStatusFields" class="shortField">{{value | uppercase}}:</label>
-                <input type="number" min="0" class="form-control w80" ng-model="actor.status[value]"> 
+                <input type="number" min="0" class="form-control w80" ng-model="actor.status[value]">
                 <hr ng-repeat-end ng-if="($index+1)%2==0  || $last" />
             </div>
             <div class="col-xs-6">
@@ -87,7 +93,7 @@
             </div>
             <!-- actors value -->
             <div class="form-group form-inline" ng-if="$index!=0">
-                <button class="btn btn-danger pull-right" ng-click="cards.editCard.removeActor(actor.$$hashkey)">Remove actor</button>
+                <button class="btn btn-danger pull-right" ng-click="cards.editCard.removeActor(actor.$$hashKey)">Remove actor</button>
                 <br clear="all">
             </div>
         </div>

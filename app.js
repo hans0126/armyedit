@@ -7,21 +7,30 @@ var events = require('events'); //事件
 var fs = require('fs');
 var http = require('http');
 
+
+
+
+var multer = require('multer')
+var upload = multer({
+    dest: './upload_temp/'
+});
+
 var app = express();
+
+//app.use(multer({ dest: './uploads/'}));
 
 global.dbUrl = "mongodb://localhost:27017/warmachine";
 
 var MongoClient = mongodb.MongoClient;
 var ObjectId = mongodb.ObjectId;
 //body parser
+
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({
     extended: true
 })); // support encoded bodies
-
-
-
 
 global.appRoot = path.resolve(__dirname + '/frontend/');
 
@@ -31,6 +40,9 @@ app.get('/', function(req, res) {
     // res.sendFile(path.join(__dirname + '/frontend/index.html'));
     res.sendFile(global.appRoot + '/index.html');
 });
+
+
+
 
 app.post('/getData', function(req, res) {
 
@@ -75,24 +87,13 @@ app.post('/getData', function(req, res) {
                 res.send(re, 200);
             })
             break;
-        case "search":
+        case "search":        
 
-            var getArmyList = new getData.getArmyList();
+            var getItemList = new getData.getItemList();
 
-            getArmyList.getData({
-                field: [
-                    req.body.series,
-                    req.body.faction,
-                    req.body.category
-                ],
-                keyword: req.body.keyword,
-                currentPage: req.body.currentPage,
-                pageshow: req.body.pageshow,
-                keywordLogic:req.body.keywordLogic
-            });
+            getItemList.getData(req.body.datas);
 
-
-            getArmyList.on("ok", function(re) {
+            getItemList.on("ok", function(re) {
                 res.send(re, 200);
             })
 
@@ -149,17 +150,57 @@ app.post('/mapreduce', function(req, res) {
             })
             reduce.on('get status data', function(arr) {
                 res.send(arr, 200);
-                console.log("OK");
             })
 
             break;
     }
 
-
-
     // res.send("a", 200);
 })
 
+
+
+
+app.post('/cards', upload.single('file'), function(req, res) {
+
+
+    var cards = require("./my_modules/cards.js");
+    cards = new cards();
+
+    switch (req.body.type) {
+        case "inheritCard":
+            cards.inheritCard(req.body.datas,req.file);
+            cards.on("save complete", function(msg) {
+                res.send(msg, 200);
+            })
+            break;
+
+        case "getCard":
+            cards.getCard(req.body.data);
+            cards.on("get data complete", function(msg) {
+                res.send(msg, 200);
+            })
+            break;
+
+        case "updateCard":
+            cards.updateCard(req.body.datas,req.file);
+            cards.on("update data complete", function() {
+                res.send("update ok", 200);
+            })
+            break;
+
+        case "addNew":
+
+            cards.addNewCard(req.body.datas,req.file);
+       
+            cards.on("add new card complete", function() {
+                res.send("update ok", 200);
+            })
+            break;
+
+
+    }
+})
 
 
 app.get('/p', function(req, res) {
@@ -197,8 +238,6 @@ app.get('/i', function(req, res) {
 
 
 app.get('/getImg', function(req, res) {
-
-
     var parser = require("./my_modules/parser.js");
     var pF = new parser.parserFaction();
     pF.getImg("33088_KommanderHarkevichWEB.jpg");
@@ -211,10 +250,6 @@ app.get('/m', function(req, res) {
 
     // Retrieve
     var MongoClient = mongodb.MongoClient;
-
-
-
-
     // Connect to the db
 
     var url = 'mongodb://localhost:27017/warmachine';
@@ -258,13 +293,7 @@ app.get('/m', function(req, res) {
 
 
 function parserFaction() {
-
-
-
-
     //  console.log(tt);
-
-
 }
 
 util.inherits(parserFaction, events.EventEmitter);

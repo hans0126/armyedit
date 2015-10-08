@@ -3,15 +3,17 @@ define(function(require) {
     var app = require("app");
     require('js/lib/thumbEdit/thumbEdit.js');
     app.controller("cards_controller", ["$scope",
-        "search",
         "statusAvgService",
         "getCategoryService",
-
-        function($scope, search, statusAvgService, getCategoryService) {
+        "dbCtrlFactory",
+        function($scope, statusAvgService, getCategoryService, dbCtrlFactory) {
 
             var _self = this;
+            var dbCtrl = new dbCtrlFactory();
+            var selectedObj = null;
+            var cardsStatus = "new"; //  1.inherit 2.update 3.new(no parent)
 
-            //  console.log(getCategoryService);
+            _self.cardStatusText = null;
 
             statusAvgService.cardStatusFields = ["spd", "str", "mat", "rat", "def", "arm", "cmd", "focus"]
 
@@ -19,25 +21,52 @@ define(function(require) {
 
             _self.c = getCategoryService;
 
-            search.itemSelect = function(_obj) {
 
-                _self.editCard.reset();
-
-                var _editData = _self.editCard.primaryCard;
-
-                for (var i = 0; i < _obj.relation.length; i++) {
-                    _tc = getCategoryService.simpleMapping[_obj.relation[i]]
-                    _editData[_tc['type']] = _tc['_id'];
+            // to search area
+            $scope.itemSelect = function(_obj) {
+                if (_obj == selectedObj) {
+                    return false;
                 }
 
-                _editData.title = _obj.title;
+                selectedObj = _obj;
 
-                _editData.img = _self.thumbImg = "/images/army/normal/" + _obj.image_name
+                if (selectedObj.copy) {
+                    // has data
+                    // get data
 
-                _editData.parent_id = _obj._id;
+                    dbCtrl.getData(selectedObj.copy).then(function(response) {
+                        _self.editCard.primaryCard = response.data;
+                        _self.thumbImg = "/images/army/normal/" + _self.editCard.primaryCard.image_name;
+                        cardsStatus = "update";
 
+                        _self.cardStatusText = "Inherited"
 
+                    }, function() {
+                        console.log("get data error")
+                    })
 
+                } else {
+                    // console.log("non");                    
+                    _self.cardStatusText = "data was not created yet"
+
+                    cardsStatus = "inherit";
+
+                    _self.editCard.reset();
+
+                    var _editData = _self.editCard.primaryCard;
+
+                    for (var i = 0; i < selectedObj.relation.length; i++) {
+                        _tc = getCategoryService.simpleMapping[selectedObj.relation[i]]
+                        _editData[_tc['type']] = _tc['_id'];
+                    }
+
+                    _editData.title = selectedObj.title;
+
+                    _self.thumbImg = "/images/army/normal/" + selectedObj.image_name;
+                    _editData.image_name = selectedObj.image_name;
+
+                    _editData.parent_id = selectedObj._id;
+                }
             }
 
             _self.editCard = {
@@ -53,8 +82,9 @@ define(function(require) {
                     num: null
                 }],
                 cardTemplate: {
+                    parent_id: null,
                     title: null,
-                    img: null,
+                    image_name: null,
                     series: null,
                     faction: null,
                     category: null,
@@ -86,7 +116,6 @@ define(function(require) {
                         focus: null
                     },
                     img: {
-                        thumb: null,
                         pX: null,
                         pY: null
                     }
@@ -105,17 +134,54 @@ define(function(require) {
                 addActor: function() {
                     this.primaryCard.actor.push(angular.copy(this.actorTemplate));
                 },
-                removeActor: function(key) {
+                removeActor: function(_key) {
+                    // console.log(this.primaryCard.actor);
                     var _actor = this.primaryCard.actor;
                     for (var i = 0; i < _actor.length; i++) {
-                        if (_actor[i].$$hashkey == key) {
+                        if (_actor[i].$$hashKey == _key) {
                             _actor.splice(i, 1);
                             break;
                         }
                     }
                 },
                 save: function() {
-                    console.log(this.primaryCard);
+
+                    var _d = {}
+                    _d.datas = angular.toJson(this.primaryCard);
+                    _d.file = _self.imgFile;
+
+                    switch (cardsStatus) {
+                        case "update":
+                            _d.type = "updateCard";
+                            dbCtrl.db(_d).then(function(response) {
+                                console.log(response.data);
+                            })
+
+                            break;
+
+                        case "inherit":
+                            _d.type = "inheritCard";
+                            dbCtrl.db(_d).then(function(response) {
+                                selectedObj.copy = response.data;
+                            })
+
+                            break;
+
+                        case "new":
+                            _d.type = "addNew";
+                            dbCtrl.db(_d).then(function(response) {
+                                console.log(response.data);
+                            })
+
+                            break;
+                    }
+                },
+                createNew: function() {
+
+                    cardsStatus = "new";
+                    _self.editCard.reset();
+                    selectedObj = null;
+                    _self.thumbImg = null;
                 }
             }
 
@@ -123,9 +189,7 @@ define(function(require) {
 
             _self.statusAvgService = statusAvgService;
 
-            _self.thumbShow = false;
             _self.thumbImg = null;
-            //$scope.thumbImg = null;
 
         }
     ])
@@ -135,10 +199,8 @@ define(function(require) {
         return {
             restrict: 'A',
             scope: {
-                thumb: "@",
-                thumbs: "@",
-                showThumb: "=",
-                thumbImg: "="
+                thumbImg: "=",
+                imgFile: "="
             },
             link: function(scope, element, attrs) {
                 // get function and bind change Event
@@ -147,11 +209,21 @@ define(function(require) {
             },
             controller: function($scope) {
                 // tips : define function in controller  , directive use this function 
-                var _t = new thumbEdit();
-                $scope.uploadFile = function() {
-                    $scope.showThumb = true;
 
-                    var filename = event.target.files[0].name;
+                $scope.uploadFile = function() {
+
+                    var _file = event.target.files[0];
+                    var _fileType = _file.type;
+                    _fileType = _fileType.split("/");
+                    $scope.imgFile = _file;
+                    if (_fileType[0] != "image") {
+                        $scope.imgFile = null;
+                        console.log("file format error!!");
+                        return false;
+                    }
+
+                    var filename = _file.name;
+
                     var reader = new FileReader();
                     reader.onload = function(e) {
                         $scope.thumbImg = e.target.result;
@@ -221,6 +293,39 @@ define(function(require) {
 
         }
     })
+
+    app.factory("dbCtrlFactory", ['$http', function($http) {
+
+        function ctrl() {
+            var _self = this;
+
+            _self.db = function(_data) {
+                var fd = new FormData();
+                for (var _key in _data) {
+                    fd.append(_key, _data[_key]);
+                }
+
+                return $http.post("cards", fd, {
+                    transformRequest: angular.identity,
+                    headers: {
+                        'Content-Type': undefined
+                    }
+                })
+            }
+
+            _self.getData = function(_id, _file) {
+                var _d = {}
+                _d.type = "getCard";
+                _d.file = _file;
+                _d.data = _id;
+
+                return $http.post("cards", _d)
+            }
+
+        }
+        return ctrl
+
+    }])
 
 
 

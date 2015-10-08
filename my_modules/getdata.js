@@ -12,7 +12,6 @@ util.inherits(getSelectData, events.EventEmitter);
 /**
  * @param _field{object} query
  */
-
 getSelectData.prototype.getValue = function(_field) {
     MongoClient.connect(global.dbUrl, function(err, db) {
         var _category = db.collection('category');
@@ -29,27 +28,38 @@ getSelectData.prototype.getValue = function(_field) {
     }.bind(this));
 }
 
-function getArmyList() {}
-util.inherits(getArmyList, events.EventEmitter);
+function getItemList() {}
+util.inherits(getItemList, events.EventEmitter);
 
-getArmyList.prototype.getData = function(_field) {
+getItemList.prototype.getData = function(_field) {
 
+    console.log(_field);
+
+    var _tempC = ["series", "faction", "category"]
+
+    var _self = this;
     var _query = [];
     var _dbq = {};
     var _keyword = [];
     var _nullCount = 0;
 
-    console.log(_field.keywordLogic);
+    switch (_field.searchType) {
+        case "products":
 
-    for (var i = 0; i < _field.field.length; i++) {
-        if (_field.field[i] != null) {
-            _query.push(ObjectID(_field.field[i]));
-        } else {
-            _nullCount++;
-        }
+            for (var i = 0; i < _tempC.length; i++) {
+                if (_field[_tempC[i]] != null) {
+                    _query.push(ObjectID(_field[_tempC[i]]));
+                }
+            }
+
+            break;
+
+        case "cards":
+
+            break;
     }
 
-    if (_nullCount < _field.field.length) {
+    if (_query.length > 0) {
         _dbq.relation = {
             $all: _query
         }
@@ -70,8 +80,6 @@ getArmyList.prototype.getData = function(_field) {
                 $in: _keyword
             }
         }
-
-       
     }
 
     MongoClient.connect(global.dbUrl, function(err, db) {
@@ -82,40 +90,27 @@ getArmyList.prototype.getData = function(_field) {
             "title": 1
         }).skip(_field.pageshow * _field.currentPage).limit(_field.pageshow).toArray(function(err, re) {
 
-
-
             _product.find(_dbq).count(function(err, count) {
                 // this.emit("ok", {data:re,count:count});
-                var status_avg = db.collection('status_avg');
 
-                status_avg.find({}, {
-                    status: 1
-                }).toArray(function(err, re2) {
+                console.log(re);
 
-                    this.emit("ok", {
-                        data: re,
-                        count: count,
-                        status_avg: re2[0].status
-                    });
-                }.bind(this));
+                _self.emit("ok", {
+                    data: re,
+                    count: count
+                });
+            })
+        })
+    });
 
-            }.bind(this))
-
-
-        }.bind(this))
-
-    }.bind(this));
 }
 
 
 getSelectData.prototype.getCategory = function() {
 
     var _self = this;
-
     MongoClient.connect(global.dbUrl, function(err, db) {
-
         var category = db.collection('category');
-
         category.find().toArray(function(err, re) {
             _self.emit("category get complete", re)
         })
@@ -127,5 +122,5 @@ getSelectData.prototype.getCategory = function() {
 
 module.exports = {
     getSelect: getSelectData,
-    getArmyList: getArmyList
+    getItemList: getItemList
 }
