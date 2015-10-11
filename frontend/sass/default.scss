@@ -130,12 +130,11 @@
     width: 80px !important;
     display: inline-block !important;
 }
+
 .shortField {
     width: 17% !important;
     display: inline-block !important;
 }
-
-
 
 button > .fa {
     margin-right: 0.4em;
@@ -178,24 +177,20 @@ button > .fa {
 }
 
 //cards
-
 #thumb_img {
     width: 195px;
     height: 195px;
     overflow: hidden;
     position: relative;
-
     > img {
         position: absolute;
     }
-
 }
 
 .thumbGroup {
-   clear: both;
-   position: relative;
-
-    > div{
+    clear: both;
+    position: relative;
+    > div {
         position: absolute;
         bottom: 5px;
         left: 330px;
@@ -217,4 +212,37 @@ button > .fa {
         left: -330px;
         background: #999;
     }
+}
+
+#msg {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    > p {
+        margin: 0;
+        padding: 0.5em 1em;
+    }
+}
+
+.fade.ng-enter {
+    transition: 0.5s linear all;
+    opacity: 0;
+
+}
+
+/* The finishing CSS styles for the enter animation */
+
+.fade.ng-enter.ng-enter-active {
+    opacity: 1;
+}
+
+.fade.ng-leave {
+    transition: 0.5s linear all;
+    opacity: 1;
+}
+
+.fade.ng-leave.ng-leave-active {
+    opacity: 0;
 }

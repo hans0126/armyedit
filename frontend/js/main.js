@@ -2,10 +2,11 @@ requirejs.config({
     baseUrl: 'js',
 
     paths: {
-        angular: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min',
-        angularMocks: 'https://code.angularjs.org/1.2.9/angular-mocks',
-        angularRoute: 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular-route.min',
-        angularAMD: 'http://cdn.jsdelivr.net/angular.amd/0.2/angularAMD.min',
+        angular: 'lib/angular.min',
+        angularMocks: 'lib/angular-mocks',
+        angularRoute: 'lib/angular-route.min',
+        angularAnimate:'lib/angular-animate.min',
+        angularAMD: 'lib/angularAMD.min',
         d3: 'lib/d3.min',
         d3_radar: 'lib/radar-chart-d3-master/src/radar-chart.min',
         app: 'apps/module/main_module'
@@ -18,8 +19,11 @@ requirejs.config({
         angularAMD: {
             deps: ['angular']
         },
-        angularRoute: {
+        angularAnimate:{
             deps: ['angularAMD']
+        },
+        angularRoute: {
+            deps: ['angularAnimate']
         },
         d3_radar: {
             deps: ['d3']

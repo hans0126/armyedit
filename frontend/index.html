@@ -36,6 +36,11 @@
     <div class="center-block container-fluid" id="wrap">
         <div ng-view id="templateView"></div>
     </div>
+
+    <div id="msg" msg showMsg="showMsg" ></div>
+
+    <button ng-click="addMsg('save ok',0)">1234</button>
+      <button ng-click="addMsg('save ng',1)">1234</button>
 </body>
 
 </html>

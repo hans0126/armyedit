@@ -18,7 +18,6 @@ define(function(require) {
             $http.post("getdata", {
                 type: "getCategory"
             }).then(function(response) {
-
                 _self.translate(response.data);
             })
         }
