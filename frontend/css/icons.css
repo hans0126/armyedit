@@ -1,0 +1,51 @@
+/* ----------------------------------------------------
+   created with http://www.codeandweb.com/texturepacker 
+   ----------------------------------------------------
+   $TexturePacker:SmartUpdate:9aeafa6700a6cd3b24dc7c90a9ffb429:ee9171cd9cc25cedea06c4aab64d8657:f1ca9f615efd41ee6d583ace452461d3$
+   ----------------------------------------------------
+
+   usage: <span class="{-spritename-} sprite"></span>
+
+   replace {-spritename-} with the sprite you like to use
+
+*/
+
+.sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(../images/icons.png);}
+
+.abomination {width:33px; height:33px; background-position: -2px -2px}
+.advance_deployment {width:33px; height:33px; background-position: -2px -37px}
+.arc_node {width:33px; height:32px; background-position: -352px -72px}
+.buckler {width:33px; height:33px; background-position: -2px -72px}
+.cold {width:33px; height:33px; background-position: -37px -2px}
+.combined_melee_attack {width:33px; height:33px; background-position: -37px -37px}
+.combined_ranged_attack {width:33px; height:33px; background-position: -37px -72px}
+.commander {width:33px; height:33px; background-position: -72px -2px}
+.construct {width:33px; height:33px; background-position: -72px -37px}
+.continuous_corrosion {width:33px; height:33px; background-position: -72px -72px}
+.continuous_fire {width:33px; height:33px; background-position: -107px -2px}
+.corrosion {width:33px; height:33px; background-position: -107px -37px}
+.critical_corrosion {width:33px; height:33px; background-position: -107px -72px}
+.critical_fire {width:33px; height:33px; background-position: -142px -2px}
+.electricity {width:33px; height:33px; background-position: -142px -37px}
+.eyeless_sight {width:33px; height:33px; background-position: -142px -72px}
+.fearless {width:33px; height:33px; background-position: -177px -2px}
+.fire {width:33px; height:33px; background-position: -177px -37px}
+.gunfighter {width:33px; height:33px; background-position: -177px -72px}
+.immunity_cold {width:33px; height:33px; background-position: -212px -2px}
+.immunity_corrosion {width:33px; height:33px; background-position: -212px -37px}
+.immunity_electricity {width:33px; height:33px; background-position: -212px -72px}
+.immunity_fire {width:33px; height:33px; background-position: -247px -2px}
+.incorporeal {width:33px; height:33px; background-position: -247px -37px}
+.jack_marshal {width:33px; height:33px; background-position: -247px -72px}
+.magical_weapon {width:33px; height:32px; background-position: -387px -2px}
+.officer {width:33px; height:33px; background-position: -282px -2px}
+.open_fist {width:33px; height:33px; background-position: -282px -37px}
+.pathfinder {width:33px; height:32px; background-position: -422px -2px}
+.reach {width:33px; height:32px; background-position: -387px -36px}
+.shield {width:33px; height:33px; background-position: -282px -72px}
+.standard_bearer {width:33px; height:33px; background-position: -317px -2px}
+.stealth {width:33px; height:33px; background-position: -317px -37px}
+.terror {width:33px; height:32px; background-position: -422px -36px}
+.tough {width:33px; height:33px; background-position: -317px -72px}
+.undead {width:33px; height:33px; background-position: -352px -2px}
+.weapon_master {width:33px; height:33px; background-position: -352px -37px}

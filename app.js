@@ -87,7 +87,7 @@ app.post('/getData', function(req, res) {
                 res.send(re, 200);
             })
             break;
-        case "search":        
+        case "search":
 
             var getItemList = new getData.getItemList();
 
@@ -115,6 +115,16 @@ app.post('/getData', function(req, res) {
 
             getSelectData.getCategory();
             getSelectData.on('category get complete', function(re) {
+                res.send(re, 200);
+            })
+
+            break;
+
+        case "get_ability":
+
+            var getAbility = new getData.getAbility();
+            getAbility.getData();
+            getAbility.on('ability load complete', function(re) {
                 res.send(re, 200);
             })
 
@@ -169,7 +179,7 @@ app.post('/cards', upload.single('file'), function(req, res) {
 
     switch (req.body.type) {
         case "inheritCard":
-            cards.inheritCard(req.body.datas,req.file);
+            cards.inheritCard(req.body.datas, req.file);
             cards.on("save complete", function(msg) {
                 res.send(msg, 200);
             })
@@ -183,7 +193,7 @@ app.post('/cards', upload.single('file'), function(req, res) {
             break;
 
         case "updateCard":
-            cards.updateCard(req.body.datas,req.file);
+            cards.updateCard(req.body.datas, req.file);
             cards.on("update data complete", function() {
                 res.send("update ok", 200);
             })
@@ -191,8 +201,8 @@ app.post('/cards', upload.single('file'), function(req, res) {
 
         case "addNew":
 
-            cards.addNewCard(req.body.datas,req.file);
-       
+            cards.addNewCard(req.body.datas, req.file);
+
             cards.on("add new card complete", function() {
                 res.send("update ok", 200);
             })

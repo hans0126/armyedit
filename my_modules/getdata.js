@@ -28,41 +28,61 @@ getSelectData.prototype.getValue = function(_field) {
     }.bind(this));
 }
 
+
+getSelectData.prototype.getCategory = function() {
+
+    var _self = this;
+    MongoClient.connect(global.dbUrl, function(err, db) {
+        var category = db.collection('category');
+        category.find().toArray(function(err, re) {
+            _self.emit("category get complete", re)
+        })
+
+    })
+
+}
+
+
+
+
+
 function getItemList() {}
 util.inherits(getItemList, events.EventEmitter);
 
 getItemList.prototype.getData = function(_field) {
 
-    console.log(_field);
-
-    var _tempC = ["series", "faction", "category"]
-
+    var _tempC = ["series", "faction", "category"];
     var _self = this;
     var _query = [];
     var _dbq = {};
     var _keyword = [];
     var _nullCount = 0;
+    var _collection;
 
     switch (_field.searchType) {
         case "products":
-
             for (var i = 0; i < _tempC.length; i++) {
                 if (_field[_tempC[i]] != null) {
                     _query.push(ObjectID(_field[_tempC[i]]));
                 }
             }
-
+            if (_query.length > 0) {
+                _dbq.relation = {
+                    $all: _query
+                }
+            }
+            _collection = "products";
             break;
 
         case "cards":
-
+            for (var i = 0; i < _tempC.length; i++) {
+                if (_field[_tempC[i]] != null) {
+                    var _obj = {};
+                    _dbq[_tempC[i]] = ObjectID(_field[_tempC[i]]);                 
+                }
+            }          
+            _collection = "cards";
             break;
-    }
-
-    if (_query.length > 0) {
-        _dbq.relation = {
-            $all: _query
-        }
     }
 
     if (_field.keyword != null) {
@@ -84,16 +104,16 @@ getItemList.prototype.getData = function(_field) {
 
     MongoClient.connect(global.dbUrl, function(err, db) {
 
-        var _product = db.collection('products');
+        var _product = db.collection(_collection);
+
         _product.find(_dbq).sort({
             "order": 1,
             "title": 1
         }).skip(_field.pageshow * _field.currentPage).limit(_field.pageshow).toArray(function(err, re) {
-
+             if (err) throw err;
             _product.find(_dbq).count(function(err, count) {
-                // this.emit("ok", {data:re,count:count});
-
-                console.log(re);
+                 if (err) throw err;
+                // this.emit("ok", {data:re,count:count});               
 
                 _self.emit("ok", {
                     data: re,
@@ -105,22 +125,27 @@ getItemList.prototype.getData = function(_field) {
 
 }
 
+function getAbility() {}
+util.inherits(getAbility, events.EventEmitter);
 
-getSelectData.prototype.getCategory = function() {
+getAbility.prototype.getData = function(){
 
     var _self = this;
-    MongoClient.connect(global.dbUrl, function(err, db) {
-        var category = db.collection('category');
-        category.find().toArray(function(err, re) {
-            _self.emit("category get complete", re)
+
+     MongoClient.connect(global.dbUrl, function(err, db) {
+
+        var _ability = db.collection("ability");
+
+        _ability.find().toArray(function(err, re) {
+             if (err) throw err;
+            _self.emit('ability load complete',re);
         })
-
-    })
-
+    });
 }
 
 
 module.exports = {
     getSelect: getSelectData,
-    getItemList: getItemList
+    getItemList: getItemList,
+    getAbility:getAbility
 }

@@ -7,7 +7,8 @@ define(function(require) {
         "radarFactory",
         "getCategoryService",
         "searchData",
-        function(statusAvgService, radarFactory, getCategoryService, searchData) {
+        "searchTypeService",
+        function(statusAvgService, radarFactory, getCategoryService, searchData, stService) {
 
             var _self = this;
             //category
@@ -27,7 +28,7 @@ define(function(require) {
             _self.totalItemCount = 0;
             _self.searchResult = [];
 
-            _self.searchType = "products";
+            //_self.searchType = "products";
 
             _self.cssActive = function(_va) {
                 if (_va) {
@@ -35,15 +36,24 @@ define(function(require) {
                 }
             }
 
-            _self.activeSearchBtn = true;
+            if (stService.searchType == "products") {
+                _self.activeSearchBtn = true;
+            } else {
+                _self.activeSearchBtn = false;
+            }
+
+
 
             _self.changeSearchtType = function(_va) {
-                
-                if(_self.searchType==_va){
+
+                if (stService.searchType == _va) {
                     return false;
                 }
 
-                _self.searchType = _va;
+                _self.searchResult = [];
+
+                stService.searchType = _va;
+
                 _self.activeSearchBtn = !_self.activeSearchBtn
             }
 
@@ -59,9 +69,9 @@ define(function(require) {
                     _self.totalItemCount = 0;
 
                     searchQuery = {
-                      
+
                         pageshow: pageshow,
-                        searchType:_self.searchType
+                        searchType: stService.searchType
                     }
 
                     for (var _key in _self.selectGroup) {
@@ -77,8 +87,8 @@ define(function(require) {
                 searchQuery["currentPage"] = _self.currentPage;
 
                 var _d = {
-                    type:"search",
-                    datas:searchQuery
+                    type: "search",
+                    datas: searchQuery
                 }
 
                 searchData(_d).then(function(response) {
@@ -94,7 +104,7 @@ define(function(require) {
 
             }
             _self.clear = function() {
-                  _self.selectGroup = angular.copy(resetDataSample);
+                _self.selectGroup = angular.copy(resetDataSample);
             }
             _self.prev = function() {
                 if (_self.currentPage > 0) {
@@ -122,6 +132,11 @@ define(function(require) {
         return search
 
     }])
+
+    app.service('searchTypeService', function() {
+        this.searchType = null;
+
+    })
 
 
 })

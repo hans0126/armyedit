@@ -1,0 +1,191 @@
+[{
+    "title": "Abomination",
+    "cssClass": "abomination",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Advance Deployment",
+    "cssClass": "advance_deployment",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Arc Node",
+    "cssClass": "arc_node",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Buckler",
+    "cssClass": "buckler",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Damage Type: Cold",
+    "cssClass": "cold",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Combined Melee Attack",
+    "cssClass": "combined_melee_attack",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Combined Ranged Attack",
+    "cssClass": "combined_ranged_attack",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Commander",
+    "cssClass": "commander",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Construct",
+    "cssClass": "construct",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Continuous Effect: Corrosion",
+    "cssClass": "continuous_corrosion",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Continuous Effect: Fire",
+    "cssClass": "continuous_fire",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Critical Corrosion",
+    "cssClass": "critical_corrosion",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Critical Fire",
+    "cssClass": "critical_fire",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Damage Type: Electricity",
+    "cssClass": "electricity",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Damage Type: Fire",
+    "cssClass": "fire",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Reach",
+    "cssClass": "reach",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Magical Weapon",
+    "cssClass": "magical_weapon",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Open Fist",
+    "cssClass": "open_fist",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Shield",
+    "cssClass": "shield",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Weapon_Master",
+    "cssClass": "weapon_master",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Damage Type: Electricity",
+    "cssClass": "electricity",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Damage Type: Corrosion",
+    "cssClass": "corrosion",
+    "type": "weapon",
+    "content": null
+}, {
+    "title": "Eyeless Sight",
+    "cssClass": "eyeless_sight",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Fearless",
+    "cssClass": "fearless",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Gunfighter",
+    "cssClass": "gunfighter",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Immunity: Cold",
+    "cssClass": "immunity_cold",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Immunity: Corrosion",
+    "cssClass": "immunity_corrosion",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Immunity: Electricity",
+    "cssClass": "immunity_electricity",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Immunity: Fire",
+    "cssClass": "immunity_fire",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Incorporeal",
+    "cssClass": "incorporeal",
+    "type": "character",
+    "content": null
+}, {
+    "title": "’Jack Marshal",
+    "cssClass": "jack_marshal",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Officer",
+    "cssClass": "officer",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Pathfinder",
+    "cssClass": "pathfinder",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Standard_Bearer",
+    "cssClass": "standard_bearer",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Stealth",
+    "cssClass": "stealth",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Terror",
+    "cssClass": "terror",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Tough",
+    "cssClass": "tough",
+    "type": "character",
+    "content": null
+}, {
+    "title": "Undead",
+    "cssClass": "undead",
+    "type": "character",
+    "content": null
+}]

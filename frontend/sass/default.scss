@@ -8,6 +8,10 @@
     box-sizing: border-box;
 }
 
+    html{
+         overflow-x: hidden;
+    }
+
 #wrap {
     width: 1024px;
 }
@@ -202,13 +206,14 @@ button > .fa {
     height: 100px;
     display: block;
     border: 1px solid #999;
+    margin-bottom: 0.5em;
 }
 
 .thumbEditArea {
     position: relative;
     .editPopup {
         position: absolute;
-        top: -115px;
+        top: 0px;
         left: -330px;
         background: #999;
     }
@@ -226,23 +231,24 @@ button > .fa {
     }
 }
 
-.fade.ng-enter {
-    transition: 0.5s linear all;
+.zipper.ng-enter {
+    transition: 0.5s ease-in all;
     opacity: 0;
-
+    transform: translate(100%, 0);  
 }
 
-/* The finishing CSS styles for the enter animation */
-
-.fade.ng-enter.ng-enter-active {
-    opacity: 1;
+.zipper.ng-enter.ng-enter-active {
+    opacity: 1;    
+    transform: translate(0, 0);
 }
 
-.fade.ng-leave {
+.zipper.ng-leave {
     transition: 0.5s linear all;
     opacity: 1;
+    
 }
 
-.fade.ng-leave.ng-leave-active {
+.zipper.ng-leave.ng-leave-active {
     opacity: 0;
+    
 }

@@ -13,10 +13,13 @@
     <link rel="stylesheet" href="css/default.css">
     <!-- d3 radar -->
     <link rel="stylesheet" href="js/lib/radar-chart-d3-master/src/radar-chart.css">
+    <!-- icons -->
+    <link rel="stylesheet" href="css/icons.css">
 </head>
 
-<body ng-controller="mainCtrl as mCtrl">
+<body ng-controller="mainCtrl as mCtrl">  
     <div id="navi">
+
         <ul class="center-block list-inline">
             <li>
                 <button class="btn btn-default" ng-click="mCtrl.go('/')">Product</button>
@@ -36,11 +39,10 @@
     <div class="center-block container-fluid" id="wrap">
         <div ng-view id="templateView"></div>
     </div>
+     <div id="msg" msg class="zipper" ng-if='msg.show'></div>
+   
 
-    <div id="msg" msg showMsg="showMsg" ></div>
-
-    <button ng-click="addMsg('save ok',0)">1234</button>
-      <button ng-click="addMsg('save ng',1)">1234</button>
+   
 </body>
 
 </html>

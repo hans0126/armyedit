@@ -6,7 +6,9 @@ define(function(require) {
         "statusAvgService",
         "getCategoryService",
         "dbCtrlFactory",
-        function($scope, statusAvgService, getCategoryService, dbCtrlFactory) {
+        "searchTypeService",
+        "abilityService",
+        function($scope, statusAvgService, getCategoryService, dbCtrlFactory, stService, abilityService) {
 
             var _self = this;
             var dbCtrl = new dbCtrlFactory();
@@ -15,12 +17,18 @@ define(function(require) {
 
             _self.cardStatusText = null;
 
+
+            _self.ability = abilityService;
+
             statusAvgService.cardStatusFields = ["spd", "str", "mat", "rat", "def", "arm", "cmd", "focus"]
 
-            $scope.searchType = "productCategory";
+            //$scope.searchType = "products";
+
+            stService.searchType = "cards" //cards & priducts            
 
             _self.c = getCategoryService;
 
+            _self.submitBtnDisabled = true;
 
             // to search area
             $scope.itemSelect = function(_obj) {
@@ -28,14 +36,22 @@ define(function(require) {
                     return false;
                 }
 
-                console.log(_obj);  
+                _self.submitBtnDisabled = false;
 
                 selectedObj = _obj;
+
+                if (stService.searchType == "products") {
+                    productsProcess();
+                } else {
+                    cardsProcess();
+                }
+            }
+
+            function productsProcess() {
 
                 if (selectedObj.copy) {
                     // has data
                     // get data
-
                     dbCtrl.getData(selectedObj.copy).then(function(response) {
                         _self.editCard.primaryCard = response.data;
                         _self.thumbImg = "/images/army/normal/" + _self.editCard.primaryCard.image_name;
@@ -49,7 +65,7 @@ define(function(require) {
 
                 } else {
                     // console.log("non");                    
-                    _self.cardStatusText = "data was not created yet"
+                    _self.cardStatusText = "data is not created yet"
 
                     cardsStatus = "inherit";
 
@@ -69,6 +85,13 @@ define(function(require) {
 
                     _editData.parent_id = selectedObj._id;
                 }
+
+            }
+
+            function cardsProcess() {
+                _self.editCard.primaryCard = selectedObj;
+                _self.thumbImg = "/images/army/normal/" + selectedObj.image_name;
+                cardsStatus = "update";
             }
 
             _self.editCard = {
@@ -80,8 +103,7 @@ define(function(require) {
                     brief: "c"
                 }, {
                     title: "Number",
-                    brief: "n",
-                    num: null
+                    brief: "n"
                 }],
                 cardTemplate: {
                     parent_id: null,
@@ -100,7 +122,10 @@ define(function(require) {
                             people: null
                         }
                     },
-                    fa: null,
+                    fa: {
+                        info: null,
+                        num: null
+                    },
                     wj: null,
                     actor: []
 
@@ -147,7 +172,7 @@ define(function(require) {
                     }
                 },
                 save: function() {
-
+                    _self.submitBtnDisabled = true;
                     var _d = {}
                     _d.datas = angular.toJson(this.primaryCard);
                     _d.file = _self.imgFile;
@@ -156,7 +181,8 @@ define(function(require) {
                         case "update":
                             _d.type = "updateCard";
                             dbCtrl.db(_d).then(function(response) {
-                                console.log(response.data);
+                                $scope.msg.showMsg('update complete', 0);
+                                _self.submitBtnDisabled = false;
                             })
 
                             break;
@@ -165,6 +191,8 @@ define(function(require) {
                             _d.type = "inheritCard";
                             dbCtrl.db(_d).then(function(response) {
                                 selectedObj.copy = response.data;
+                                $scope.msg.showMsg('inherit complete', 0);
+                                _self.submitBtnDisabled = false;
                             })
 
                             break;
@@ -172,18 +200,18 @@ define(function(require) {
                         case "new":
                             _d.type = "addNew";
                             dbCtrl.db(_d).then(function(response) {
-                                console.log(response.data);
+                                $scope.msg.showMsg('add complete', 0);
+                                _self.submitBtnDisabled = false;
                             })
 
                             break;
                     }
                 },
                 createNew: function() {
-
                     cardsStatus = "new";
-                    _self.editCard.reset();
                     selectedObj = null;
                     _self.thumbImg = null;
+                    _self.editCard.reset();
                 }
             }
 
@@ -248,7 +276,7 @@ define(function(require) {
                 currentActor: "=currentActor"
             },
             transclude: true,
-            link: function(scope, element, attr) {
+            link: function(scope, element, attr) {         
 
                 var _thumbEdit = new thumbEdit();
 
@@ -262,23 +290,16 @@ define(function(require) {
                     }
 
                     if (!scope.edit) {
-                        scope.editText = "Cancel"
+                        scope.editText = "Apply"
                         _thumbEdit.init('thumb' + scope.idx, scope.thumbImg, 'thumbs' + scope.idx);
                         scope.edit = true;
                         scope.thumbEditReady = true;
                     } else {
-                        scope.currentActor.img.pX = 0;
-                        scope.currentActor.img.pY = 0;
+                        scope.currentActor.img.pX = _thumbEdit.output.x;
+                        scope.currentActor.img.pY = _thumbEdit.output.y;
                         scope.editText = "Edit thumb"
                         scope.edit = false;
                     }
-                }
-
-                scope.apply = function() {
-                    scope.currentActor.img.pX = _thumbEdit.output.x;
-                    scope.currentActor.img.pY = _thumbEdit.output.y;
-                    scope.editText = "Edit thumb"
-                    scope.edit = false;
                 }
 
                 scope.$watch('thumbImg', function(_value) {
@@ -288,13 +309,33 @@ define(function(require) {
                 })
 
             },
-            template: "<div ng-show='edit' class='editPopup'>" +
-                "<canvas id='thumb{{idx}}'></canvas>" +
-                "</div><div><button class='btn btn-primary' ng-click='editBtnClick()'>{{editText}}</button> " +
-                "<button class='btn btn-primary' ng-if='edit' ng-click='apply()'>Apply</button></div>"
-
+            template: "<div id='thumbs{{idx}}' class='thumbImg' style='background-position:{{currentActor.img.pX}}px {{currentActor.img.pY}}px;background-image:url({{thumbImg}})'></div>"+
+            "<div ng-show='edit' class='editPopup'><canvas id='thumb{{idx}}'></canvas></div>" +           
+            "<div><button class='btn btn-primary' ng-click='editBtnClick()'>{{editText}}</button></div>"
         }
     })
+
+  app.directive("abilityEdit", function() {
+
+    return {
+         restrict: 'A',
+         scope:{
+            ability:"=abilityEdit"
+         },
+        link:function(scope,element,attr){
+                
+              
+
+            scope.addAbility= function(){
+                
+            }
+
+        },
+        template:"<button ng-click='addAbility()'>Add Ability</button>"+
+                "<div id='ability_popup'><div></div></div>"
+    }
+
+  })
 
     app.factory("dbCtrlFactory", ['$http', function($http) {
 
@@ -328,6 +369,8 @@ define(function(require) {
         return ctrl
 
     }])
+
+
 
 
 

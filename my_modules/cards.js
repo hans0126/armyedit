@@ -18,6 +18,8 @@ cards.prototype.inheritCard = function(_data, _file) {
     var _self = this;
     var _d = JSON.parse(_data);
 
+    categoryIdConvertToObjectId.call(_d);
+
     if (_file) {
         _d.img = uploadImage(_file);
     }
@@ -67,6 +69,9 @@ cards.prototype.updateCard = function(_data, _file) {
     var _self = this;
     var _d = JSON.parse(_data);
 
+    categoryIdConvertToObjectId.call(_d);
+
+
     if (_file) {
         _d.img = uploadImage(_file);
     }
@@ -92,6 +97,8 @@ cards.prototype.addNewCard = function(_data, _file) {
 
     var _d = JSON.parse(_data);
 
+    categoryIdConvertToObjectId.call(_d);
+    
     if (_file) {
         _d.img = uploadImage(_file);
     }
@@ -128,6 +135,20 @@ function uploadImage(_file) {
 
 }
 
+function categoryIdConvertToObjectId() {
+    var _tempC = ["series", "faction", "category"]
+
+    for (var i = 0; i < _tempC.length; i++) {
+        if (this[_tempC[i]] != null) {
+            this[_tempC[i]] = ObjectID(this[_tempC[i]]);
+        }
+    }
+
+    this.a = "b";
+
+    //return _data
+
+}
 
 
 module.exports = cards
