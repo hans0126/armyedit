@@ -54,7 +54,7 @@
            document.getElementsByTagName('head')[0].appendChild(style);
 
 
-           _self.canvasElement.style.border = "1px solid #333";
+           _self.canvasElement.style.border = "1px solid #aaa";
 
            // outputELement = _outputElement;
            outputELement = document.getElementById(_outputElement);
@@ -64,7 +64,7 @@
                "display": "block",
                "width": _self.crop.w + "px",
                "height": _self.crop.h + "px",
-               "border": "1px solid #333",
+               "border": "1px solid #aaa",
                "backgroundRepeat": "no-repeat"
               
            }

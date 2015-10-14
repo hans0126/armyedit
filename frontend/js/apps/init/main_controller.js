@@ -73,9 +73,9 @@ define(function(require) {
 
         _self.weapon = [];
         _self.character = [];
+        _self.mapping = []
 
         _self.getData = function() {
-
             $http.post("getData", {
                 type: "get_ability"
             }).then(function(response) {
@@ -83,9 +83,10 @@ define(function(require) {
                 var _d = response.data
                 for (var i = 0; i < _d.length; i++) {
                     _self[_d[i].type].push(_d[i]);
-                }               
-            });
-
+                    _self.mapping[_d[i]._id] = _d[i];
+                }                  
+           
+            });          
         }
     }])
 

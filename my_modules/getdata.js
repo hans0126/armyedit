@@ -42,14 +42,10 @@ getSelectData.prototype.getCategory = function() {
 
 }
 
-
-
-
-
 function getItemList() {}
 util.inherits(getItemList, events.EventEmitter);
 
-getItemList.prototype.getData = function(_field) {
+getItemList.prototype.getData = function(_field) {   
 
     var _tempC = ["series", "faction", "category"];
     var _self = this;
@@ -61,6 +57,7 @@ getItemList.prototype.getData = function(_field) {
 
     switch (_field.searchType) {
         case "products":
+            _collection = "products";
             for (var i = 0; i < _tempC.length; i++) {
                 if (_field[_tempC[i]] != null) {
                     _query.push(ObjectID(_field[_tempC[i]]));
@@ -71,17 +68,30 @@ getItemList.prototype.getData = function(_field) {
                     $all: _query
                 }
             }
-            _collection = "products";
+
             break;
 
         case "cards":
+            _collection = "cards";
             for (var i = 0; i < _tempC.length; i++) {
                 if (_field[_tempC[i]] != null) {
                     var _obj = {};
-                    _dbq[_tempC[i]] = ObjectID(_field[_tempC[i]]);                 
+                    _dbq[_tempC[i]] = ObjectID(_field[_tempC[i]]);
                 }
-            }          
-            _collection = "cards";
+            }
+
+            if (_field.ability) {
+                if (_field.ability.length > 0) {
+                    for(var i=0;i<_field.ability.length;i++){
+                        _field.ability[i] = ObjectID(_field.ability[i])
+                    }
+
+                    _dbq["actor.characterAbility"] = {
+                        $in: _field.ability
+                    }
+                }
+            }
+
             break;
     }
 
@@ -100,7 +110,7 @@ getItemList.prototype.getData = function(_field) {
                 $in: _keyword
             }
         }
-    }
+    }    
 
     MongoClient.connect(global.dbUrl, function(err, db) {
 
@@ -110,9 +120,9 @@ getItemList.prototype.getData = function(_field) {
             "order": 1,
             "title": 1
         }).skip(_field.pageshow * _field.currentPage).limit(_field.pageshow).toArray(function(err, re) {
-             if (err) throw err;
+            if (err) throw err;
             _product.find(_dbq).count(function(err, count) {
-                 if (err) throw err;
+                if (err) throw err;
                 // this.emit("ok", {data:re,count:count});               
 
                 _self.emit("ok", {
@@ -128,17 +138,17 @@ getItemList.prototype.getData = function(_field) {
 function getAbility() {}
 util.inherits(getAbility, events.EventEmitter);
 
-getAbility.prototype.getData = function(){
+getAbility.prototype.getData = function() {
 
     var _self = this;
 
-     MongoClient.connect(global.dbUrl, function(err, db) {
+    MongoClient.connect(global.dbUrl, function(err, db) {
 
         var _ability = db.collection("ability");
 
         _ability.find().toArray(function(err, re) {
-             if (err) throw err;
-            _self.emit('ability load complete',re);
+            if (err) throw err;
+            _self.emit('ability load complete', re);
         })
     });
 }
@@ -147,5 +157,5 @@ getAbility.prototype.getData = function(){
 module.exports = {
     getSelect: getSelectData,
     getItemList: getItemList,
-    getAbility:getAbility
+    getAbility: getAbility
 }

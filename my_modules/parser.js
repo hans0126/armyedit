@@ -28,7 +28,7 @@ parserFaction.prototype.startParser = function() {
             this.category = re;
             // get faction datas 
             // when loaded, parser start!!
-            fs.readFile('factions.json', 'utf8', _startParserData.bind(this));
+            fs.readFile('json/factions.json', 'utf8', _startParserData.bind(this));
         })
         /**
          * get category data,conver to array
@@ -66,6 +66,7 @@ parserFaction.prototype.startParser = function() {
 
         for (var key in _factions) {
             for (var i = 0; i < _factions[key].faction.length; i++) {
+
                 for (var j = 0; j < _factions[key].class.length; j++) {
                     var _url = _factions[key].url + _factions[key].faction[i] + "/" + _factions[key].class[j];
                     this.parser(_url, key, _factions[key].faction[i], _factions[key].class[j]);
@@ -119,6 +120,7 @@ parserFaction.prototype.parser = function(url, _series, _faction, _category) {
     //url = "http://privateerpress.com/warmachine/gallery/cygnar/warcasters";
     request(url, function(err, resp, body) {
         if (resp.statusCode == 200) {
+
             var tt = [];
             var $ = cheerio.load(body);
 
@@ -146,6 +148,7 @@ parserFaction.prototype.parser = function(url, _series, _faction, _category) {
                 _img_path.splice(_img_path.length - 1, 1);
                 _img_path = _img_path.join("/");
 
+                console.log(_link);
                 subParser.subParser(_link);
 
                 subParser.on('sub parser ok', function(msg) {

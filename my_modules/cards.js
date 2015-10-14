@@ -70,6 +70,7 @@ cards.prototype.updateCard = function(_data, _file) {
     var _d = JSON.parse(_data);
 
     categoryIdConvertToObjectId.call(_d);
+    abilityIdConvertToObjectId.call(_d);
 
 
     if (_file) {
@@ -98,7 +99,7 @@ cards.prototype.addNewCard = function(_data, _file) {
     var _d = JSON.parse(_data);
 
     categoryIdConvertToObjectId.call(_d);
-    
+
     if (_file) {
         _d.img = uploadImage(_file);
     }
@@ -149,6 +150,18 @@ function categoryIdConvertToObjectId() {
     //return _data
 
 }
+
+function abilityIdConvertToObjectId() {
+    var _actors = this.actor;
+    for (var i = 0; i < _actors.length; i++) {
+        if (_actors[i].characterAbility) {
+            for (j = 0; j < _actors[i].characterAbility.length; j++) {
+                _actors[i].characterAbility[j] = ObjectID(_actors[i].characterAbility[j]);
+            }
+        }
+    }
+}
+
 
 
 module.exports = cards

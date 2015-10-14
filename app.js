@@ -220,13 +220,13 @@ app.get('/p', function(req, res) {
 
 
 
-    // pF.startParser();
+    pF.startParser();
     //pF.checkHasImg();
-    //pF.getNoHasImg();
-    /*
+  // pF.getNoHasImg();
+
     pF.on("save complete", function() {
         console.log("this ok");
-    })*/
+    })
 
     /*var ca = new parser.createCategory2DB();
     ca.start();*/

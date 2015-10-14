@@ -8,7 +8,8 @@ define(function(require) {
         "getCategoryService",
         "searchData",
         "searchTypeService",
-        function(statusAvgService, radarFactory, getCategoryService, searchData, stService) {
+        "abilityService",
+        function(statusAvgService, radarFactory, getCategoryService, searchData, stService, abilityService) {
 
             var _self = this;
             //category
@@ -20,6 +21,7 @@ define(function(require) {
                 faction: null,
                 category: null,
                 keyword: null,
+                ability: null,
                 keywordLogic: "and"
             }
 
@@ -28,7 +30,24 @@ define(function(require) {
             _self.totalItemCount = 0;
             _self.searchResult = [];
 
-            //_self.searchType = "products";
+            //ability
+
+            _self.ability = abilityService;
+            _self.tempAbility = [];
+            _self.ablityActive = function(_ability) {
+                if (_self.tempAbility.indexOf(_ability) > -1) {
+                    return "active"
+                }
+            }
+            _self.abilityModify = function(_obj) {
+                var _idx = _self.tempAbility.indexOf(_obj);
+                if (_idx > -1) {
+                    _self.tempAbility.splice(_idx, 1);
+                } else {
+                    _self.tempAbility.push(_obj);
+                }
+            }
+
 
             _self.cssActive = function(_va) {
                 if (_va) {
@@ -36,13 +55,13 @@ define(function(require) {
                 }
             }
 
+         
+
             if (stService.searchType == "products") {
                 _self.activeSearchBtn = true;
             } else {
                 _self.activeSearchBtn = false;
             }
-
-
 
             _self.changeSearchtType = function(_va) {
 
@@ -60,7 +79,7 @@ define(function(require) {
             _self.selectGroup = angular.copy(resetDataSample);
 
             _self.search = function(_newSearch) {
-
+                 console.log(stService);
                 var searchQuery = {}
                     // if new search
                 if (typeof(_newSearch) != "undefined") {
@@ -79,6 +98,8 @@ define(function(require) {
                     }
                     //tip selected record
                     _self.selectedRecord = angular.copy(searchQuery);
+
+                    searchQuery.ability = _self.tempAbility;
 
                 } else {
                     searchQuery = _self.selectedRecord;
@@ -105,6 +126,7 @@ define(function(require) {
             }
             _self.clear = function() {
                 _self.selectGroup = angular.copy(resetDataSample);
+                _self.tempAbility = [];
             }
             _self.prev = function() {
                 if (_self.currentPage > 0) {

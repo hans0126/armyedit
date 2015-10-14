@@ -182,16 +182,17 @@ button > .fa {
   position: absolute;
 }
 
+/*
 .thumbGroup {
-  clear: both;
-  position: relative;
+    clear: both;
+    position: relative;
+    > div {
+       position: absolute;
+        bottom: 5px;
+        left: 330px;
+    }
 }
-.thumbGroup > div {
-  position: absolute;
-  bottom: 5px;
-  left: 330px;
-}
-
+*/
 .thumbImg {
   width: 100px;
   height: 100px;
@@ -206,8 +207,7 @@ button > .fa {
 .thumbEditArea .editPopup {
   position: absolute;
   top: 0px;
-  left: -330px;
-  background: #999;
+  left: -370px;
 }
 
 #msg {
@@ -240,4 +240,42 @@ button > .fa {
 
 .zipper.ng-leave.ng-leave-active {
   opacity: 0;
+}
+
+.popup {
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
+  border-radius: 25px;
+  -moz-box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
+  -webkit-box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
+  box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
+  background: #FFF;
+  padding: 1em;
+  position: absolute;
+}
+
+#abilityStatusArea {
+  width: 200px;
+}
+
+.abilityIcon {
+  margin: 0 0.5em 0.5em 0;
+  cursor: pointer;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+  opacity: 0.5;
+}
+.abilityIcon.active {
+  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+  opacity: 1;
+}
+
+#ability_popup {
+  width: 300px;
+  top: 0;
+  left: -200px;
+}
+#ability_popup .abilityArea {
+  width: 90%;
+  height: 70%;
+  margin: 0 auto;
 }

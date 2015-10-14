@@ -81,18 +81,19 @@
                         <!-- actors title -->
                         <div class="form-group form-inline">
                             <label class="shortField">Title:</label>
-                            <input type="text" class="form-control" ng-model="actor.title" name='title' required>
-                            <small ng-show="cardForm.title.$error.required" class="clearfix">Title is required</small>
+                            <input type="text" class="form-control" ng-model="actor.title" name='title' >                            
                         </div>
                         <label for="" ng-repeat-start="(key,value) in cards.statusAvgService.cardStatusFields" class="shortField">{{value | uppercase}}:</label>
                         <input type="number" min="0" class="form-control w80" ng-model="actor.status[value]">
                         <hr ng-repeat-end ng-if="($index+1)%2==0  || $last" />
                     </div>
                     <div class="col-xs-6">
-                        <!-- actors thumb -->
+                        <!-- actors thumb -->                     
                         <div class="thumbEditArea pull-left" thumb-images="cards.thumbImg" idx="{{$index}}" current-actor="actor"></div>
-                        <div class="pull-right" ability-edit="cards.ability">123</div>
-                       
+                        <div class="pull-right" id='abilityStatusArea' ability-edit="cards.ability" current-actor="actor"></div>
+                         <div class='clearfix'></div>
+                        <hr>
+
                     </div>
                 </div>
                 <div class="form-group form-inline" ng-if="$index!=0">

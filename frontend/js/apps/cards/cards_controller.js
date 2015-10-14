@@ -22,7 +22,7 @@ define(function(require) {
 
             statusAvgService.cardStatusFields = ["spd", "str", "mat", "rat", "def", "arm", "cmd", "focus"]
 
-            //$scope.searchType = "products";
+          
 
             stService.searchType = "cards" //cards & priducts            
 
@@ -276,9 +276,16 @@ define(function(require) {
                 currentActor: "=currentActor"
             },
             transclude: true,
-            link: function(scope, element, attr) {         
+            link: function(scope, element, attr) {
 
                 var _thumbEdit = new thumbEdit();
+
+                if (scope.currentActor.img.pX && scope.currentActor.img.pY) {
+                    _thumbEdit.output = {
+                        x: scope.currentActor.img.pX,
+                        y: scope.currentActor.img.pY
+                    }
+                }
 
                 scope.edit = false;
                 scope.editText = "Edit Thumb";
@@ -292,6 +299,7 @@ define(function(require) {
                     if (!scope.edit) {
                         scope.editText = "Apply"
                         _thumbEdit.init('thumb' + scope.idx, scope.thumbImg, 'thumbs' + scope.idx);
+
                         scope.edit = true;
                         scope.thumbEditReady = true;
                     } else {
@@ -309,33 +317,85 @@ define(function(require) {
                 })
 
             },
-            template: "<div id='thumbs{{idx}}' class='thumbImg' style='background-position:{{currentActor.img.pX}}px {{currentActor.img.pY}}px;background-image:url({{thumbImg}})'></div>"+
-            "<div ng-show='edit' class='editPopup'><canvas id='thumb{{idx}}'></canvas></div>" +           
-            "<div><button class='btn btn-primary' ng-click='editBtnClick()'>{{editText}}</button></div>"
+            template: "<div id='thumbs{{idx}}' class='thumbImg' style='background-position:{{currentActor.img.pX}}px {{currentActor.img.pY}}px;background-image:url({{thumbImg}})'></div>" +
+                "<div ng-show='edit' class='editPopup popup'><canvas id='thumb{{idx}}'></canvas></div>" +
+                "<div><button class='btn btn-primary' ng-click='editBtnClick()'>{{editText}}</button></div>"
         }
     })
 
-  app.directive("abilityEdit", function() {
+    app.directive("abilityEdit", function() {
 
-    return {
-         restrict: 'A',
-         scope:{
-            ability:"=abilityEdit"
-         },
-        link:function(scope,element,attr){
-                
-              
+        return {
+            restrict: 'A',
+            scope: {
+                ability: "=abilityEdit",
+                currentActor: "=currentActor"
+            },
+            link: function(scope, element, attr) {
 
-            scope.addAbility= function(){
-                
-            }
+                scope.mapping = [];
+                if (scope.currentActor.characterAbility) {                      
+                    for (var i = 0; i < scope.currentActor.characterAbility.length; i++) {                        
+                        scope.mapping.push(scope.ability.mapping[scope.currentActor.characterAbility[i]]);
+                    }                    
+                }
+                scope.addAbility = function() {
+                    scope.popupShow = !scope.popupShow;
+                    if (scope.popupShow) {
+                        scope.buttonText = "Apply";
+                    } else {
+                        scope.buttonText = "Edit Ability";
+                    }
+                }
 
-        },
-        template:"<button ng-click='addAbility()'>Add Ability</button>"+
-                "<div id='ability_popup'><div></div></div>"
-    }
+                scope.modify = function(_ability) {
+                    if (!scope.currentActor.characterAbility) {
+                        scope.currentActor.characterAbility = [];
+                    }
 
-  })
+                    var _idx = scope.currentActor.characterAbility.indexOf(_ability._id);
+
+                    if (_idx > -1) {
+                        scope.currentActor.characterAbility.splice(_idx, 1);
+                        scope.mapping.splice(_idx, 1);
+                    } else {
+                        scope.currentActor.characterAbility.push(_ability._id);
+                        scope.mapping.push(_ability);
+                    }
+                }
+
+                scope.active = function(_ability) {
+                    if (scope.currentActor.characterAbility) {
+                        if (scope.currentActor.characterAbility.indexOf(_ability) > -1) {
+                            return "active"
+                        }
+                    }
+                }
+
+                scope.clear = function() {
+                    scope.currentActor.characterAbility = [];
+                    scope.mapping = [];
+                }
+
+                scope.buttonText = "Edit Ability";
+
+                scope.popupShow = false;
+
+
+
+            },
+            template: "<div class='form-group'><button ng-click='addAbility()' class='btn btn-primary'>{{buttonText}}</button></div>" +
+                "<ul class='list-unstyled'><li ng-repeat='ability in mapping | orderBy:\"title\"' class='sprite {{ability.cssClass}} abilityIcon active' title='{{ability.title}}'></li></ul>" +
+                "<div id='ability_popup' class='popup' ng-if='popupShow'>" +
+                "<div class='form-group'><input type='text' class='form-control' ng-model='abilitySearch'/></div>" +
+                "<div class='abilityArea'>" +
+                "<div ng-repeat='character in ability.character | filter:{title:abilitySearch}' class='sprite {{character.cssClass}} abilityIcon' ng-class='active(character._id)'  title='{{character.title}}' ng-click='modify(character)'></div>" +
+                "</div>" +
+                "<div class='form-group form-inline'><button ng-click='clear()' class='btn btn-primary'>clear</button> <button ng-click='addAbility()' class='btn btn-primary'>Apply</button></div>" +
+                "</div>"
+        }
+
+    })
 
     app.factory("dbCtrlFactory", ['$http', function($http) {
 
