@@ -9,11 +9,13 @@ define(function(require) {
         "searchData",
         "searchTypeService",
         "abilityService",
-        function(statusAvgService, radarFactory, getCategoryService, searchData, stService, abilityService) {
+        function(statusAvgService, radarFactory, getCategoryService, searchData, searchTypeService, abilityService) {
 
             var _self = this;
             //category
             _self.c = getCategoryService;
+
+
 
             var pageshow = 9;
             var resetDataSample = {
@@ -29,6 +31,8 @@ define(function(require) {
             _self.totalPageCount = 0;
             _self.totalItemCount = 0;
             _self.searchResult = [];
+
+            _self.searchType = searchTypeService;
 
             //ability
 
@@ -57,7 +61,7 @@ define(function(require) {
 
          
 
-            if (stService.searchType == "products") {
+            if (searchTypeService.searchType == "product") {
                 _self.activeSearchBtn = true;
             } else {
                 _self.activeSearchBtn = false;
@@ -65,13 +69,13 @@ define(function(require) {
 
             _self.changeSearchtType = function(_va) {
 
-                if (stService.searchType == _va) {
+                if (searchTypeService.searchType == _va) {
                     return false;
                 }
 
                 _self.searchResult = [];
 
-                stService.searchType = _va;
+                searchTypeService.searchType = _va;
 
                 _self.activeSearchBtn = !_self.activeSearchBtn
             }
@@ -79,7 +83,7 @@ define(function(require) {
             _self.selectGroup = angular.copy(resetDataSample);
 
             _self.search = function(_newSearch) {
-                 console.log(stService);
+              
                 var searchQuery = {}
                     // if new search
                 if (typeof(_newSearch) != "undefined") {
@@ -90,7 +94,7 @@ define(function(require) {
                     searchQuery = {
 
                         pageshow: pageshow,
-                        searchType: stService.searchType
+                        searchType: searchTypeService.searchType
                     }
 
                     for (var _key in _self.selectGroup) {

@@ -2,6 +2,18 @@ define(function(require) {
 
     var app = require("app");
 
+    require('apps/init/main_controller');
+    require('apps/init/get-category_service');
+    require('apps/init/status-avg_service');
+    require('apps/product/search_factory');
+
+    require('apps/product/product-detail_factory')
+    require('apps/product/radar_factory')
+    require('apps/filter/highlight_filter');
+    require('apps/directive/image-onload_directive');
+    require('apps/search/search_controller');
+
+
     app.config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.

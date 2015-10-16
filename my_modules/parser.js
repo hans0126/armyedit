@@ -74,9 +74,7 @@ parserFaction.prototype.startParser = function() {
 
                 }
 
-
             }
-
 
         }
         // wher all parser complete, save to DB
@@ -89,7 +87,6 @@ parserFaction.prototype.startParser = function() {
             }
 
             if (this.eventCount >= this.totalCount) {
-
                 console.log("parser complete");
                 this.saveData(_arrResult);
 
@@ -111,7 +108,7 @@ parserFaction.prototype.startParser = function() {
  * @param _category {string} 
  */
 parserFaction.prototype.parser = function(url, _series, _faction, _category) {
-
+    var _self = this
     var _arrRelation = [];
     _arrRelation.push(this.category[_series]);
     _arrRelation.push(this.category[_faction]);
@@ -134,80 +131,40 @@ parserFaction.prototype.parser = function(url, _series, _faction, _category) {
 
                 var _link,
                     _img_path,
-                    _image_name,
-                    subParser = new _subParser();
+                    _image_name;
 
                 _link = "http://privateerpress.com" + $(link).find('.views-field-title .field-content a').attr('href');
-
 
                 _img_path = $(link).find('.views-field-field-image-fid img').attr('src');
 
                 _img_path = _img_path.split("/");
                 _image_name = _img_path[_img_path.length - 1];
 
-                _img_path.splice(_img_path.length - 1, 1);
-                _img_path = _img_path.join("/");
+                tt.push({
+                    image_name: _image_name,
+                    title: $(link).find('.views-field-title .field-content').text(),
+                    pip_code: $(link).find('.views-field-field-pip-code-value .field-content').text(),
+                    fa: null,
+                    pc: null,
+                    series: _series,
+                    faction: _faction,
+                    category: _category,
+                    relation: _arrRelation,
+                    has_img: null
+                })
 
-                console.log(_link);
-                subParser.subParser(_link);
+                currentCount++
 
-                subParser.on('sub parser ok', function(msg) {
+                if (parserCount == currentCount) {
+                    _self.emit('parser complete', tt);
+                }
 
-                    tt.push({
-                        image_name: _image_name,
-                        title: $(link).find('.views-field-title .field-content').text(),
-                        pip_code: $(link).find('.views-field-field-pip-code-value .field-content').text(),
-                        fa: null,
-                        pc: null,
-                        series: _series,
-                        faction: _faction,
-                        category: _category,
-                        relation: _arrRelation,
-                        img: {
-                            normal: null,
-                            thumb: null,
-                            thumb_path: _img_path,
-                            normal_path: msg
-                        }
-                    })
-                    currentCount++
-
-                    if (parserCount == currentCount) {
-                        this.emit('parser complete', tt);
-                    }
-
-                }.bind(this))
-
-            }.bind(this));
+            });
 
         } else {
-            this.emit('parser complete', []);
+            _self.emit('parser complete', []);
         }
-    }.bind(this));
-
-
-    function _subParser() {}
-
-    util.inherits(_subParser, events.EventEmitter);
-
-    _subParser.prototype.subParser = function(_url) {
-        request(_url, function(err, resp, body) {
-            console.log(resp.statusCode);
-            if (resp.statusCode == 200) {
-                var $ = cheerio.load(body);
-                var _i = $('.field-field-image img').attr('src');
-                _i = _i.split("/");
-                _i.splice(_i.length - 1, 1);
-                _i = _i.join("/");
-
-                this.emit('sub parser ok', _i);
-            } else {
-                this.emit('sub parser ok', null);
-            }
-
-        }.bind(this))
-    }
-
+    });
 
 
 };
@@ -218,6 +175,9 @@ parserFaction.prototype.parser = function(url, _series, _faction, _category) {
 parserFaction.prototype.saveData = function(_arrData) {
 
     //process count
+
+    var _self = this;
+
     this.eventCount = 0;
     this.totalCount = 0;
 
@@ -230,37 +190,37 @@ parserFaction.prototype.saveData = function(_arrData) {
 
             for (var i = 0; i < _arrData.length; i++) {
 
-                _saveProcee.call(this, _arrData[i], {
+                _saveProcee.call(_self, _arrData[i], {
                     products: products,
                     newProducts: newProducts
                 });
 
             }
 
-        }.bind(this))
+        })
 
-    }.bind(this));
+    });
 
-    this.on("current save complete", function() {
-        this.eventCount++;
+    _self.on("current save complete", function() {
+        _self.eventCount++;
 
-        if (this.eventCount == this.totalCount) {
-            this.emit("all complete");
+        if (_self.eventCount == _self.totalCount) {
+            _self.emit("all complete");
             console.log("complete");
         }
     })
 
-    this.on("get img", function(msg) {
-        this.getImg(msg);
+    _self.on("get img", function(msg) {
+        _self.getImg(msg);
     })
 
     function _eventCount(err, result) {
-        this.emit("current save complete");
-      this.emit("get img", result.insertedIds[0]);
+        _self.emit("current save complete");
+        // this.emit("get img", result.insertedIds[0]);
     }
 
     function _eventCountN(err, result) {
-        this.emit("current save complete");
+        _self.emit("current save complete");
 
     }
 
@@ -274,11 +234,11 @@ parserFaction.prototype.saveData = function(_arrData) {
         }, function(err, count) {
             if (count == 0) {
 
-                this.totalCount += 2;
-                _db.products.insert(_arr, _eventCount.bind(this));
-                _db.newProducts.insert(_arr, _eventCountN.bind(this));
+                _self.totalCount += 2;
+                _db.products.insert(_arr, _eventCount);
+                _db.newProducts.insert(_arr, _eventCountN);
             }
-        }.bind(this));
+        });
     }
 }
 
@@ -286,17 +246,15 @@ parserFaction.prototype.saveData = function(_arrData) {
  * get has't img from site
  */
 parserFaction.prototype.getNoHasImg = function() {
+
+    var _self = this;
+
     MongoClient.connect(global.dbUrl, function(err, db) {
 
         var products = db.collection('products');
 
         products.find({
-            "$or": [{
-                "img.thumb": null
-            }, {
-                "img.normal": null
-            }]
-
+            "img": null
         }, {
             _id: 1,
             image_name: 1,
@@ -304,15 +262,11 @@ parserFaction.prototype.getNoHasImg = function() {
         }).toArray(function(err, re) {
             console.log("start");
             for (var i = 0; i < re.length; i++) {
-                this.getImg(re[i]._id, re[i].image_name, re[i].img);
-                //console.log(re[i].img);
-               
-
+                _self.getImg(re[i]._id, re[i].image_name, re[i].img);
             }
-        }.bind(this));
+        });
 
-
-    }.bind(this))
+    })
 }
 
 
@@ -380,20 +334,21 @@ parserFaction.prototype.checkHasImg = function() {
  */
 
 parserFaction.prototype.getImg = function(_id, _iName, _imgUrl) {
+    var _self = this;
 
-    this.imgCount = 0;
+    _self.imgCount = 0;
+    _self.currentImgCount = 0;
+    _self._id = [];
 
-    var _path = {
-        normal: "frontend\\images\\army\\normal\\",
-        thumb: "frontend\\images\\army\\thumb\\"
-    }
 
-    var _imgUrl = {
-        normal: _imgUrl.normal_path,
-        thumb: _imgUrl.thumb_path
-    }
+    var _path = "frontend\\products\\normal\\";
+
+
+    var _imgUrl = "http://privateerpress.com/files/products/";
+
 
     if (typeof(_iName) == "undefined") {
+
 
         MongoClient.connect(global.dbUrl, function(err, db) {
             var products = db.collection('products');
@@ -404,65 +359,76 @@ parserFaction.prototype.getImg = function(_id, _iName, _imgUrl) {
             }).toArray(function(err, result) {
                 var _imgName = result[0].image_name;
                 var _id = result[0]._id
+                getting(_imgName, _id);
+            })
 
-                for (var key in _imgUrl) {
-                    getting.call(this, key, _imgName, _id);
-                }
+        })
 
-            }.bind(this))
-
-        }.bind(this))
 
     } else {
-
-        for (var key in _imgUrl) {
-            getting.call(this, key, _iName, _id);
-        }
+        getting(_iName, _id);
     }
 
-    function getting(_key, _img, _id) {
+    function getting(_img, _id) {
 
-        
-        var request = http.get(_imgUrl[_key] +"/"+ _img, function(res) {
+        http.globalAgent.maxSockets = 200; //default 5
+
+
+        var request = http.get(_imgUrl + _img, function(res) {
 
             if (res.statusCode == 200) {
 
-                saveImgStatus(_key, _id);
-                var imagedata = '';
-                res.setEncoding('binary');
+                _self.imgCount++;
 
+                var imagedata = '';
+
+                _self._id.push(ObjectID(_id));
+                //saveImgStatus(_id);
+
+                res.setEncoding('binary');
                 res.on('data', function(chunk) {
                     imagedata += chunk;
                 })
 
                 res.on('end', function() {
-                    fs.writeFile(_path[_key] + _img, imagedata, 'binary', function(err) {
+
+                    fs.writeFile(_path + _img, imagedata, 'binary', function(err) {
                         if (err) throw err
 
-                        this.imgCount++
-                        console.log(this.imgCount + '.File saved.' + _img);
-                    }.bind(this))
-                }.bind(this))
+                        _self.currentImgCount++;
+
+                        console.log( _self.imgCount+"/"+ _self.currentImgCount);
+
+                        console.log(_self.imgCount + '.File saved.' + _img);
+                        if (_self.currentImgCount == _self.imgCount) {
+                            console.log("get complete, save to db");
+                            saveImgStatus();
+                        }
+                    })
+                })
             } else {
-                console.log(res.statusCode);
+                console.log(res.statusCode+" / "+_img);
+
             }
-        }.bind(this))
+        })
     }
 
-    function saveImgStatus(_type, _id) {
-        console.log(_id)
-
-        var updateItem = {}
-        updateItem["img." + _type] = true;
+    function saveImgStatus() {
 
         MongoClient.connect(global.dbUrl, function(err, db) {
 
             var products = db.collection('products');
 
             products.update({
-                _id: ObjectID(_id)
+                _id: {
+                    $in: _self._id
+                }
             }, {
-                $set: updateItem
+                $set: {
+                    img: true
+                }
+            }, {
+                multi: true
             }, function(err) {
                 if (err) throw err;
                 console.log("save to db");
@@ -470,8 +436,6 @@ parserFaction.prototype.getImg = function(_id, _iName, _imgUrl) {
 
         })
     }
-
-
 }
 
 

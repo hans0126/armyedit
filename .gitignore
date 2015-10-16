@@ -1,1 +1,4 @@
 /frontend/images
+/.sass-cache
+/uploads
+/upload_temp

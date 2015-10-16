@@ -56,7 +56,7 @@ getItemList.prototype.getData = function(_field) {
     var _collection;
 
     switch (_field.searchType) {
-        case "products":
+        case "product":
             _collection = "products";
             for (var i = 0; i < _tempC.length; i++) {
                 if (_field[_tempC[i]] != null) {
@@ -71,7 +71,7 @@ getItemList.prototype.getData = function(_field) {
 
             break;
 
-        case "cards":
+        case "card":
             _collection = "cards";
             for (var i = 0; i < _tempC.length; i++) {
                 if (_field[_tempC[i]] != null) {

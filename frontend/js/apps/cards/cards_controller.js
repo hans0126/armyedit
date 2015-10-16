@@ -14,6 +14,7 @@ define(function(require) {
             var dbCtrl = new dbCtrlFactory();
             var selectedObj = null;
             var cardsStatus = "new"; //  1.inherit 2.update 3.new(no parent)
+            var imgPath = "/products/normal/";
 
             _self.cardStatusText = null;
 
@@ -22,9 +23,10 @@ define(function(require) {
 
             statusAvgService.cardStatusFields = ["spd", "str", "mat", "rat", "def", "arm", "cmd", "focus"]
 
-          
+            _self.liftType = ["number", "warjack", "warbeast"];
 
-            stService.searchType = "cards" //cards & priducts            
+
+            stService.searchType = "card" //cards & priducts            
 
             _self.c = getCategoryService;
 
@@ -32,6 +34,9 @@ define(function(require) {
 
             // to search area
             $scope.itemSelect = function(_obj) {
+
+
+
                 if (_obj == selectedObj) {
                     return false;
                 }
@@ -40,7 +45,8 @@ define(function(require) {
 
                 selectedObj = _obj;
 
-                if (stService.searchType == "products") {
+
+                if (stService.searchType == "product") {
                     productsProcess();
                 } else {
                     cardsProcess();
@@ -54,8 +60,10 @@ define(function(require) {
                     // get data
                     dbCtrl.getData(selectedObj.copy).then(function(response) {
                         _self.editCard.primaryCard = response.data;
-                        _self.thumbImg = "/images/army/normal/" + _self.editCard.primaryCard.image_name;
+                        _self.thumbImg = imgPath + _self.editCard.primaryCard.image_name;
                         cardsStatus = "update";
+
+
 
                         _self.cardStatusText = "Inherited"
 
@@ -64,8 +72,8 @@ define(function(require) {
                     })
 
                 } else {
-                    // console.log("non");                    
-                    _self.cardStatusText = "data is not created yet"
+
+                    _self.cardStatusText = "data is not filed"
 
                     cardsStatus = "inherit";
 
@@ -78,9 +86,11 @@ define(function(require) {
                         _editData[_tc['type']] = _tc['_id'];
                     }
 
+
+
                     _editData.title = selectedObj.title;
 
-                    _self.thumbImg = "/images/army/normal/" + selectedObj.image_name;
+                    _self.thumbImg = imgPath + selectedObj.image_name;
                     _editData.image_name = selectedObj.image_name;
 
                     _editData.parent_id = selectedObj._id;
@@ -90,7 +100,7 @@ define(function(require) {
 
             function cardsProcess() {
                 _self.editCard.primaryCard = selectedObj;
-                _self.thumbImg = "/images/army/normal/" + selectedObj.image_name;
+                _self.thumbImg = imgPath + selectedObj.image_name;
                 cardsStatus = "update";
             }
 
@@ -193,6 +203,8 @@ define(function(require) {
                                 selectedObj.copy = response.data;
                                 $scope.msg.showMsg('inherit complete', 0);
                                 _self.submitBtnDisabled = false;
+                                cardsStatus = "update";
+                                _self.cardStatusText = "data was Inherited"
                             })
 
                             break;
@@ -202,6 +214,8 @@ define(function(require) {
                             dbCtrl.db(_d).then(function(response) {
                                 $scope.msg.showMsg('add complete', 0);
                                 _self.submitBtnDisabled = false;
+                                cardsStatus = "update";
+                                _self.cardStatusText = "data was Inherited"
                             })
 
                             break;
@@ -334,10 +348,10 @@ define(function(require) {
             link: function(scope, element, attr) {
 
                 scope.mapping = [];
-                if (scope.currentActor.characterAbility) {                      
-                    for (var i = 0; i < scope.currentActor.characterAbility.length; i++) {                        
+                if (scope.currentActor.characterAbility) {
+                    for (var i = 0; i < scope.currentActor.characterAbility.length; i++) {
                         scope.mapping.push(scope.ability.mapping[scope.currentActor.characterAbility[i]]);
-                    }                    
+                    }
                 }
                 scope.addAbility = function() {
                     scope.popupShow = !scope.popupShow;

@@ -1,16 +1,15 @@
 <div class="row">
     <!-- search area -->
     <div class='col-xs-4' style="position:relative" ng-controller="search_controller as search">
-        <div ng-include="'template/search_area.html'"></div>
-        <div ng-include="'template/search_result.html'"></div>
+        <div ng-include="'template/search/search_area.html'"></div>
+        <div ng-include="'template/search/search_result.html'"></div>
     </div>
     <!-- data area -->
     <div class='col-xs-8'>
         <form name="cardForm" novalidate>
             <div class="row">
                 <div class="col-xs-12 form-group">
-                    <div ng-show="cardFrom.$drity">no</div>
-                    {{cards.cardStatusText}}
+                    <kbd ng-show="cards.cardStatusText">{{cards.cardStatusText}}</kbd>
                     <button class="btn btn-primary" ng-click="cards.editCard.createNew()">Create New</button>
                 </div>
             </div>
@@ -81,19 +80,26 @@
                         <!-- actors title -->
                         <div class="form-group form-inline">
                             <label class="shortField">Title:</label>
-                            <input type="text" class="form-control" ng-model="actor.title" name='title' >                            
+                            <input type="text" class="form-control" ng-model="actor.title" name='title'>
                         </div>
+                        <hr>
                         <label for="" ng-repeat-start="(key,value) in cards.statusAvgService.cardStatusFields" class="shortField">{{value | uppercase}}:</label>
                         <input type="number" min="0" class="form-control w80" ng-model="actor.status[value]">
                         <hr ng-repeat-end ng-if="($index+1)%2==0  || $last" />
+                        <div class="form-group form-inline">
+                            <label class="shortField">Life:</label>
+                            <select class="form-control" ng-model="actor.lifeType" ng-options="life as life for life in cards.liftType"></select>
+                            <span ng-switch="actor.lifeType">
+                                     <input type="number" min="0" class="form-control w80" ng-model="actor.life" ng-switch-when="number">
+                            </span>
+                        </div>
                     </div>
                     <div class="col-xs-6">
-                        <!-- actors thumb -->                     
+                        <!-- actors thumb -->
                         <div class="thumbEditArea pull-left" thumb-images="cards.thumbImg" idx="{{$index}}" current-actor="actor"></div>
                         <div class="pull-right" id='abilityStatusArea' ability-edit="cards.ability" current-actor="actor"></div>
-                         <div class='clearfix'></div>
+                        <div class='clearfix'></div>
                         <hr>
-
                     </div>
                 </div>
                 <div class="form-group form-inline" ng-if="$index!=0">
