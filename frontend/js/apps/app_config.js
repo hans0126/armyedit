@@ -5,7 +5,10 @@ define(function(require) {
     require('apps/init/main_controller');
     require('apps/init/get-category_service');
     require('apps/init/status-avg_service');
+     require('apps/init/setting_service');
     require('apps/product/search_factory');
+
+
 
     require('apps/product/product-detail_factory')
     require('apps/product/radar_factory')

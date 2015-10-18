@@ -1,6 +1,7 @@
 <div class="row">
     <!-- search area -->
-    <div class='col-xs-4' style="position:relative" ng-controller="search_controller as search">
+    <div class='col-xs-4' style="position:relative" ng-controller="searchController as search">
+    
         <div ng-include="'template/search/search_area.html'"></div>
         <div ng-include="'template/search/search_result.html'"></div>
     </div>
@@ -22,20 +23,20 @@
                     <!-- series select -->
                     <div class="form-group">
                         <div>
-                            <select ng-model="cards.editCard.primaryCard.series" ng-options="sel._id as sel.title for sel in cards.c.series" class="form-control">
+                            <select ng-model="cards.editCard.primaryCard.series" ng-options="sel._id as sel.title for sel in cards.s.series" class="form-control">
                                 <option value="">-series-</option>
                             </select>
                         </div>
                     </div>
                     <!-- faction select -->
                     <div class="form-group">
-                        <select ng-model="cards.editCard.primaryCard.faction" ng-options="sel._id as sel.title for sel in cards.c.faction  | filter: {parent: cards.editCard.primaryCard.series} | orderBy:'order'" class="form-control">
+                        <select ng-model="cards.editCard.primaryCard.faction" ng-options="sel._id as sel.title for sel in cards.s.faction  | filter: {parent: cards.editCard.primaryCard.series} | orderBy:'order'" class="form-control">
                             <option value="">-faction-</option>
                         </select>
                     </div>
                     <!-- category select -->
                     <div class="form-group">
-                        <select ng-model="cards.editCard.primaryCard.category" ng-options="sel._id as sel.title for sel in cards.c['cardCategory']  | filter: {relation: cards.editCard.primaryCard.series} | orderBy:'order'" class="form-control">
+                        <select ng-model="cards.editCard.primaryCard.category" ng-options="sel._id as sel.title for sel in cards.s['cardCategory']  | filter: {relation: cards.editCard.primaryCard.series} | orderBy:'order'" class="form-control">
                             <option value="">-category-</option>
                         </select>
                     </div>
@@ -83,21 +84,22 @@
                             <input type="text" class="form-control" ng-model="actor.title" name='title'>
                         </div>
                         <hr>
-                        <label for="" ng-repeat-start="(key,value) in cards.statusAvgService.cardStatusFields" class="shortField">{{value | uppercase}}:</label>
+                        <label for="" ng-repeat-start="(key,value) in cards.s.cardStatusFields" class="shortField">{{value | uppercase}}:</label>
                         <input type="number" min="0" class="form-control w80" ng-model="actor.status[value]">
                         <hr ng-repeat-end ng-if="($index+1)%2==0  || $last" />
                         <div class="form-group form-inline">
                             <label class="shortField">Life:</label>
-                            <select class="form-control" ng-model="actor.lifeType" ng-options="life as life for life in cards.liftType"></select>
+                            <select class="form-control" ng-model="actor.lifeType" ng-options="life as life for life in cards.s.lifeType"></select>
                             <span ng-switch="actor.lifeType">
                                      <input type="number" min="0" class="form-control w80" ng-model="actor.life" ng-switch-when="number">
                             </span>
                         </div>
                     </div>
                     <div class="col-xs-6">
+                      
                         <!-- actors thumb -->
                         <div class="thumbEditArea pull-left" thumb-images="cards.thumbImg" idx="{{$index}}" current-actor="actor"></div>
-                        <div class="pull-right" id='abilityStatusArea' ability-edit="cards.ability" current-actor="actor"></div>
+                        <div class="pull-right" id='abilityStatusArea' ability-edit="cards.s.abilityCharacter" current-actor="actor"></div>
                         <div class='clearfix'></div>
                         <hr>
                     </div>

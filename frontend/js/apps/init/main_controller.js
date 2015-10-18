@@ -6,26 +6,29 @@ define(function(require) {
 
     app.controller("mainCtrl", ["$scope",
         "$location",
-        "getCategoryService",
-        "statusAvgService",
         "msgService",
-        "abilityService",
-        function($scope, $location, getCategoryService, statusAvgService, msgService, abilityService) {
+        "settingService",
+        function($scope, $location, msgService, setting) {
 
             var _self = this;
 
+            setting.init();
+
+            // _self.setting = setting;
+
             _self.go = function(path) {
-                    $location.path(path);
-                }
-                //get status avg
-            statusAvgService.getData();
-            //
-            getCategoryService.getData();
+                $location.path(path);
+            }
+
+            //get status avg
+            //    statusAvgService.getData();
+
+            //   getCategoryService.getData();
             // _self.category = getCategoryService;
             $scope.msg = msgService;
-            //
 
-            abilityService.getData();
+
+            //  abilityService.getData();
         }
     ])
 
@@ -84,11 +87,43 @@ define(function(require) {
                 for (var i = 0; i < _d.length; i++) {
                     _self[_d[i].type].push(_d[i]);
                     _self.mapping[_d[i]._id] = _d[i];
-                }                  
-           
-            });          
+                }
+
+            });
         }
     }])
+
+    app.directive('lightBox', function($compile) {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attr) {
+
+                scope.aa = function() {
+                    alert("A");
+                }
+
+                var aaa = "<button bbb>A</button>";
+                var linkFn = $compile(aaa);
+                console.log(linkFn);
+                var content = linkFn(scope);
+                element.append(content);
+            }
+        }
+
+    })
+
+    app.directive('bbb', function($compile) {
+
+        return {
+            restrict: 'A',
+            link: function(scope, element, attr) {
+                element.bind('click',function(){
+                    alert("B");
+                })    
+            }
+        }
+
+    })
 
 
 

@@ -2,20 +2,15 @@ define(function(require) {
 
     var app = require("app");
 
-    app.controller("search_controller", [
-        "statusAvgService",
-        "radarFactory",
-        "getCategoryService",
+    app.controller("searchController", [        
         "searchData",
-        "searchTypeService",
-        "abilityService",
-        function(statusAvgService, radarFactory, getCategoryService, searchData, searchTypeService, abilityService) {
+        "searchTypeService",        
+        "settingService",
+        function( searchData, searchTypeService,settingService) {
 
             var _self = this;
             //category
-            _self.c = getCategoryService;
-
-
+            _self.s = settingService;     
 
             var pageshow = 9;
             var resetDataSample = {
@@ -36,7 +31,7 @@ define(function(require) {
 
             //ability
 
-            _self.ability = abilityService;
+          //  _self.ability = abilityService;
             _self.tempAbility = [];
             _self.ablityActive = function(_ability) {
                 if (_self.tempAbility.indexOf(_ability) > -1) {
@@ -59,7 +54,7 @@ define(function(require) {
                 }
             }
 
-         
+
 
             if (searchTypeService.searchType == "product") {
                 _self.activeSearchBtn = true;
@@ -83,7 +78,8 @@ define(function(require) {
             _self.selectGroup = angular.copy(resetDataSample);
 
             _self.search = function(_newSearch) {
-              
+
+
                 var searchQuery = {}
                     // if new search
                 if (typeof(_newSearch) != "undefined") {

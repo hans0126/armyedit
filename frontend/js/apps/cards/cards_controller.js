@@ -2,13 +2,11 @@ define(function(require) {
 
     var app = require("app");
     require('js/lib/thumbEdit/thumbEdit.js');
-    app.controller("cards_controller", ["$scope",
-        "statusAvgService",
-        "getCategoryService",
+    app.controller("cards_controller", ["$scope",       
         "dbCtrlFactory",
         "searchTypeService",
-        "abilityService",
-        function($scope, statusAvgService, getCategoryService, dbCtrlFactory, stService, abilityService) {
+        "settingService",
+        function($scope,  dbCtrlFactory, stService,settingService) {
 
             var _self = this;
             var dbCtrl = new dbCtrlFactory();
@@ -16,19 +14,11 @@ define(function(require) {
             var cardsStatus = "new"; //  1.inherit 2.update 3.new(no parent)
             var imgPath = "/products/normal/";
 
+            _self.s = settingService;
+
             _self.cardStatusText = null;
 
-
-            _self.ability = abilityService;
-
-            statusAvgService.cardStatusFields = ["spd", "str", "mat", "rat", "def", "arm", "cmd", "focus"]
-
-            _self.liftType = ["number", "warjack", "warbeast"];
-
-
-            stService.searchType = "card" //cards & priducts            
-
-            _self.c = getCategoryService;
+            stService.searchType = "card" //cards or priducts                        
 
             _self.submitBtnDisabled = true;
 
@@ -231,8 +221,6 @@ define(function(require) {
 
             _self.editCard.init();
 
-            _self.statusAvgService = statusAvgService;
-
             _self.thumbImg = null;
 
         }
@@ -403,7 +391,7 @@ define(function(require) {
                 "<div id='ability_popup' class='popup' ng-if='popupShow'>" +
                 "<div class='form-group'><input type='text' class='form-control' ng-model='abilitySearch'/></div>" +
                 "<div class='abilityArea'>" +
-                "<div ng-repeat='character in ability.character | filter:{title:abilitySearch}' class='sprite {{character.cssClass}} abilityIcon' ng-class='active(character._id)'  title='{{character.title}}' ng-click='modify(character)'></div>" +
+                "<div ng-repeat='character in ability | filter:{title:abilitySearch}' class='sprite {{character.cssClass}} abilityIcon' ng-class='active(character._id)'  title='{{character.title}}' ng-click='modify(character)'></div>" +
                 "</div>" +
                 "<div class='form-group form-inline'><button ng-click='clear()' class='btn btn-primary'>clear</button> <button ng-click='addAbility()' class='btn btn-primary'>Apply</button></div>" +
                 "</div>"

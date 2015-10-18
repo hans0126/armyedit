@@ -6,10 +6,12 @@ define(function(require) {
         "search",
         "statusAvgService",
         "productDetailFactory",
-        "radarFactory",
+        "radarFactory",      
         function($scope, search, statusAvgService, productDetailFactory, radarFactory) {
 
             var _self = this;
+
+         
 
             _self.editCtrl = productDetailFactory;
             //

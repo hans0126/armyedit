@@ -15,6 +15,8 @@ define(function(require) {
                 _obj[data[i]._id] = data[i].value;
             }
             _self.simple_data = _obj;
+
+            
         }
 
         _self.getData = function() {

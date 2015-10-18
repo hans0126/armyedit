@@ -136,11 +136,10 @@ button > .fa {
 }
 
 #navi {
-  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSIjY2NjY2NjIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjYWFhYWFhIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g');
-  background-size: 100%;
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(50%, #cccccc), color-stop(100%, #aaaaaa));
-  background-image: -moz-linear-gradient(#ffffff, #cccccc, #aaaaaa);
   background-image: -webkit-linear-gradient(#ffffff, #cccccc, #aaaaaa);
+  background-image: -moz-linear-gradient(#ffffff, #cccccc, #aaaaaa);
+  background-image: -o-linear-gradient(#ffffff, #cccccc, #aaaaaa);
   background-image: linear-gradient(#ffffff, #cccccc, #aaaaaa);
   margin-bottom: 20px;
 }
@@ -163,11 +162,13 @@ button > .fa {
   position: absolute;
   z-index: 999;
   background: #FFF;
-  -moz-border-radius: 25px;
   -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -ms-border-radius: 25px;
+  -o-border-radius: 25px;
   border-radius: 25px;
-  -moz-box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
   -webkit-box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
+  -moz-box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
   box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
   min-height: 630px;
 }
@@ -243,11 +244,13 @@ button > .fa {
 }
 
 .popup {
-  -moz-border-radius: 25px;
   -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -ms-border-radius: 25px;
+  -o-border-radius: 25px;
   border-radius: 25px;
-  -moz-box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
   -webkit-box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
+  -moz-box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
   box-shadow: rgba(0, 0, 255, 0.2) 0 0 25px;
   background: #FFF;
   padding: 1em;
@@ -265,7 +268,7 @@ button > .fa {
   opacity: 0.5;
 }
 .abilityIcon.active {
-  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
 
@@ -278,4 +281,14 @@ button > .fa {
   width: 90%;
   height: 70%;
   margin: 0 auto;
+}
+
+#lightBox {
+  width: 200px;
+  height: 200px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: #666;
+  border: 1px solid #333;
 }
