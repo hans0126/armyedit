@@ -17,9 +17,8 @@
     <link rel="stylesheet" href="css/icons.css">
 </head>
 
-<body ng-controller="mainCtrl as mCtrl">       
+<body ng-controller="mainCtrl as mCtrl">
     <div id="navi">
-
         <ul class="center-block list-inline">
             <li>
                 <button class="btn btn-default" ng-click="mCtrl.go('/')">Product</button>
@@ -30,8 +29,11 @@
             <li>
                 <button class="btn btn-default" ng-click="mCtrl.go('/db_data')">Db data</button>
             </li>
-             <li>
+            <li>
                 <button class="btn btn-default" ng-click="mCtrl.go('/cards')">Cards</button>
+            </li>
+            <li>
+                <button class="btn btn-default" ng-click="mCtrl.go('/lab')">Lab</button>
             </li>
             <br clear="all">
         </ul>
@@ -39,11 +41,7 @@
     <div class="center-block container-fluid" id="wrap">
         <div ng-view id="templateView"></div>
     </div>
-     <div id="msg" msg class="zipper" ng-if='msg.show'></div>
-   
-    
-    <div id='lightBox' light-box></div>
-   
+    <div id="msg" msg class="zipper" ng-if='msg.show'></div>
 </body>
 
 </html>

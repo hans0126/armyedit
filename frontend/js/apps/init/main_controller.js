@@ -8,6 +8,7 @@ define(function(require) {
         "$location",
         "msgService",
         "settingService",
+
         function($scope, $location, msgService, setting) {
 
             var _self = this;
@@ -20,15 +21,10 @@ define(function(require) {
                 $location.path(path);
             }
 
-            //get status avg
-            //    statusAvgService.getData();
-
-            //   getCategoryService.getData();
-            // _self.category = getCategoryService;
+          
             $scope.msg = msgService;
 
 
-            //  abilityService.getData();
         }
     ])
 
@@ -63,71 +59,17 @@ define(function(require) {
     })
 
 
-    app.directive("msg", function() {
+    app.directive("msg", function($rootScope) {
+         
         return {
             restrict: 'A',
-            template: "<p class='{{msg.msgType}}' ><i class='fa {{msg.icon}}'></i> {{msg.msgText}}</p>"
-        }
+            template: "<p class='{{msg.msgType}}' ><i class='fa {{msg.icon}}'></i> {{msg.msgText}}</p>",
+            link:function(){
 
-    })
-
-    app.service('abilityService', ['$http', function($http) {
-        var _self = this;
-
-        _self.weapon = [];
-        _self.character = [];
-        _self.mapping = []
-
-        _self.getData = function() {
-            $http.post("getData", {
-                type: "get_ability"
-            }).then(function(response) {
-                //console.log(response.data);
-                var _d = response.data
-                for (var i = 0; i < _d.length; i++) {
-                    _self[_d[i].type].push(_d[i]);
-                    _self.mapping[_d[i]._id] = _d[i];
-                }
-
-            });
-        }
-    }])
-
-    app.directive('lightBox', function($compile) {
-        return {
-            restrict: 'A',
-            link: function(scope, element, attr) {
-
-                scope.aa = function() {
-                    alert("A");
-                }
-
-                var aaa = "<button bbb>A</button>";
-                var linkFn = $compile(aaa);
-                console.log(linkFn);
-                var content = linkFn(scope);
-                element.append(content);
             }
         }
 
     })
-
-    app.directive('bbb', function($compile) {
-
-        return {
-            restrict: 'A',
-            link: function(scope, element, attr) {
-                element.bind('click',function(){
-                    alert("B");
-                })    
-            }
-        }
-
-    })
-
-
-
-
 
 
 })

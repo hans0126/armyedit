@@ -3,18 +3,14 @@ define(function(require) {
     var app = require("app");
 
     require('apps/init/main_controller');
-    require('apps/init/get-category_service');
-    require('apps/init/status-avg_service');
-     require('apps/init/setting_service');
-    require('apps/product/search_factory');
+    require('apps/init/setting_service');
 
-
-
-    require('apps/product/product-detail_factory')
-    require('apps/product/radar_factory')
-    require('apps/filter/highlight_filter');
+    require('apps/product/product-detail_factory');
+    require('apps/product/radar_factory');   
     require('apps/directive/image-onload_directive');
     require('apps/search/search_controller');
+
+     require('apps/filter/highlight_filter');
 
 
     app.config(['$routeProvider',
@@ -39,6 +35,11 @@ define(function(require) {
                 templateUrl: 'template/cards.html',
                 controller: 'cards_controller as cards',
                 controllerUrl: 'js/apps/cards/cards_controller.js'
+            })).
+            when('/lab', angularAMD.route({
+                templateUrl: 'template/lab.html',
+                controller: 'laboratory_controller as lab',
+                controllerUrl: 'js/apps/lab/laboratory_controller.js'
             })).
             otherwise({
                 redirectTo: '/'

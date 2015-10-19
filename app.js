@@ -21,6 +21,8 @@ var app = express();
 
 global.dbUrl = "mongodb://localhost:27017/warmachine";
 
+//global.dbUrl ="mongodb://hans0126:a0955587777@ds039484.mongolab.com:39484/ttt"
+
 var MongoClient = mongodb.MongoClient;
 var ObjectId = mongodb.ObjectId;
 //body parser

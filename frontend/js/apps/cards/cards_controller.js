@@ -72,7 +72,7 @@ define(function(require) {
                     var _editData = _self.editCard.primaryCard;
 
                     for (var i = 0; i < selectedObj.relation.length; i++) {
-                        _tc = getCategoryService.simpleMapping[selectedObj.relation[i]]
+                        _tc = settingService.categoryMapping[selectedObj.relation[i]]
                         _editData[_tc['type']] = _tc['_id'];
                     }
 
@@ -325,7 +325,7 @@ define(function(require) {
         }
     })
 
-    app.directive("abilityEdit", function() {
+    app.directive("abilityEdit", function($rootScope) {
 
         return {
             restrict: 'A',
@@ -334,6 +334,8 @@ define(function(require) {
                 currentActor: "=currentActor"
             },
             link: function(scope, element, attr) {
+
+               
 
                 scope.mapping = [];
                 if (scope.currentActor.characterAbility) {

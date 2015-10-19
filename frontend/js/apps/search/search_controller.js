@@ -2,15 +2,15 @@ define(function(require) {
 
     var app = require("app");
 
-    app.controller("searchController", [        
-        "searchData",
-        "searchTypeService",        
+    app.controller("searchController", [
+        "searchTypeService",
         "settingService",
-        function( searchData, searchTypeService,settingService) {
+        "searchData",
+        function(searchTypeService, settingService,searchData) {
 
             var _self = this;
             //category
-            _self.s = settingService;     
+            _self.s = settingService;
 
             var pageshow = 9;
             var resetDataSample = {
@@ -31,7 +31,7 @@ define(function(require) {
 
             //ability
 
-          //  _self.ability = abilityService;
+            //  _self.ability = abilityService;
             _self.tempAbility = [];
             _self.ablityActive = function(_ability) {
                 if (_self.tempAbility.indexOf(_ability) > -1) {

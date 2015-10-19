@@ -8,9 +8,9 @@
 <ul id="product_list" class="list-inline">
     <li class='col-xs-4' ng-repeat='value in search.searchResult'>
         <div class='imgArea' ng-click="itemSelect(value)">
-            <img ng-src='images/army/thumb/{{value.image_name}}' imageonload>
+            <img ng-src='products/thumb/{{value.image_name}}' imageonload>
             <i class='fa {{value.icon}} fa-2x'></i>
         </div>
-        <h5 ng-bind-html="value.title | highlightFilter"></h5>
+        <h5 ng-bind-html="value.title | highlightFilter:search.selectGroup.keyword"></h5>
     </li>
 </ul>
