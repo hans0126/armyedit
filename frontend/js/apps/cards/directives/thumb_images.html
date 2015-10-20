@@ -1,0 +1,7 @@
+<div id='thumbs{{idx}}' class='thumbImg' style='background-position:{{currentActor.img.pX}}px {{currentActor.img.pY}}px;background-image:url({{thumbImg}})'></div>
+<div ng-show='edit' class='editPopup popup'>
+    <canvas id='thumb{{idx}}'></canvas>
+</div>
+<div>
+    <button class='btn btn-primary' ng-click='editBtnClick()'>{{editText}}</button>
+</div>

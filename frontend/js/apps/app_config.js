@@ -1,17 +1,9 @@
 define(function(require) {
 
+
     var app = require("app");
 
-    require('apps/init/main_controller');
-    require('apps/init/setting_service');
-
-    require('apps/product/product-detail_factory');
-    require('apps/product/radar_factory');   
-    require('apps/directive/image-onload_directive');
-    require('apps/search/search_controller');
-
-     require('apps/filter/highlight_filter');
-
+    require('apps/main_controller');
 
     app.config(['$routeProvider',
         function($routeProvider) {
@@ -21,20 +13,20 @@ define(function(require) {
                 controller: 'product as product',
                 controllerUrl: 'js/apps/product/product_controller.js'
             })).
-            when('/db_data', angularAMD.route({
-                templateUrl: 'template/db_data.html',
-                controller: 'db_data as dbData',
-                controllerUrl: 'js/apps/db_data/db_data_controller.js'
+            when('/statistic', angularAMD.route({
+                templateUrl: 'js/apps/statistic/controllers/statistic_controller.html',
+                controller: 'statistic as dbData',
+                controllerUrl: 'js/apps/statistic/controllers/statistic_controller.js'
             })).
             when('/compare', angularAMD.route({
-                templateUrl: 'template/compare.html',
+                templateUrl: 'js/apps/compare/controllers/compare_controller.html',
                 controller: 'compare_controller as compare',
-                controllerUrl: 'js/apps/compare/compare_controller.js'
+                controllerUrl: 'js/apps/compare/controllers/compare_controller.js'
             })).
             when('/cards', angularAMD.route({
-                templateUrl: 'template/cards.html',
+                templateUrl: 'js/apps/cards/controllers/cards_controller.html',
                 controller: 'cards_controller as cards',
-                controllerUrl: 'js/apps/cards/cards_controller.js'
+                controllerUrl: 'js/apps/cards/controllers/cards_controller.js'
             })).
             when('/lab', angularAMD.route({
                 templateUrl: 'template/lab.html',
@@ -42,12 +34,10 @@ define(function(require) {
                 controllerUrl: 'js/apps/lab/laboratory_controller.js'
             })).
             otherwise({
-                redirectTo: '/'
+                redirectTo: '/cards'
             });
         }
     ]);
-
-
 
 
 })

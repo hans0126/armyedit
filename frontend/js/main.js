@@ -8,7 +8,7 @@ requirejs.config({
         angularAMD: 'lib/angularAMD.min',
         d3: 'lib/d3.min',
         d3_radar: 'lib/radar-chart-d3-master/src/radar-chart.min',
-        app: 'apps/module/main_module'
+        app: 'apps/app'
 
     },
     shim: {
@@ -21,15 +21,16 @@ requirejs.config({
         angularRoute: {
             deps: ['angularAnimate']
         },
-        app:{
-             deps: ['angularRoute','d3_radar']
+        app: {
+            deps: ['angularRoute', 'd3_radar']
         },
         d3_radar: {
             deps: ['d3']
         }
-    },
-    deps:['apps/app_config']
+    }
+    
 });
 
+require(['apps/app_config'], function(app) {
 
-
+})

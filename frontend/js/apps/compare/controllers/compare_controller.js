@@ -3,14 +3,61 @@ define(function(require) {
     var app = require("app");
 
     app.controller("compare_controller", ["$scope",
-        "search",
-        "statusAvgService",
-        "productDetailFactory",
-        "radarFactory",
-        function($scope, search, statusAvgService, productDetailFactory, radarFactory) {
+        "searchTypeService",
+        "settingService",
+        function($scope, stService, settingService) {
 
             var _self = this;
 
+            stService.searchBtnShow = false //select btn visible
+            stService.searchType = "card" //cards or priducts   
+
+
+            _self.selctedCard = null;
+
+            _self.thumbCss = thumbCss;
+            _self.selectItem = selectItem;
+
+            _self.compareBox = [];
+
+            stService.objectSelected = function(obj) {
+                _self.selctedCard = obj;
+            }
+
+
+            function thumbCss(_obj, _actor) {
+                return {
+                    "background": "url(products/normal/" + _obj.image_name + ")",
+                    "background-position": _actor.img.pX + "px " + _actor.img.pY + "px",
+                    width: "100px",
+                    height: "100px"
+
+                }
+            }
+
+            function selectItem(_obj, _actorIdx) {
+                if (checkTheSame(_obj, _actorIdx)) {
+                    _self.compareBox.push({
+                        card: _obj,
+                        actorIndex: _actorIdx
+                    })
+                }
+
+                function checkTheSame(_tobj, _tidx) {
+
+                    var result = true;
+
+                    for (var i = 0; i < _self.compareBox.length; i++) {
+                        if (_self.compareBox[i].card._id == _tobj._id && _self.compareBox[i].actorIndex == _tidx) {
+                            result = false;
+                            break;
+                        }
+                    }
+                    return result;
+                }
+            }
+
+            /*
             _self.search = search;
 
             _self.search.init();
@@ -53,12 +100,12 @@ define(function(require) {
 
                 }
             }
-
+            */
 
         }
     ])
 
-
+    /*
     app.directive("smallRadar", ["radarFactory", "statusAvgService", function(radarFactory, statusAvgService) {
 
         return {
@@ -124,7 +171,7 @@ define(function(require) {
 
 
 
-
+    */
 
 
 })

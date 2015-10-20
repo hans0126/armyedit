@@ -1,9 +1,8 @@
 <div class="row">
     <!-- search area -->
-    <div class='col-xs-4' style="position:relative" ng-controller="searchController as search">
-    
-        <div ng-include="'template/search/search_area.html'"></div>
-        <div ng-include="'template/search/search_result.html'"></div>
+    <div class='col-xs-4' style="position:relative" ng-controller="searchController as search">    
+        <div ng-include="search.searchTemplateUrl"></div>
+        <div ng-include="search.resultTemplateUrl"></div>
     </div>
     <!-- data area -->
     <div class='col-xs-8'>
@@ -11,56 +10,56 @@
             <div class="row">
                 <div class="col-xs-12 form-group">
                     <kbd ng-show="cards.cardStatusText">{{cards.cardStatusText}}</kbd>
-                    <button class="btn btn-primary" ng-click="cards.editCard.createNew()">Create New</button>
+                    <button class="btn btn-primary" ng-click="cards.createNew()">Create New</button>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-6">
                     <!-- main title -->
                     <div class="form-group">
-                        <input type="text" ng-model="cards.editCard.primaryCard.title" class="form-control">
+                        <input type="text" ng-model="cards.primaryCard.title" class="form-control">
                     </div>
                     <!-- series select -->
                     <div class="form-group">
                         <div>
-                            <select ng-model="cards.editCard.primaryCard.series" ng-options="sel._id as sel.title for sel in cards.s.series" class="form-control">
+                            <select ng-model="cards.primaryCard.series" ng-options="sel._id as sel.title for sel in cards.s.series" class="form-control">
                                 <option value="">-series-</option>
                             </select>
                         </div>
                     </div>
                     <!-- faction select -->
                     <div class="form-group">
-                        <select ng-model="cards.editCard.primaryCard.faction" ng-options="sel._id as sel.title for sel in cards.s.faction  | filter: {parent: cards.editCard.primaryCard.series} | orderBy:'order'" class="form-control">
+                        <select ng-model="cards.primaryCard.faction" ng-options="sel._id as sel.title for sel in cards.s.faction  | filter: {parent: cards.primaryCard.series} | orderBy:'order'" class="form-control">
                             <option value="">-faction-</option>
                         </select>
                     </div>
                     <!-- category select -->
                     <div class="form-group">
-                        <select ng-model="cards.editCard.primaryCard.category" ng-options="sel._id as sel.title for sel in cards.s['cardCategory']  | filter: {relation: cards.editCard.primaryCard.series} | orderBy:'order'" class="form-control">
+                        <select ng-model="cards.primaryCard.category" ng-options="sel._id as sel.title for sel in cards.s['cardCategory']  | filter: {relation: cards.primaryCard.series} | orderBy:'order'" class="form-control">
                             <option value="">-category-</option>
                         </select>
                     </div>
                     <!-- primary card value -->
                     <div class="form-group form-inline">
                         <label class="shortField">COST:</label>
-                        <input type="number" min="0" class="form-control w80" ng-model="cards.editCard.primaryCard.pc.min.cost" placeholder="cost"> /
-                        <input type="number" min="0" class="form-control w80" ng-model="cards.editCard.primaryCard.pc.min.people" placeholder="people"> (min)
+                        <input type="number" min="0" class="form-control w80" ng-model="cards.primaryCard.pc.min.cost" placeholder="cost"> /
+                        <input type="number" min="0" class="form-control w80" ng-model="cards.primaryCard.pc.min.people" placeholder="people"> (min)
                     </div>
                     <div class="form-group form-inline">
                         <label class="shortField"></label>
-                        <input type="number" min="0" class="form-control w80" ng-model="cards.editCard.primaryCard.pc.max.cost" placeholder="cost"> /
-                        <input type="number" min="0" class="form-control w80" ng-model="cards.editCard.primaryCard.pc.max.people" placeholder="people"> (max)
+                        <input type="number" min="0" class="form-control w80" ng-model="cards.primaryCard.pc.max.cost" placeholder="cost"> /
+                        <input type="number" min="0" class="form-control w80" ng-model="cards.primaryCard.pc.max.people" placeholder="people"> (max)
                     </div>
                     <div class="form-group form-inline">
                         <label class="shortField">FA:</label>
-                        <select class="form-control" ng-model="cards.editCard.primaryCard.fa.info" ng-options="fa.brief as fa.title for fa in cards.editCard.fa">
+                        <select class="form-control" ng-model="cards.primaryCard.fa.info" ng-options="fa.brief as fa.title for fa in cards.s.fa">
                             <option value="">--</option>
                         </select>
-                        <input type="number" min="0" class="form-control w80" ng-if="cards.editCard.primaryCard.fa.info=='n'" ng-model="cards.editCard.primaryCard.fa.num">
+                        <input type="number" min="0" class="form-control w80" ng-if="cards.primaryCard.fa.info=='n'" ng-model="cards.primaryCard.fa.num">
                     </div>
                     <div class="form-group form-inline">
                         <label class="shortField">WJ/WB:</label>
-                        <input type="number" min="0" class="form-control w80" ng-model="cards.editCard.primaryCard.wj">
+                        <input type="number" min="0" class="form-control w80" ng-model="cards.primaryCard.wj">
                     </div>
                 </div>
                 <div class="col-xs-6">
@@ -75,7 +74,7 @@
             </div>
             <hr>
             <!-- actors status -->
-            <div ng-repeat="actor in cards.editCard.primaryCard.actor">
+            <div ng-repeat="actor in cards.primaryCard.actor">
                 <div class="row">
                     <div class="col-xs-6">
                         <!-- actors title -->
@@ -105,15 +104,15 @@
                     </div>
                 </div>
                 <div class="form-group form-inline" ng-if="$index!=0">
-                    <button class="btn btn-danger pull-right" ng-click="cards.editCard.removeActor(actor.$$hashKey)">Remove actor</button>
+                    <button class="btn btn-danger pull-right" ng-click="cards.removeActor(actor.$$hashKey)">Remove actor</button>
                     <br clear="all">
                 </div>
             </div>
             <div class="form-group form-inline ">
-                <button class="btn btn-primary" ng-click="cards.editCard.addActor()">Add actor</button>
+                <button class="btn btn-primary" ng-click="cards.addActor()">Add actor</button>
             </div>
             <div class="form-group form-inline">
-                <button class="btn btn-primary pull-right" ng-click="cards.editCard.save()" ng-disabled="cards.submitBtnDisabled">SAVE</button>
+                <button class="btn btn-primary pull-right" ng-click="cards.saveData()" ng-disabled="cards.submitBtnDisabled">SAVE</button>
             </div>
         </form>
     </div>

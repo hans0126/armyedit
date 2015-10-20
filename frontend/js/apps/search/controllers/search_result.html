@@ -7,7 +7,7 @@
 <!-- search result -->
 <ul id="product_list" class="list-inline">
     <li class='col-xs-4' ng-repeat='value in search.searchResult'>
-        <div class='imgArea' ng-click="itemSelect(value)">
+        <div class='imgArea' ng-click="search.searchType.objectSelected(value)">
             <img ng-src='products/thumb/{{value.image_name}}' imageonload>
             <i class='fa {{value.icon}} fa-2x'></i>
         </div>

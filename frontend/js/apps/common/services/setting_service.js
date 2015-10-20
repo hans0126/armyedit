@@ -125,7 +125,7 @@ define(function(require) {
                 //console.log(response.data);
                 var _d = response.data
                 for (var i = 0; i < _d.length; i++) {
-                 
+
                     if (_d[i].type == "weapon") {
                         _self.abilityWeapon.push(_d[i])
                     } else {
@@ -138,10 +138,21 @@ define(function(require) {
             });
         }
 
-        _self.cardStatusFields = ["spd", "str", "mat", "rat", "def", "arm", "cmd", "focus","threshold"]
+        _self.cardStatusFields = ["spd", "str", "mat", "rat", "def", "arm", "cmd", "focus", "threshold"]
 
         _self.lifeType = ["number", "warjack", "warbeast"];
         //_self.fieldSort = ["spd", "str", "mat", "rat", "def", "arm"];
+
+        _self.fa = [{
+            title: "Unlimit",
+            brief: "u"
+        }, {
+            title: "Character",
+            brief: "c"
+        }, {
+            title: "Number",
+            brief: "n"
+        }]
 
     }])
 

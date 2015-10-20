@@ -2,15 +2,11 @@ define(function(require) {
 
     var app = require("app");
 
-    app.controller("db_data", [
+    app.controller("statistic", [
         "settingService",
         function(settingService) {
-
             var _self = this;
-
             _self.s = settingService;
-
-
         }
     ])
 

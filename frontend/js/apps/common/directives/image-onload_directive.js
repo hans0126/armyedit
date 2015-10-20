@@ -1,8 +1,6 @@
 define(function(require) {
 
-    var app = require("app");
-
-  
+   var app = require("app"); 
 
     app.directive("imageonload", function($compile) {
         return {

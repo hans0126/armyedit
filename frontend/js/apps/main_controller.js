@@ -2,13 +2,20 @@ define(function(require) {
 
     var app = require("app");
 
+    require('apps/common/services/setting_service');
+    require('apps/common/directives/image-onload_directive');
+    //require('apps/product/product-detail_factory');
+    //require('apps/product/radar_factory');
+   
+    require('apps/search/controllers/search_controller');
+    require('apps/common/filters/highlight_filter');
+
     //primary module
 
     app.controller("mainCtrl", ["$scope",
         "$location",
         "msgService",
         "settingService",
-
         function($scope, $location, msgService, setting) {
 
             var _self = this;
@@ -20,8 +27,6 @@ define(function(require) {
             _self.go = function(path) {
                 $location.path(path);
             }
-
-          
             $scope.msg = msgService;
 
 
@@ -60,11 +65,11 @@ define(function(require) {
 
 
     app.directive("msg", function($rootScope) {
-         
+
         return {
             restrict: 'A',
             template: "<p class='{{msg.msgType}}' ><i class='fa {{msg.icon}}'></i> {{msg.msgText}}</p>",
-            link:function(){
+            link: function() {
 
             }
         }

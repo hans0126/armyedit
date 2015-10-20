@@ -2,17 +2,19 @@ define(function(require) {
 
     var app = require("app");
 
+    require('js/apps/search/services/search_data.js');
+    require('js/apps/search/services/search_type.js');
+
     app.controller("searchController", [
         "searchTypeService",
         "settingService",
         "searchData",
-        function(searchTypeService, settingService,searchData) {
+        function(searchTypeService, settingService, searchData) {
 
             var _self = this;
-            //category
-            _self.s = settingService;
 
             var pageshow = 9;
+
             var resetDataSample = {
                 series: null,
                 faction: null,
@@ -22,6 +24,11 @@ define(function(require) {
                 keywordLogic: "and"
             }
 
+            _self.s = settingService;
+
+            _self.searchTemplateUrl = 'js/apps/search/controllers/search_area.html';
+            _self.resultTemplateUrl = 'js/apps/search/controllers/search_result.html';
+
             _self.currentPage = 0;
             _self.totalPageCount = 0;
             _self.totalItemCount = 0;
@@ -29,16 +36,30 @@ define(function(require) {
 
             _self.searchType = searchTypeService;
 
-            //ability
-
-            //  _self.ability = abilityService;
             _self.tempAbility = [];
-            _self.ablityActive = function(_ability) {
+            _self.ablityActive = ablityActive;
+            _self.abilityModify = abilityModify;
+            _self.cssActive = cssActive;
+
+            _self.changeSearchtType = changeSearchtType;
+            _self.search = search;
+            _self.clearData = clearData;
+            _self.goPrev = goPrev;
+            _self.goNext = goNext;
+
+            if (searchTypeService.searchType == "product") {
+                _self.activeSearchBtn = true;
+            } else {
+                _self.activeSearchBtn = false;
+            }
+
+            function ablityActive(_ability) {
                 if (_self.tempAbility.indexOf(_ability) > -1) {
                     return "active"
                 }
             }
-            _self.abilityModify = function(_obj) {
+
+            function abilityModify(_obj) {
                 var _idx = _self.tempAbility.indexOf(_obj);
                 if (_idx > -1) {
                     _self.tempAbility.splice(_idx, 1);
@@ -47,22 +68,13 @@ define(function(require) {
                 }
             }
 
-
-            _self.cssActive = function(_va) {
+            function cssActive(_va) {
                 if (_va) {
                     return "active"
                 }
             }
 
-
-
-            if (searchTypeService.searchType == "product") {
-                _self.activeSearchBtn = true;
-            } else {
-                _self.activeSearchBtn = false;
-            }
-
-            _self.changeSearchtType = function(_va) {
+            function changeSearchtType(_va) {
 
                 if (searchTypeService.searchType == _va) {
                     return false;
@@ -77,8 +89,7 @@ define(function(require) {
 
             _self.selectGroup = angular.copy(resetDataSample);
 
-            _self.search = function(_newSearch) {
-
+            function search(_newSearch) {
 
                 var searchQuery = {}
                     // if new search
@@ -88,7 +99,6 @@ define(function(require) {
                     _self.totalItemCount = 0;
 
                     searchQuery = {
-
                         pageshow: pageshow,
                         searchType: searchTypeService.searchType
                     }
@@ -120,45 +130,27 @@ define(function(require) {
                     if (response.data.count % pageshow > 0) {
                         _self.totalPageCount++;
                     }
-
                 })
-
             }
-            _self.clear = function() {
+
+            function clearData() {                
                 _self.selectGroup = angular.copy(resetDataSample);
                 _self.tempAbility = [];
             }
-            _self.prev = function() {
+
+            function goPrev() {
                 if (_self.currentPage > 0) {
                     _self.currentPage--;
                     _self.search();
                 }
             }
-            _self.next = function() {
-                if (this.currentPage < this.totalPageCount - 1) {
-                    this.currentPage++;
-                    this.search();
+
+            function goNext() {
+                if (_self.currentPage < _self.totalPageCount - 1) {
+                    _self.currentPage++;
+                    _self.search();
                 }
             }
-
-
         }
     ])
-
-    app.factory("searchData", ["$http", function($http) {
-
-        function search(_data) {
-            return $http.post("getData", _data)
-        }
-
-        return search
-
-    }])
-
-    app.service('searchTypeService', function() {
-        this.searchType = null;
-
-    })
-
-
 })

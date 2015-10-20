@@ -1,0 +1,47 @@
+<div id="popup_search" class="row" ng-controller="searchController as search">
+    <div class="col-xs-4" ng-include="search.searchTemplateUrl"></div>
+    <div class='col-xs-5' ng-include="search.resultTemplateUrl"></div>
+    <div class="col-xs-3">
+        <div ng-repeat ="actor in compare.selctedCard.actor">
+                <div ng-style="compare.thumbCss(compare.selctedCard,actor)" ng-click="compare.selectItem(compare.selctedCard,$index)"></div>
+                
+        </div>
+        {{compare.compareBox}}   
+    </div>
+</div>
+<button class="btn" ng-click="compare.searchBtn.trigger()">{{compare.searchBtn.text}}</button>
+<div class="row">
+    <div class='row' id="itemCompare">
+        <div class="selectedItem">
+            <div class='col-xs-4' ng-repeat='val in compare.selected'>
+                <h5>{{val.title}}</h5>
+                <div class='imgArea pull-left'>
+                    <img ng-src='images/army/thumb/{{val.image_name}}' imageonload>
+                </div>
+                <div small-radar status="val.status" class="pull-left small_radar"></div>
+            </div>
+        </div>
+        <hr style="clear:both">
+        <div id="compareArea">
+            <div class='col-xs-7'>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td></td>
+                            <td ng-repeat='val in compare.selected'>{{val.title}}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat='(_key,_val) in compare.statusAvg.simple_data'>
+                            <td>{{_key | uppercase}}</td>
+                            <td ng-repeat='val in compare.selected'>{{val.status[_key]}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class='col-xs-5'>
+                <div compare-radar id="compare_radar" selected="compare.selected"></div>
+            </div>
+        </div>
+    </div>
+</div>

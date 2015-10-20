@@ -14,19 +14,16 @@ reduce.prototype.status_avg = function(_field) {
     var _self = this;
 
     MongoClient.connect(global.dbUrl, function(err, db) {
-        var products = db.collection('products');
-        var temp_collection = db.collection('temp_collection');
-
-
-
+        var products = db.collection('cards');
         //map
         function _map() {
-            for (var key in this.status) {
-                emit(key, this.status[key]);
+            for (var i = 0; i < this.actor.length; i++) {
+                for (var key in this.actor[i].status) {
+                    emit(key, this.actor[i].status[key]);
+                }
             }
-
-            // emit(this.status_key, this.status_value);
         }
+
         //reduce
         function _reduce(_key, _values) {
 
@@ -72,31 +69,28 @@ reduce.prototype.status_avg = function(_field) {
 
         products.mapReduce(_map, _reduce, _query, function(err, re) {
             if (err) throw err;
-
             _self.emit("status avg ok");
-
-            //temp_collection.drop();
-
         })
 
     });
 }
 
-
 reduce.prototype.get_status = function() {
     var _self = this;
     MongoClient.connect(global.dbUrl, function(err, db) {
         var status_range_value = db.collection('status_range_value');
-        status_range_value.find({},{"value.sort":0}).sort({"value.sort":1}).toArray(function(err, re) {
+        status_range_value.find({}, {
+            "value.sort": 0
+        }).sort({
+            "value.sort": 1
+        }).toArray(function(err, re) {
             if (err) throw err;
-         
+
             _self.emit("get status data", re);
 
         })
     })
 }
-
-
 
 module.exports = {
     reduce: reduce
