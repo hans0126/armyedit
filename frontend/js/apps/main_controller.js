@@ -5,10 +5,11 @@ define(function(require) {
     require('apps/common/services/setting_service');
     require('apps/common/directives/image-onload_directive');
     //require('apps/product/product-detail_factory');
-    //require('apps/product/radar_factory');
+    require('apps/common/services/radar_factory');
    
-    require('apps/search/controllers/search_controller');
+    
     require('apps/common/filters/highlight_filter');
+    require('apps/search/controllers/search_controller');
 
     //primary module
 

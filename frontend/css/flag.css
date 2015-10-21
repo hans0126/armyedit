@@ -1,0 +1,26 @@
+/* ----------------------------------------------------
+   created with http://www.codeandweb.com/texturepacker 
+   ----------------------------------------------------
+   $TexturePacker:SmartUpdate:c30dbc87853741b9d9da737ca47388d5:880543781a4e25c714cec68e6a768b04:ea28729eb5345a6ff0fe70ed9d5f808a$
+   ----------------------------------------------------
+
+   usage: <span class="{-spritename-} sprite"></span>
+
+   replace {-spritename-} with the sprite you like to use
+
+*/
+
+.flag {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(../images/flag.png);}
+
+.Convergence {width:130px; height:130px; background-position: -2px -2px}
+.circle-orboros {width:130px; height:130px; background-position: -134px -2px}
+.cryx {width:130px; height:130px; background-position: -266px -2px}
+.cygnar {width:130px; height:130px; background-position: -398px -2px}
+.khador {width:130px; height:130px; background-position: -530px -2px}
+.legion-of-everblight {width:130px; height:130px; background-position: -662px -2px}
+.mercenaries {width:130px; height:130px; background-position: -794px -2px}
+.minions {width:130px; height:130px; background-position: -926px -2px}
+.skorne {width:130px; height:130px; background-position: -1058px -2px}
+.the-protectorate-of-menoth {width:130px; height:130px; background-position: -1190px -2px}
+.the-retribution-of-scyrah {width:130px; height:130px; background-position: -1322px -2px}
+.trollbloods {width:130px; height:130px; background-position: -1454px -2px}

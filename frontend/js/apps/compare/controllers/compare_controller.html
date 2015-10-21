@@ -1,24 +1,37 @@
-<div id="popup_search" class="row" ng-controller="searchController as search">
-    <div class="col-xs-4" ng-include="search.searchTemplateUrl"></div>
-    <div class='col-xs-5' ng-include="search.resultTemplateUrl"></div>
-    <div class="col-xs-3">
-        <div ng-repeat ="actor in compare.selctedCard.actor">
-                <div ng-style="compare.thumbCss(compare.selctedCard,actor)" ng-click="compare.selectItem(compare.selctedCard,$index)"></div>
-                
+<div id="popup_search" class="row" ng-controller="searchController as search" ng-if='compare.popupShow'>
+    <div class='col-xs-4' ng-include="search.searchTemplateUrl"></div>
+    <div class='col-xs-4' ng-include="search.resultTemplateUrl"></div>
+    <div class='col-xs-4' id='compareSearchArea'>
+        <div class="flag {{compare.getFlagName(compare.selctedCard.faction)}}" ng-if="compare.selctedCard.faction"></div>
+        <h3>{{compare.selctedCard.title}}</h3>
+        <div ng-repeat="actor in compare.selctedCard.actor" class='compareSearchList'>
+            <div ng-style="compare.thumbCss(compare.selctedCard,actor)" class="compareSearchImg pull-left thumbImg" ng-click="compare.selectItem(compare.selctedCard,$index)">
+                <i class="fa fa-square-o fa-4" ng-if="!actor.selected"></i>
+                <i class="fa fa-check-square-o fa-2" ng-if="actor.selected"></i>
+            </div>
+            <h4 class='pull-left'>{{actor.title}}</h4>
+            <div class='clearfix'></div>
         </div>
-        {{compare.compareBox}}   
+        <ul id="compareSelectedItem" class='list-unstyled'>
+            <li ng-repeat="item in compare.compareBox">
+                <div>{{item.card.title}}</div>
+                <h3>{{item.card.actor[item.actorIndex].title}}</h3>
+                <i class="fa fa-times" ng-click='compare.removeCompareItem(item)'></i>
+            </li>
+        </ul>
+        <div class='form-group'>
+            <button class='btn btn-primary btn-block' ng-click='compare.compareStart()'>Compare</button>
+        </div>
     </div>
 </div>
 <button class="btn" ng-click="compare.searchBtn.trigger()">{{compare.searchBtn.text}}</button>
 <div class="row">
     <div class='row' id="itemCompare">
         <div class="selectedItem">
-            <div class='col-xs-4' ng-repeat='val in compare.selected'>
-                <h5>{{val.title}}</h5>
-                <div class='imgArea pull-left'>
-                    <img ng-src='images/army/thumb/{{val.image_name}}' imageonload>
-                </div>
-                <div small-radar status="val.status" class="pull-left small_radar"></div>
+            <div class='col-xs-4' ng-repeat='val in compare.compareBox'>
+                <h5>{{val.card.title}}-{{val.card.actor[val.actorIndex].title}} </h5>
+                <div class='imgArea pull-left thumbImg'  ng-style="compare.thumbCss(val.card,val.card.actor[val.actorIndex])" ></div>
+                <div small-radar status="val.card.actor[val.actorIndex].status" class="pull-left small_radar"></div>
             </div>
         </div>
         <hr style="clear:both">

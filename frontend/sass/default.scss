@@ -294,3 +294,56 @@ button > .fa {
     background:#666;
     border:1px solid #333;
 }
+
+
+#compareSearchArea {
+    position: relative;
+    > .flag {
+        position: absolute;
+        right: 0;
+        top: 0;
+        @include opacity(0.3);
+    }
+}
+
+.compareSearchImg{
+    cursor:pointer; 
+    position:relative;
+    margin-bottom: 20px;
+    margin-right: 10px; 
+
+    > i {
+        font-size: 1.5em;
+        color:#FFF;
+        position: absolute;
+        right: 5px;
+        top: 5px;
+         text-shadow: 2px 2px 8px #333;
+    }
+}
+
+.compareSearchList {
+    
+}
+
+#compareSelectedItem {
+
+   > li{
+        position: relative;
+        border-bottom:1px solid #999;
+        margin-bottom: 1em;
+    }
+
+    h3{
+        margin: 0;        
+    }
+
+    i {
+        position: absolute;
+        font-size:2em;
+        color:#F00;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+    }
+}
