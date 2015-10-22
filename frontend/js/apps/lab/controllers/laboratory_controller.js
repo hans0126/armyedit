@@ -2,12 +2,11 @@ define(function(require) {
 
     var app = require("app");
 
-    app.controller("laboratory_controller", [
-        function() {
+    app.controller("laboratory_controller", ['settingService', function(settingService) {
+        var _self = this;
+        _self.s = settingService
 
-
-        }
-    ])
+    }])
 
     app.directive('lightBox', function($compile) {
         return {
@@ -84,14 +83,43 @@ define(function(require) {
 
     app.directive('radar', function(radarFactory) {
 
-      
-
         return {
             restrict: 'A',
-
+            scope: {
+                avg: "=avg"
+            },
             link: function(scope, element, attr) {
-                  console.log(radarFactory.radarTemp);
+
+                var chart = new RadarChart.chart();
+
+                chart.config({
+                    w: 200,
+                    h: 200,
+                    maxValue: 100
+                }); // retrieve default config
+                var svg = d3.select(element[0]).append('svg').style({
+                    height: '200px'
+                });
+
+                var watcher = scope.$watch('avg.statusMapping', function(_a, _b) {
+                    if (_a) {
+                        var _d = radarFactory("A", status, scope.avg);
+                        svg.append('g').classed('single', true).datum([_d]).call(chart);
+                      
+                    }
+
+                })
+
+                var status = {
+                    spd: 13,
+                    arm: 10,
+                    mat: 10,
+                    rat: 10,
+                    cmd: 10
+                }
+
             }
+
         }
     })
 

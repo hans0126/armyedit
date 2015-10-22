@@ -78,10 +78,12 @@
 
   <script type="text/javascript">
   var chart = RadarChart.chart();
-  var cfg = chart.config(); // retrieve default config
+      var cfg = chart.config(); // retrieve default config
   var svg = d3.select('body').append('svg')
     .attr('width', cfg.w)
     .attr('height', cfg.h + cfg.h / 4);
+
+  
   svg.append('g').classed('single', 1).datum(randomDataset()).call(chart);
 
   // many radars

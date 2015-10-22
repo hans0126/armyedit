@@ -4,10 +4,16 @@ define(function(require) {
 
     app.service("settingService", ['$http', function($http) {
 
+
+
         var _self = this;
+
+
+
 
         //init 
         _self.init = function() {
+
             _self.getStatusData();
             _self.getCategoryData();
             _self.getAbilityData();
@@ -24,8 +30,13 @@ define(function(require) {
             }).then(function(response) {
                 _self.statusValue = response.data;
                 _self.statusMapping = _dataTranslate(response.data);
+
+                
             });
         }
+
+
+
 
         _self.updateStatusData = function() {
             $http.post("mapreduce", {

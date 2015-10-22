@@ -12,6 +12,7 @@ define(function(require) {
             stService.searchBtnShow = false //select btn visible
             stService.searchType = "card" //cards or priducts   
 
+            _self.s = settingService;
 
             _self.getFlagName = getFlagName;
 
@@ -100,8 +101,8 @@ define(function(require) {
                 }
             }
 
-            function compareStart(){
-                 _self.popupShow = false; 
+            function compareStart() {
+                _self.popupShow = false;
             }
 
 
@@ -151,27 +152,41 @@ define(function(require) {
             */
 
         }
-    ])  
-    
+    ])
+
     app.directive("smallRadar", ["radarFactory", "settingService", function(radarFactory, settingService) {
-        
+
+       
+
+
         return {
             restrict: 'A',
             scope: {
-                status: "=status"
+                status: "=status",
+                avg: "=avg"
             },
-            link: function($scope, $element, $attr) {
+            link: function(scope, element, attr) {
 
                 var _d = [];
-                if (typeof($scope.status) != "undefined") {
-                    _d.push(radarFactory.transferData($scope.status, settingService.statusMapping))
+                if (typeof(scope.status) != "undefined") {
+                    _d.push(radarFactory('a', scope.status, scope.avg))
                 }
-                _d.push(radarFactory.orignal_data);
-                RadarChart.defaultConfig.w = 150;
-                RadarChart.defaultConfig.h = 150;
-                RadarChart.defaultConfig.circles = false;
 
-                RadarChart.draw($element[0], _d);
+                var chart = new RadarChart.chart();
+
+                chart.config({
+                    w: 150,
+                    h: 150,
+                    maxValue: 100,
+                    circles:false
+                }); // retrieve default config
+               
+                var svg = d3.select(element[0]).append('svg').style({
+                    height: '150px',
+                    width:'150px'
+                });
+
+                svg.append('g').classed('single', true).datum(_d).call(chart);               
 
 
 
@@ -182,45 +197,45 @@ define(function(require) {
     }])
 
 
-/*
-    app.directive("compareRadar", ["radarFactory", "statusAvgService", function(radarFactory, statusAvgService) {
+    /*
+        app.directive("compareRadar", ["radarFactory", "statusAvgService", function(radarFactory, statusAvgService) {
 
-        return {
-            restrict: 'A',
-            scope: {
-                selected: "=selected"
-            },
-            link: function($scope, $element, $attr) {
+            return {
+                restrict: 'A',
+                scope: {
+                    selected: "=selected"
+                },
+                link: function($scope, $element, $attr) {
 
-                $scope.$watch('selected.length', function() {
-                    RadarChart.defaultConfig.w = 350;
-                    RadarChart.defaultConfig.h = 350;
-                    RadarChart.defaultConfig.circles = true;
+                    $scope.$watch('selected.length', function() {
+                        RadarChart.defaultConfig.w = 350;
+                        RadarChart.defaultConfig.h = 350;
+                        RadarChart.defaultConfig.circles = true;
 
-                    var _d = [];
-                    _d.push(radarFactory.orignal_data)
-                    for (var i = 0; i < $scope.selected.length; i++) {
-                        if (typeof($scope.selected[i].status) != "undefined") {
-                            _d.push(radarFactory.transferData($scope.selected[i].status, statusAvgService.simple_data, "chart_style_" + i))
+                        var _d = [];
+                        _d.push(radarFactory.orignal_data)
+                        for (var i = 0; i < $scope.selected.length; i++) {
+                            if (typeof($scope.selected[i].status) != "undefined") {
+                                _d.push(radarFactory.transferData($scope.selected[i].status, statusAvgService.simple_data, "chart_style_" + i))
+                            }
                         }
-                    }
 
-                    RadarChart.draw($element[0], _d);
+                        RadarChart.draw($element[0], _d);
 
 
-                })
+                    })
+
+                }
 
             }
 
-        }
-
-    }])
+        }])
 
 
 
 
 
-    */
+        */
 
 
 })

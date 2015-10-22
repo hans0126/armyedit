@@ -29,9 +29,9 @@ define(function(require) {
                 controllerUrl: 'js/apps/cards/controllers/cards_controller.js'
             })).
             when('/lab', angularAMD.route({
-                templateUrl: 'template/lab.html',
+                templateUrl: 'js/apps/lab/controllers/laboratory_controller.html',
                 controller: 'laboratory_controller as lab',
-                controllerUrl: 'js/apps/lab/laboratory_controller.js'
+                controllerUrl: 'js/apps/lab/controllers/laboratory_controller.js'
             })).
             otherwise({
                 redirectTo: '/cards'

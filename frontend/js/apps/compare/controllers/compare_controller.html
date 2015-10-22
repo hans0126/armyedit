@@ -24,14 +24,15 @@
         </div>
     </div>
 </div>
-<button class="btn" ng-click="compare.searchBtn.trigger()">{{compare.searchBtn.text}}</button>
+
 <div class="row">
     <div class='row' id="itemCompare">
         <div class="selectedItem">
             <div class='col-xs-4' ng-repeat='val in compare.compareBox'>
-                <h5>{{val.card.title}}-{{val.card.actor[val.actorIndex].title}} </h5>
+                <div>{{val.card.title}}</div>
+                <h4>{{val.card.actor[val.actorIndex].title}}</h4>
                 <div class='imgArea pull-left thumbImg'  ng-style="compare.thumbCss(val.card,val.card.actor[val.actorIndex])" ></div>
-                <div small-radar status="val.card.actor[val.actorIndex].status" class="pull-left small_radar"></div>
+                <div small-radar status="val.card.actor[val.actorIndex].status" avg="compare.s" class="pull-right small_radar"></div>
             </div>
         </div>
         <hr style="clear:both">
@@ -41,13 +42,13 @@
                     <thead>
                         <tr>
                             <td></td>
-                            <td ng-repeat='val in compare.selected'>{{val.title}}</td>
+                            <td ng-repeat='val in compare.compareBox'>{{val.card.title}}<h4>{{val.card.actor[val.actorIndex].title}}</h4></td>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat='(_key,_val) in compare.statusAvg.simple_data'>
-                            <td>{{_key | uppercase}}</td>
-                            <td ng-repeat='val in compare.selected'>{{val.status[_key]}}</td>
+                        <tr ng-repeat='_val in compare.s.cardStatusFields'>
+                            <td>{{_val | uppercase}}</td>
+                            <td ng-repeat='actor in compare.compareBox'>{{actor.card.actor[actor.actorIndex].status[_val]}}</td>
                         </tr>
                     </tbody>
                 </table>

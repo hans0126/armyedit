@@ -6,8 +6,8 @@ define(function(require) {
     require('apps/common/directives/image-onload_directive');
     //require('apps/product/product-detail_factory');
     require('apps/common/services/radar_factory');
-   
-    
+
+
     require('apps/common/filters/highlight_filter');
     require('apps/search/controllers/search_controller');
 
@@ -21,7 +21,7 @@ define(function(require) {
 
             var _self = this;
 
-            setting.init();
+            setting.init();          
 
             // _self.setting = setting;
 

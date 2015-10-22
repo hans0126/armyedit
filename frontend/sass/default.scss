@@ -42,6 +42,8 @@ html {
     }
 }
 
+
+/*
 #itemCompare {
     h5 {
         margin-bottom: 2em;
@@ -70,6 +72,7 @@ html {
         overflow: hidden;
     }
 }
+*/
 
 #product_list {
     li {
@@ -291,10 +294,9 @@ button > .fa {
     position: fixed;
     bottom: 0;
     left: 0;
-    background:#666;
-    border:1px solid #333;
+    background: #666;
+    border: 1px solid #333;
 }
-
 
 #compareSearchArea {
     position: relative;
@@ -306,44 +308,54 @@ button > .fa {
     }
 }
 
-.compareSearchImg{
-    cursor:pointer; 
-    position:relative;
+.compareSearchImg {
+    cursor: pointer;
+    position: relative;
     margin-bottom: 20px;
-    margin-right: 10px; 
-
+    margin-right: 10px;
     > i {
         font-size: 1.5em;
-        color:#FFF;
+        color: #FFF;
         position: absolute;
         right: 5px;
         top: 5px;
-         text-shadow: 2px 2px 8px #333;
+        text-shadow: 2px 2px 8px #333;
     }
 }
 
-.compareSearchList {
-    
-}
+.compareSearchList {}
 
 #compareSelectedItem {
-
-   > li{
+    > li {
         position: relative;
-        border-bottom:1px solid #999;
+        border-bottom: 1px solid #999;
         margin-bottom: 1em;
     }
-
-    h3{
-        margin: 0;        
+    h3 {
+        margin: 0;
     }
-
     i {
         position: absolute;
-        font-size:2em;
-        color:#F00;
+        font-size: 2em;
+        color: #F00;
         top: 0;
         right: 0;
         cursor: pointer;
+    }
+}
+
+.small_radar {
+    padding: 10px;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    display: block;
+    margin-top: -20px;
+}
+
+
+.selectedItem {
+    h4{
+        margin: 5px 0;
     }
 }
