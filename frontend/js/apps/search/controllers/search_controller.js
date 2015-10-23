@@ -117,8 +117,7 @@ define(function(require) {
 
                 searchQuery["currentPage"] = _self.currentPage;
 
-                var _d = {
-                    type: "search",
+                var _d = {                  
                     datas: searchQuery
                 }
 

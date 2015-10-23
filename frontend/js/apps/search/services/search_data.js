@@ -5,7 +5,7 @@ define(function(require) {
     app.factory("searchData", ["$http", function($http) {
 
         function search(_data) {
-            return $http.post("getData", _data)
+            return $http.post("/search", _data)
         }
 
         return search

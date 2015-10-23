@@ -25,18 +25,11 @@ define(function(require) {
         _self.statusMapping = []; // mapping by status title
 
         _self.getStatusData = function() {
-            $http.post("mapreduce", {
-                type: "get_status"
-            }).then(function(response) {
+            $http.post("get_statusAvg").then(function(response) {
                 _self.statusValue = response.data;
-                _self.statusMapping = _dataTranslate(response.data);
-
-                
+                _self.statusMapping = _dataTranslate(response.data);                
             });
         }
-
-
-
 
         _self.updateStatusData = function() {
             $http.post("mapreduce", {
@@ -66,9 +59,7 @@ define(function(require) {
 
         _self.getCategoryData = function() {
 
-            $http.post("getdata", {
-                type: "getCategory"
-            }).then(function(response) {
+            $http.post("get_category").then(function(response) {               
                 _translate(response.data);
             })
 
@@ -130,10 +121,7 @@ define(function(require) {
         _self.abilityMapping = []
 
         _self.getAbilityData = function() {
-            $http.post("getData", {
-                type: "get_ability"
-            }).then(function(response) {
-                //console.log(response.data);
+            $http.post("get_ability").then(function(response) {
                 var _d = response.data
                 for (var i = 0; i < _d.length; i++) {
 

@@ -1,3 +1,5 @@
+
+//process.env.NODE_ENV = 'production';
 var express = require('express');
 var path = require("path");
 var mongodb = require('mongodb'); //mongodb
@@ -6,45 +8,58 @@ var util = require('util'); //繼承object
 var events = require('events'); //事件
 var fs = require('fs');
 var http = require('http');
-
-
-
+var morgan = require('morgan') //record 
 
 var multer = require('multer')
+
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+
 var upload = multer({
     dest: './upload_temp/'
 });
 
 var app = express();
 
-//app.use(multer({ dest: './uploads/'}));
+mongoose.connect("mongodb://localhost:27017/warmachine");
 
-global.dbUrl = "mongodb://localhost:27017/warmachine";
 
-//global.dbUrl ="mongodb://hans0126:a0955587777@ds039484.mongolab.com:39484/ttt"
+
+
+//console.log(route);
 
 var MongoClient = mongodb.MongoClient;
 var ObjectId = mongodb.ObjectId;
+
+var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
+
+app.use(morgan('combined',{stream: accessLogStream}))
+
+//app.use(multer({ dest: './uploads/'}));
+
+global.dbUrl = "mongodb://localhost:27017/warmachine";
+global.appRoot = path.resolve(__dirname + '/frontend/');
+
+//global.dbUrl ="mongodb://hans0126:a0955587777@ds039484.mongolab.com:39484/ttt"
+
+//console.log(app.get('env'));
+
 //body parser
-
-
-var bodyParser = require('body-parser');
+app.use(bodyParser());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({
     extended: true
 })); // support encoded bodies
 
-global.appRoot = path.resolve(__dirname + '/frontend/');
-
 app.use(express.static(global.appRoot));
+
+
+var route = require('./routes.js')(app);
 
 app.get('/', function(req, res) {
     // res.sendFile(path.join(__dirname + '/frontend/index.html'));
     res.sendFile(global.appRoot + '/index.html');
 });
-
-
-
 
 app.post('/getData', function(req, res) {
 
@@ -53,87 +68,24 @@ app.post('/getData', function(req, res) {
     var getSelectData = new getData.getSelect();
     var save = new saveData.saveData();
 
-    switch (req.body.type) {
-        case "series":
-            getSelectData.getValue({
-                "type": "series"
-            })
+    if (req.accepts('json')) {
 
-            getSelectData.on("ok", function(re) {
-                res.send(re, 200);
-            })
+        switch (req.body.type) {         
 
-            break;
+            case "save_status":
+                save.saveSingle(req.body);
 
-        case "faction":
-
-            getSelectData.getValue({
-                "type": "faction",
-                "parent": ObjectId(req.body.id)
-            })
-            getSelectData.on("ok", function(re) {
-                res.send(re, 200);
-            })
-
-            break;
-        case "category":
-
-            getSelectData.getValue({
-                "type": "category",
-                "relation": {
-                    "$in": [ObjectId(req.body.id)]
-                }
-            })
-
-            getSelectData.on("ok", function(re) {
-                res.send(re, 200);
-            })
-            break;
-        case "search":
-
-            var getItemList = new getData.getItemList();
-
-            getItemList.getData(req.body.datas);
-
-            getItemList.on("ok", function(re) {
-                res.send(re, 200);
-            })
-
-            break;
-
-        case "save_status":
-            save.saveSingle(req.body);
-
-            save.on("save ok", function() {
-                res.send(JSON.stringify({
-                    result: "ok"
-                }), 200)
-            })
+                save.on("save ok", function() {
+                    res.send(JSON.stringify({
+                        result: "ok"
+                    }), 200)
+                })
 
 
-            break;
-
-        case "getCategory":
-
-            getSelectData.getCategory();
-            getSelectData.on('category get complete', function(re) {
-                res.send(re, 200);
-            })
-
-            break;
-
-        case "get_ability":
-
-            var getAbility = new getData.getAbility();
-            getAbility.getData();
-            getAbility.on('ability load complete', function(re) {
-                res.send(re, 200);
-            })
-
-            break;
-
-
-
+                break;          
+        }
+    }else{
+         res.send("data type error", 500);
     }
 
 });
@@ -225,11 +177,11 @@ app.get('/p', function(req, res) {
     //pF.startParser();
     //pF.checkHasImg();
     //pF.getNoHasImg();
-/*
-    pF.on("all complete", function() {
-        console.log("parse end")
-    })
-*/
+    /*
+        pF.on("all complete", function() {
+            console.log("parse end")
+        })
+    */
     /*
         pF.on("save complete", function() {
             console.log("this ok");
