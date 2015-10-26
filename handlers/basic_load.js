@@ -28,5 +28,4 @@ exports.getStatusAvg = function(req, res) {
          res.json(200, re);
     })
 
-
 };

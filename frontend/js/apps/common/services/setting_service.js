@@ -32,9 +32,7 @@ define(function(require) {
         }
 
         _self.updateStatusData = function() {
-            $http.post("mapreduce", {
-                type: "update_status"
-            }).then(function(response) {
+            $http.post("status_mapreduce").then(function(response) {
                 _self.statusValue = response.data;
                 _self.statusMapping = _dataTranslate(response.data);
             });

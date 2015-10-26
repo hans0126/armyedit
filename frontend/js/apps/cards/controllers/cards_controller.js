@@ -38,8 +38,8 @@ define(function(require) {
 
 
             // to search area stService.objectSelected
-           stService.objectSelected = function(_obj) {
-
+            stService.objectSelected = function(_obj) {
+                _self.aaaa= _obj;
                 if (_obj == selectedObj) {
                     return false;
                 }
@@ -58,11 +58,16 @@ define(function(require) {
 
             function productsProcess() {
 
+
+
                 if (selectedObj.copy) {
+
+
                     // has data
                     // get data
                     dbCtrl.getData(selectedObj.copy).then(function(response) {
                         _self.primaryCard = response.data;
+                        console.log(_self.primaryCard);
                         _self.thumbImg = imgPath + _self.primaryCard.image_name;
                         cardsStatus = "update";
                         _self.cardStatusText = "Inherited"
@@ -98,6 +103,7 @@ define(function(require) {
 
             function cardsProcess() {
                 _self.primaryCard = selectedObj;
+
                 _self.thumbImg = imgPath + selectedObj.image_name;
                 cardsStatus = "update";
             }
@@ -170,9 +176,14 @@ define(function(require) {
 
             function saveData() {
                 _self.submitBtnDisabled = true;
-                var _d = {}
+
+                var _d = {};
+
                 _d.datas = angular.toJson(_self.primaryCard);
-                _d.file = _self.imgFile;
+
+                if(_self.imgFile){
+                    _d.file = _self.imgFile;
+                }
 
                 switch (cardsStatus) {
                     case "update":
@@ -185,8 +196,7 @@ define(function(require) {
                         break;
 
                     case "inherit":
-                        _d.type = "inheritCard";
-                        dbCtrl.db(_d).then(function(response) {
+                        dbCtrl.inheritCard(_d).then(function(response) {
                             selectedObj.copy = response.data;
                             $scope.msg.showMsg('inherit complete', 0);
                             _self.submitBtnDisabled = false;

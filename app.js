@@ -1,4 +1,3 @@
-
 //process.env.NODE_ENV = 'production';
 var express = require('express');
 var path = require("path");
@@ -31,9 +30,13 @@ mongoose.connect("mongodb://localhost:27017/warmachine");
 var MongoClient = mongodb.MongoClient;
 var ObjectId = mongodb.ObjectId;
 
-var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
+var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
+    flags: 'a'
+})
 
-app.use(morgan('combined',{stream: accessLogStream}))
+app.use(morgan('combined', {
+    stream: accessLogStream
+}))
 
 //app.use(multer({ dest: './uploads/'}));
 
@@ -56,77 +59,12 @@ app.use(express.static(global.appRoot));
 
 var route = require('./routes.js')(app);
 
-app.get('/', function(req, res) {
-    // res.sendFile(path.join(__dirname + '/frontend/index.html'));
-    res.sendFile(global.appRoot + '/index.html');
-});
-
-app.post('/getData', function(req, res) {
-
-    var getData = require("./my_modules/getdata.js");
-    var saveData = require("./my_modules/savedata.js");
-    var getSelectData = new getData.getSelect();
-    var save = new saveData.saveData();
-
-    if (req.accepts('json')) {
-
-        switch (req.body.type) {         
-
-            case "save_status":
-                save.saveSingle(req.body);
-
-                save.on("save ok", function() {
-                    res.send(JSON.stringify({
-                        result: "ok"
-                    }), 200)
-                })
 
 
-                break;          
-        }
-    }else{
-         res.send("data type error", 500);
-    }
-
-});
-
-app.post('/mapreduce', function(req, res) {
-
-    var reduce_module = require("./my_modules/mapreduce.js");
-
-    var reduce = new reduce_module.reduce();
-
-    //  reduce.status_avg();
-
-    switch (req.body.type) {
-        case "get_status":
-            reduce.get_status();
-            reduce.on('get status data', function(arr) {
-                res.send(arr, 200);
-            })
-
-            break;
-
-        case "update_status":
-            reduce.status_avg();
-            reduce.on("status avg ok", function() {
-                reduce.get_status();
-            })
-            reduce.on('get status data', function(arr) {
-                res.send(arr, 200);
-            })
-
-            break;
-    }
-
-    // res.send("a", 200);
-})
-
-
-
-
+/*
 app.post('/cards', upload.single('file'), function(req, res) {
 
+  
 
     var cards = require("./my_modules/cards.js");
     cards = new cards();
@@ -166,7 +104,7 @@ app.post('/cards', upload.single('file'), function(req, res) {
     }
 })
 
-
+*/
 app.get('/p', function(req, res) {
     //parse web data
     var parser = require("./my_modules/parser.js");
