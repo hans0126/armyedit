@@ -2,12 +2,7 @@ define(function(require) {
 
     var app = require("app");
 
-    require('js/lib/thumbEdit/thumbEdit.js');
-    require('js/apps/cards/directives/ability_edit.js');
-    require('js/apps/cards/directives/thumb_images.js');
-    require('js/apps/cards/directives/custom_on_change.js');
-    require('js/apps/cards/services/db_ctrl.js');
-
+ 
 
     app.controller("cards_controller", ["$scope",
         "dbCtrlFactory",
@@ -39,7 +34,7 @@ define(function(require) {
 
             // to search area stService.objectSelected
             stService.objectSelected = function(_obj) {
-                _self.aaaa= _obj;
+
                 if (_obj == selectedObj) {
                     return false;
                 }
@@ -57,8 +52,6 @@ define(function(require) {
             }
 
             function productsProcess() {
-
-
 
                 if (selectedObj.copy) {
 
@@ -181,14 +174,14 @@ define(function(require) {
 
                 _d.datas = angular.toJson(_self.primaryCard);
 
-                if(_self.imgFile){
+                if (_self.imgFile) {
                     _d.file = _self.imgFile;
                 }
 
+
                 switch (cardsStatus) {
                     case "update":
-                        _d.type = "updateCard";
-                        dbCtrl.db(_d).then(function(response) {
+                        dbCtrl.update(_d, "update_card").then(function(response) {
                             $scope.msg.showMsg('update complete', 0);
                             _self.submitBtnDisabled = false;
                         })
@@ -196,7 +189,7 @@ define(function(require) {
                         break;
 
                     case "inherit":
-                        dbCtrl.inheritCard(_d).then(function(response) {
+                        dbCtrl.update(_d, "inherit_card").then(function(response) {
                             selectedObj.copy = response.data;
                             $scope.msg.showMsg('inherit complete', 0);
                             _self.submitBtnDisabled = false;
@@ -206,9 +199,8 @@ define(function(require) {
 
                         break;
 
-                    case "new":
-                        _d.type = "addNew";
-                        dbCtrl.db(_d).then(function(response) {
+                    case "new":                     
+                        dbCtrl.update(_d,"add_new_card").then(function(response) {
                             $scope.msg.showMsg('add complete', 0);
                             _self.submitBtnDisabled = false;
                             cardsStatus = "update";

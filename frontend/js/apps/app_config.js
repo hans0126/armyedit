@@ -5,6 +5,25 @@ define(function(require) {
 
     require('apps/main_controller');
 
+    require('apps/common/services/setting_service');
+    require('apps/common/directives/image-onload_directive');
+    //require('apps/product/product-detail_factory');
+    require('apps/common/services/radar_factory');
+
+
+    require('apps/common/filters/highlight_filter');
+    require('apps/search/controllers/search_controller');
+    /*search*/
+    require('js/apps/search/services/search_data.js');
+    require('js/apps/search/services/search_type.js');
+    /*cards*/
+    require('js/lib/thumbEdit/thumbEdit.js');
+    require('js/apps/cards/directives/ability_edit.js');
+    require('js/apps/cards/directives/thumb_images.js');
+    require('js/apps/cards/directives/custom_on_change.js');
+    require('js/apps/cards/services/db_ctrl.js');
+
+
     app.config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.

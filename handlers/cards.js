@@ -19,11 +19,12 @@ exports.getCard = function(req, res) {
 
 
 exports.inheritCard = function(req, res) {
-    var _self = this;
+   
     var _d = JSON.parse(req.body.datas);
     var _file = req.file;
 
     categoryIdConvertToObjectId.call(_d);
+    abilityIdConvertToObjectId.call(_d);
 
     if (_file) {
         _d.img = uploadImage(_file);
@@ -44,81 +45,52 @@ exports.inheritCard = function(req, res) {
 
 
     })
-
-    /* cards.insert(_d, function(err, re) {
-         if (err) throw err;
-
-         if (_d.parent_id) { //has products
-             products.update({
-                 _id: mongoose.Types.ObjectId(_d.parent_id)
-             }, {
-                 $set: {
-                     copy: re.insertedIds[0]
-                 }
-             }, function(err, re2) {
-                 if (err) throw err;
-                 console.log(re.insertedIds[0]);
-                 res.json(200, re.insertedIds[0]);
-             })
-         } else { //new card          
-             res.json(200);
-         }
-
-     })*/
 }
 
-/*
-cards.prototype.updateCard = function(_data, _file) {
-    var _self = this;
-    var _d = JSON.parse(_data);
+
+exports.updateCard = function(req, res) {
+
+    var _d = JSON.parse(req.body.datas);
+    var _file = req.file;
 
     categoryIdConvertToObjectId.call(_d);
     abilityIdConvertToObjectId.call(_d);
-
 
     if (_file) {
         _d.img = uploadImage(_file);
     }
 
     _id = _d._id;
-    delete _d._id
+    delete _d._id;
 
-    MongoClient.connect(global.dbUrl, function(err, db) {
-
-        var cardsDB = db.collection('cards');
-        cardsDB.update({
-            _id: ObjectID(_id)
-        }, _d, function(err) {
-            _self.emit("update data complete");
-        })
-
+    cards.update({
+        _id: mongoose.Types.ObjectId(_id)
+    }, _d, function(err) {
+         res.json(200);
     })
-
 }
 
-cards.prototype.addNewCard = function(_data, _file) {
-    var _self = this;
 
-    var _d = JSON.parse(_data);
+exports.addNewCard = function(req, res) {
+ 
+    var _d = JSON.parse(req.body.datas);
+    var _file = req.file;
 
     categoryIdConvertToObjectId.call(_d);
+    abilityIdConvertToObjectId.call(_d);
 
     if (_file) {
         _d.img = uploadImage(_file);
     }
 
-    MongoClient.connect(global.dbUrl, function(err, db) {
-        var cardsDB = db.collection('cards');
-
-        cardsDB.insert(_d, function(err, re) {
-            if (err) throw err;
-            _self.emit("add new card complete", re[0]);
-        })
+    cards(_d).save(function(err, re) {
+        if (err) throw err;
+        res.json(200,re);
     })
 
 }
 
-*/
+
 
 function uploadImage(_file) {
     var fx = _file.originalname.split(".");

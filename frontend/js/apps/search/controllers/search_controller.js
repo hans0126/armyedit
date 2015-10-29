@@ -2,8 +2,7 @@ define(function(require) {
 
     var app = require("app");
 
-    require('js/apps/search/services/search_data.js');
-    require('js/apps/search/services/search_type.js');
+   
 
     app.controller("searchController", [
         "searchTypeService",
@@ -138,16 +137,17 @@ define(function(require) {
             }
 
             function goPrev() {
+
                 if (_self.currentPage > 0) {
                     _self.currentPage--;
-                    _self.search();
+                    search();
                 }
             }
 
             function goNext() {
                 if (_self.currentPage < _self.totalPageCount - 1) {
                     _self.currentPage++;
-                    _self.search();
+                    search();
                 }
             }
         }

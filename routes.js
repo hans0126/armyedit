@@ -2,7 +2,7 @@ var basicLoad = require('./handlers/basic_load.js'),
     search = require('./handlers/search.js'),
     statusMapreduce = require('./handlers/status_mapreduce.js'),
     cards = require('./handlers/cards.js'),
-   
+
     multer = require('multer'),
     upload = multer({
         dest: './upload_temp/'
@@ -31,24 +31,44 @@ module.exports = function(app) {
 
     app.post('/status_mapreduce', statusMapreduce);
 
-    //card 
+    //cards
 
     app.post('/get_card', cards.getCard);
 
-    app.post('/inherit_card',upload.single('file'), cards.inheritCard);   
+    app.post('/inherit_card', upload.single('file'), cards.inheritCard);
 
+    app.post('/update_card', upload.single('file'), cards.updateCard);
+
+    app.post('/add_new_card', upload.single('file'), cards.addNewCard);
+    
     /*
-       
-        app.post('/update_card', statusMapreduce);
-        app.post('/add_new_card', statusMapreduce);
-    */
+    app.get('/p', function(req, res) {
+        //parse web data
+        var parser = require("./my_modules/parser.js");
+        var pF = new parser.parserFaction();
 
 
 
+        //pF.startParser();
+        //pF.checkHasImg();
+        //pF.getNoHasImg();
+
+        pF.on("all complete", function() {
+            console.log("parse end")
+        })
 
 
+        pF.on("save complete", function() {
+            console.log("this ok");
+        })
 
 
+        //var ca = new parser.createCategory2DB();
+        // ca.start();
 
+        // res.send("ok");
+
+    });
+*/
 
 }

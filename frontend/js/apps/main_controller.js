@@ -2,26 +2,27 @@ define(function(require) {
 
     var app = require("app");
 
-    require('apps/common/services/setting_service');
-    require('apps/common/directives/image-onload_directive');
-    //require('apps/product/product-detail_factory');
-    require('apps/common/services/radar_factory');
-
-
-    require('apps/common/filters/highlight_filter');
-    require('apps/search/controllers/search_controller');
-
     //primary module
 
     app.controller("mainCtrl", ["$scope",
         "$location",
         "msgService",
         "settingService",
-        function($scope, $location, msgService, setting) {
+        "ll",
+        function($scope, $location, msgService, setting, ll) {
 
             var _self = this;
 
-            setting.init();          
+            setting.init();
+
+            _self.ss = ll;
+
+            _self.cc = function() {
+                event.preventDefault();
+                console.log('Clicked!');
+            }
+
+            //   console.log(ll.show);
 
             // _self.setting = setting;
 
@@ -33,6 +34,14 @@ define(function(require) {
 
         }
     ])
+
+
+
+    app.service('ll', function() {
+
+        this.show = false;
+    })
+
 
     app.service("msgService", function($timeout) {
         var _self = this;

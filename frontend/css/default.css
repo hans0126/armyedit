@@ -352,3 +352,27 @@ button > .fa {
 .selectedItem h4 {
   margin: 5px 0;
 }
+
+#lightBox {
+  background: url(../images/overlay.png);
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: auto;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+  z-index: 5433;
+}
+
+.lightBoxFixed {
+  overflow: hidden !important;
+}
+
+/* lock scroll
+
+body {
+   
+}
+
+*/

@@ -18,13 +18,40 @@ define(function(require) {
             _self.inheritCard = function(_data) {
 
                 var fd = new FormData();
-             //   fd.append("datas", _data);
-                 for (var _key in _data) {
-                     fd.append(_key, _data[_key]);
-                 }
+                //   fd.append("datas", _data);
+                for (var _key in _data) {
+                    fd.append(_key, _data[_key]);
+                }
 
                 return $http.post("inherit_card", fd, uploadOption)
             }
+
+            _self.updateCard = function(_data) {
+
+                var fd = new FormData();
+
+                for (var _key in _data) {
+                    fd.append(_key, _data[_key]);
+                }
+
+                return $http.post("update_card", fd, uploadOption)
+            }
+
+
+            _self.update = function(_data, _route) {
+
+                var fd = new FormData();
+
+                for (var _key in _data) {
+                    fd.append(_key, _data[_key]);
+                }
+
+                  return $http.post(_route, fd, uploadOption)
+
+            }
+
+
+
 
             _self.getData = function(_id) {
                 var _d = {}
