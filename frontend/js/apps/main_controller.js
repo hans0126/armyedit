@@ -18,8 +18,12 @@ define(function(require) {
             _self.ss = ll;
 
             _self.cc = function() {
-                event.preventDefault();
+                // event.preventDefault();
                 console.log('Clicked!');
+                ll.show = false;
+                var body = document.getElementsByTagName('html');
+                body = angular.element(body);
+                 body.removeClass('lightBoxFixed');
             }
 
             //   console.log(ll.show);

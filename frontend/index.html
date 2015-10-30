@@ -44,9 +44,10 @@
     </div>
     <div id="msg" msg class="zipper" ng-if='msg.show'></div>
     {{lightBoxShow}}
-    <div id="lightBox" ng-if='mCtrl.ss.show' ng-click='mCtrl.cc($event);'>
+    <div id="lightBox" ng-if='mCtrl.ss.show'>
+        <div class="overlay"  ng-click='mCtrl.cc();'></div>
         <div class="popup">
-
+            content
         </div>
     </div>
 </body>

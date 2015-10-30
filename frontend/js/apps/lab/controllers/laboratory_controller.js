@@ -10,7 +10,8 @@ define(function(require) {
         _self.ba = "AAAASDDSD"
 
         var bb = document.getElementById('b');
-        var body = document.getElementsByTagName('body');
+        var body = document.getElementsByTagName('html');
+
 
         body = angular.element(body);
         bb = angular.element(bb);
