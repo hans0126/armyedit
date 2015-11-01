@@ -2,8 +2,6 @@ define(function(require) {
 
     var app = require("app");
 
- 
-
     app.controller("cards_controller", ["$scope",
         "dbCtrlFactory",
         "searchTypeService",
@@ -31,7 +29,6 @@ define(function(require) {
             _self.removeActor = removeActor;
             _self.createNew = createNew;
 
-
             // to search area stService.objectSelected
             stService.objectSelected = function(_obj) {
 
@@ -43,7 +40,6 @@ define(function(require) {
 
                 selectedObj = _obj;
 
-
                 if (stService.searchType == "product") {
                     productsProcess();
                 } else {
@@ -54,7 +50,6 @@ define(function(require) {
             function productsProcess() {
 
                 if (selectedObj.copy) {
-
 
                     // has data
                     // get data

@@ -9,6 +9,9 @@ define(function(require) {
     require('apps/common/directives/image-onload_directive');
     //require('apps/product/product-detail_factory');
     require('apps/common/services/radar_factory');
+    //light box
+    require('apps/common/services/lightbox_service');
+    require('apps/common/directives/lightbox_directive');
 
 
     require('apps/common/filters/highlight_filter');
