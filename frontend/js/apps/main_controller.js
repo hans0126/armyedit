@@ -22,34 +22,7 @@ define(function(require) {
     ])
 
 
-    app.service('lightBoxService', ['$compile', function($compile) {
-        var _self = this;
-        _self.visible = true;
-        _self.htmlBody = angular.element(document.getElementsByTagName('html'));
-        var lightBox = angular.element(document.getElementById('lightBox'));
 
-        _self.close = function(fn) {
-            _self.visible = false;
-            _self.htmlBody.removeClass('lightBoxFixed');
-            if (typeof(fn) == 'function') {
-                fn();
-            }
-
-            lightBox.empty();
-        }
-
-        _self.open = function(compiledObj) {
-            _self.visible = false;
-            _self.htmlBody.addClass('lightBoxFixed');
-            if (compiledObj) {
-                lightBox.append(compiledObj);
-            }
-        }
-    }])
-
-    app.service('ll', function() {
-        this.show = false;
-    })
 
 
     app.service("msgService", function($timeout) {
@@ -80,19 +53,7 @@ define(function(require) {
     })
 
 
-    app.directive("lightbox", ['lightBoxService', function(lightBoxService) {
-        return {
-            replace: true,
-            restrict: "A",
-            link: function(scope, element, atrr) {
-                scope.lightbox = lightBoxService;
-            },
-            template: "<div id='lightBox' ng-if='lightbox.visible'><div class='overlay' ng-click='lightbox.close()'></div><div class='popup'>content</div></div>"
-
-        }
-    }])
-
-
+    
     app.directive("msg", function($rootScope) {
 
         return {
