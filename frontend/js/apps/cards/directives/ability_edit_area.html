@@ -1,0 +1,11 @@
+<div class='form-group'>
+    <input type='text' class='form-control' ng-model='abilitySearch' />
+</div>
+<div class='abilityArea'>
+    <div ng-repeat='character in ability | filter:{title:abilitySearch}' class='sprite {{character.cssClass}} abilityIcon' ng-class='active(character._id)' title='{{character.title}}' ng-click='modify(character)'></div>
+</div>
+<div class='form-group form-inline'>
+    <button ng-click='clear()' class='btn btn-primary'>clear</button>
+    <button ng-click='close()' class='btn btn-primary'>Apply</button>
+</div>
+
