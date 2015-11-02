@@ -26,6 +26,7 @@ define(function(require) {
     require('js/apps/cards/directives/thumb_images.js');
     require('js/apps/cards/directives/custom_on_change.js');
     require('js/apps/cards/services/db_ctrl.js');
+  //  require('js/lib/pixi_banner_creater.js');
 
 
     app.config(['$routeProvider',
