@@ -7,44 +7,22 @@ define(function(require) {
     app.controller("mainCtrl", ["$scope",
         "$location",
         "msgService",
-        "settingService",
-        "ll",
-        function($scope, $location, msgService, setting, ll) {
+        "settingService",    
+        function($scope, $location, msgService, setting) {
 
             var _self = this;
 
-            setting.init();
-
-            _self.ss = ll;
-
-            _self.cc = function() {
-                // event.preventDefault();
-                console.log('Clicked!');
-                ll.show = false;
-                var body = document.getElementsByTagName('html');
-                body = angular.element(body);
-                 body.removeClass('lightBoxFixed');
-            }
-
-            //   console.log(ll.show);
-
-            // _self.setting = setting;
+            setting.init();        
 
             _self.go = function(path) {
                 $location.path(path);
             }
             $scope.msg = msgService;
-
-
         }
     ])
 
 
 
-    app.service('ll', function() {
-
-        this.show = false;
-    })
 
 
     app.service("msgService", function($timeout) {
@@ -59,7 +37,6 @@ define(function(require) {
         _self.icon = null;
         _self.showMsg = function(_text, _typeIndex) {
 
-
             _self.msgType = _type[_typeIndex];
             _self.msgText = _text;
             _self.icon = _icon[_typeIndex];
@@ -72,12 +49,11 @@ define(function(require) {
                 _self.show = null;
 
             }, 3000)
-
-
         }
     })
 
 
+    
     app.directive("msg", function($rootScope) {
 
         return {

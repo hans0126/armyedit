@@ -9,6 +9,9 @@ define(function(require) {
     require('apps/common/directives/image-onload_directive');
     //require('apps/product/product-detail_factory');
     require('apps/common/services/radar_factory');
+    //light box
+    require('apps/common/services/lightbox_service');
+    require('apps/common/directives/lightbox_directive');
 
 
     require('apps/common/filters/highlight_filter');
@@ -19,6 +22,7 @@ define(function(require) {
     /*cards*/
     require('js/lib/thumbEdit/thumbEdit.js');
     require('js/apps/cards/directives/ability_edit.js');
+    require('js/apps/cards/directives/ability_edit_area.js');
     require('js/apps/cards/directives/thumb_images.js');
     require('js/apps/cards/directives/custom_on_change.js');
     require('js/apps/cards/services/db_ctrl.js');
