@@ -3,9 +3,9 @@ define(function(require) {
     var app = require("app");
 
     app.directive("abilityEditArea", [
-        function(lightBoxService) {
+        function() {
             return {
-                restrict: 'A',
+                restrict: 'A',                
                 templateUrl: "js/apps/cards/directives/ability_edit_area.html"
             }
 

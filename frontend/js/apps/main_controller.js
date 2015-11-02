@@ -18,6 +18,7 @@ define(function(require) {
                 $location.path(path);
             }
             $scope.msg = msgService;
+
         }
     ])
 

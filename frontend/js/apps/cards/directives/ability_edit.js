@@ -20,10 +20,8 @@ define(function(require) {
                             scope.mapping.push(scope.ability.mapping[scope.currentActor.characterAbility[i]]);
                         }
                     }
-                    scope.addAbility = function() {
-
+                    scope.addAbility = function() {                       
                         var _a = $compile("<div ability-edit-area id='ability_popup'></div>")(scope);
-
                         lightBoxService.open(_a, 300, 300);
                     }
 

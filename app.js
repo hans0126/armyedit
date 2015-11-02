@@ -21,16 +21,19 @@ var app = express();
 
 mongoose.connect("mongodb://localhost:27017/warmachine");
 
+/*
 var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {
     flags: 'a'
 })
 
-
-global.appRoot = path.resolve(__dirname + '/frontend/');
-
 app.use(morgan('combined', {
     stream: accessLogStream
 }))
+*/
+
+
+global.appRoot = path.resolve(__dirname + '/frontend/');
+
 
 //body parser
 app.use(bodyParser());
