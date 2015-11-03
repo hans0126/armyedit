@@ -17,7 +17,7 @@ define(function(require) {
             controller: function($scope) {
                 // tips : define function in controller  , directive use this function 
 
-                $scope.uploadFile = function() {
+                $scope.uploadFile = function(event) {
 
                     var _file = event.target.files[0];
                     var _fileType = _file.type;

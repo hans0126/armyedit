@@ -2,7 +2,7 @@ define(function(require) {
 
     var app = require("app");
 
- 
+
 
     app.controller("cards_controller", ["$scope",
         "dbCtrlFactory",
@@ -24,7 +24,7 @@ define(function(require) {
             _self.s = settingService;
             _self.cardStatusText = null;
 
-            _self.submitBtnDisabled = true;
+            _self.submitBtnDisabled = false;
             _self.primaryCard = null;
             _self.saveData = saveData;
             _self.addActor = addActor;
@@ -124,7 +124,6 @@ define(function(require) {
                 },
                 wj: null,
                 actor: []
-
             }
 
             actorTemplate = {
@@ -137,11 +136,16 @@ define(function(require) {
                     def: null,
                     arm: null,
                     cmd: null,
-                    focus: null
+                    focus: null,
+                    threshold: null
                 },
                 img: {
-                    pX: null,
-                    pY: null
+                    thumb: null,
+                    banner: null
+                },
+                newImg: {
+                    thumb: null,
+                    banner: null
                 }
             }
 
@@ -151,7 +155,6 @@ define(function(require) {
                 _self.thumbImg = null;
                 resetData();
             }
-
 
             function removeActor(_key) {
                 var _actor = _self.primaryCard.actor;
@@ -171,13 +174,17 @@ define(function(require) {
                 _self.submitBtnDisabled = true;
 
                 var _d = {};
+                var _tempCard = angular.copy(_self.primaryCard);
 
-                _d.datas = angular.toJson(_self.primaryCard);
-
-                if (_self.imgFile) {
-                    _d.file = _self.imgFile;
+                for (var i = 0; i < _tempCard.actor.length; i++) {
+                    for (var key in _tempCard.actor[i].img) {
+                        if (_tempCard.actor[i].newImg[key]) {
+                            _tempCard.actor[i].img[key] = null;
+                        }
+                    }
                 }
 
+                _d.datas = angular.toJson(_tempCard);
 
                 switch (cardsStatus) {
                     case "update":
@@ -199,8 +206,8 @@ define(function(require) {
 
                         break;
 
-                    case "new":                     
-                        dbCtrl.update(_d,"add_new_card").then(function(response) {
+                    case "new":
+                        dbCtrl.update(_d, "add_new_card").then(function(response) {
                             $scope.msg.showMsg('add complete', 0);
                             _self.submitBtnDisabled = false;
                             cardsStatus = "update";

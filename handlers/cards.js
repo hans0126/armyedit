@@ -2,7 +2,7 @@ var cards = require('../models/cards.js'),
     products = require('../models/products.js'),
     mongoose = require('mongoose'),
     fs = require('fs');
-
+var util = require('util');
 
 // mongoose.Types.ObjectId
 
@@ -19,7 +19,7 @@ exports.getCard = function(req, res) {
 
 
 exports.inheritCard = function(req, res) {
-   
+
     var _d = JSON.parse(req.body.datas);
     var _file = req.file;
 
@@ -66,27 +66,37 @@ exports.updateCard = function(req, res) {
     cards.update({
         _id: mongoose.Types.ObjectId(_id)
     }, _d, function(err) {
-         res.json(200);
+        res.json(200);
     })
 }
 
 
 exports.addNewCard = function(req, res) {
- 
+    // console.log(util.inspect(req.body.datas.title, false, null));
     var _d = JSON.parse(req.body.datas);
     var _file = req.file;
 
-    categoryIdConvertToObjectId.call(_d);
-    abilityIdConvertToObjectId.call(_d);
+   // console.log(_file);
+    var _img = _d.actor[0].newImg.banner;
 
-    if (_file) {
-        _d.img = uploadImage(_file);
-    }
+    _img = _img.replace(/^data:image\/\w+;base64,/, "");
+    var buf = new Buffer(_img, 'base64');
+    fs.writeFile('image.png', buf);
 
-    cards(_d).save(function(err, re) {
-        if (err) throw err;
-        res.json(200,re);
-    })
+
+    /*
+
+     categoryIdConvertToObjectId.call(_d);
+     abilityIdConvertToObjectId.call(_d);
+
+     if (_file) {
+         _d.img = uploadImage(_file);
+     }
+
+     cards(_d).save(function(err, re) {
+         if (err) throw err;
+         res.json(200,re);
+     })*/
 
 }
 

@@ -1,0 +1,36 @@
+<div class='row' style="width:720px;">
+    <div class='col-xs-6'>
+        <div class='btn-group form-group'>
+            <button class='btn btn-primary' ng-class='modeActiveClass("mode",0)' ng-click='changeMode(0)'>Banner</button>
+            <button class='btn btn-primary' ng-class='modeActiveClass("mode",1)' ng-click='changeMode(1)'>thumb</button>
+        </div>
+        <div class='form-group'>
+            <input type="file" id="thumbImgFile">
+        </div>
+        <div id="editArea"></div>
+        <div id="displayArea"></div>
+        <div class='btn-group form-group' ng-if='mode==0'>
+            <button class='btn btn-primary' ng-click='changeTitleMode(0)' ng-class='modeActiveClass("title",0)'>Mode A</button>
+            <button class='btn btn-primary' ng-click='changeTitleMode(1)' ng-class='modeActiveClass("title",1)'>Mode B</button>
+            <button class='btn btn-primary' ng-click='changeTitleMode(2)' ng-class='modeActiveClass("title",2)'>Mode C</button>
+        </div>
+    </div>
+    <div class='col-xs-6'>
+        <div class='btn-group form-group'>
+            <button class='btn btn-primary' ng-click='capture()'>Caputre {{modeTitle}}</button>
+        </div>
+        <div class='form-group' id='actorBanner'></div>
+        <div class='form-group clearfix' ng-if='tempBanner'>
+            <button class='btn btn-danger pull-right' ng-click='cancel(0)'><i class="fa fa-times"></i>Cancel banner</button>
+        </div>
+        <div class='form-group' id='actorthumb'></div>
+        <div class='form-group clearfix' ng-if='tempThumb'>
+            <button class='btn btn-danger pull-right' ng-click='cancel(1)'><i class="fa fa-times"></i>Cancel thumb</button>
+        </div>
+        <hr>
+        <div class='btn-group form-group'>
+            <button class='btn btn-primary' ng-click='apply()'>Apply</button>
+        </div>
+    </div>
+</div>
+

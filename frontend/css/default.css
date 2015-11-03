@@ -130,10 +130,6 @@ html {
   display: inline-block !important;
 }
 
-button > .fa {
-  margin-right: 0.4em;
-}
-
 .germany {
   display: block;
 }

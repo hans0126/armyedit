@@ -6,7 +6,8 @@ var basicLoad = require('./handlers/basic_load.js'),
     multer = require('multer'),
     upload = multer({
         dest: './upload_temp/'
-    });
+    }),
+    cpUpload = upload.fields([{ name: 'thumb', maxCount: 10 }, { name: 'banner', maxCount: 10 }])
 
 
 module.exports = function(app) {

@@ -94,13 +94,11 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-xs-6">
-                      
+                    <div class="col-xs-6">                      
                         <!-- actors thumb -->
-                        <div class="thumbEditArea pull-left" thumb-images="cards.thumbImg" idx="{{$index}}" current-actor="actor"></div>
-                        <div class="pull-right" id='abilityStatusArea' ability-edit="cards.s.abilityCharacter" current-actor="actor"></div>
-                        <div class='clearfix'></div>
+                        <div thumb-images-area  thumb-image="cards.thumbImg" current-actor="actor"></div>                      
                         <hr>
+                        <div id='abilityStatusArea' ability-edit="cards.s.abilityCharacter" current-actor="actor"></div>
                     </div>
                 </div>
                 <div class="form-group form-inline" ng-if="$index!=0">

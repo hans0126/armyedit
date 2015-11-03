@@ -27,7 +27,9 @@ var customerSchema = mongoose.Schema({
         "characterAbility": [],
         "img": {
             "pY": "Number",
-            "pX": "Number"
+            "pX": "Number",
+            "thumb": "String",
+            "banner": "String"
         },
         "status": {
             "threshold": "Number",
