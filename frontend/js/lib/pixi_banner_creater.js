@@ -15,6 +15,44 @@ function bannerCreater() {
 
     var _self = this;
 
+    var factions = [{
+        title: 'convergence-of-cyriss.png',
+        color: '#768788'
+    }, {
+        title: 'circle-orboros.png',
+        color: '#888076'
+    }, {
+        title: 'cryx.png',
+        color: '#798876'
+    }, {
+        title: 'cygnar.png',
+        color: '#888876'
+    }, {
+        title: 'khador.png',
+        color: '#aaaaaa'
+    }, {
+        title: 'legion-of-everblight.png',
+        color: '#807688'
+    }, {
+        title: 'mercenaries.png',
+        color: '#888676'
+    }, {
+        title: 'minions.png',
+        color: '#7b8876'
+    }, {
+        title: 'skorne.png',
+        color: '#888476'
+    }, {
+        title: 'the-protectorate-of-menoth.png',
+        color: '#888176'
+    }, {
+        title: 'retribution-of-scyrah.png',
+        color: '#808c89'
+    }, {
+        title: 'trollbloods.png',
+        color: '#8b8a7b'
+    }]
+
     _self.mode = 0; //0: banner 1:thumb
 
     _self.titleMode;
@@ -47,6 +85,7 @@ function bannerCreater() {
         unFocusArea = new PIXI.Graphics(),
         gradient = new PIXI.Sprite(),
         gradientColor = ['#999999', 'transparent'],
+        factionImg = 'convergence.png',
         subTitle,
         titleGroup = new PIXI.Container(),
         logo = new PIXI.Sprite(),
@@ -78,14 +117,7 @@ function bannerCreater() {
         subTitle = new PIXI.Text('Alexia Ciannor & the Risen', subTitleStyle);
         subTitle.filters = [dropShadowFilter];
         subTitle.x = 5;
-        subTitle.y = viewAreaHeight - subTitle.height - 3;
-
-        /* title = new PIXI.extras.BitmapText('Alexia', {
-             font: "30px Templar",
-             tint: 0xFFFFFF
-         })*/
-
-        //max 2 line
+        subTitle.y = viewAreaHeight - subTitle.height - 3;      
 
         for (i = 0; i < 2; i++) {
             var _titleChild = new PIXI.extras.BitmapText('', {
@@ -108,7 +140,7 @@ function bannerCreater() {
         gradient.rotation = -0.2;
         gradient.x = -12;
 
-        logo.texture = new PIXI.Texture.fromFrame('convergence.png');
+        logo.texture = new PIXI.Texture.fromFrame(factionImg);
         //logo.texture = PIXI.loader.resources.logo.texture;
         logo.alpha = 0.4;
         logo.y = viewAreaHeight / 2 - logo.height / 2;
@@ -209,6 +241,17 @@ function bannerCreater() {
         renew();
 
     }
+
+    _self.setFaction = function(_faction) {     
+        for (var i = 0; i < factions.length; i++) {     
+            if (factions[i].title == _faction + ".png") {
+                gradientColor[0] = factions[i].color;
+                factionImg = factions[i].title;
+                break;
+            }
+        }
+    }
+
 
     _self.close = function() {
         editAreaRenderer.destroy();

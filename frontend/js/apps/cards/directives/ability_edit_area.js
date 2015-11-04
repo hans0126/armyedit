@@ -5,7 +5,10 @@ define(function(require) {
     app.directive("abilityEditArea", [
         function() {
             return {
-                restrict: 'A',               
+                restrict: 'A',
+                link:function(scope,element,attr){
+                    
+                },
                 templateUrl: "js/apps/cards/directives/ability_edit_area.html"
             }
 

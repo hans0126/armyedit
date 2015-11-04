@@ -5,7 +5,8 @@ define(function(require) {
     app.directive("abilityEdit", [
         'lightBoxService',
         "$compile",
-        function(lightBoxService, $compile) {
+        "settingService",
+        function(lightBoxService, $compile,settingService) {
 
             return {
                 restrict: 'A',
@@ -14,12 +15,14 @@ define(function(require) {
                     currentActor: "=currentActor"
                 },
                 link: function(scope, element, attr) {
-                    scope.mapping = [];
+                    scope.mapping = [];                   
+
                     if (scope.currentActor.characterAbility) {
-                        for (var i = 0; i < scope.currentActor.characterAbility.length; i++) {
-                            scope.mapping.push(scope.ability.mapping[scope.currentActor.characterAbility[i]]);
+                        for (var i = 0; i < scope.currentActor.characterAbility.length; i++) {                       
+                            scope.mapping.push(settingService.abilityMapping[scope.currentActor.characterAbility[i]]);
                         }
                     }
+
                     scope.addAbility = function() {                       
                         var _a = $compile("<div ability-edit-area id='ability_popup'></div>")(scope);
                         lightBoxService.open(_a, 300, 300);

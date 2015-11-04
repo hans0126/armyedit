@@ -1,9 +1,9 @@
-<div class='clearfix form-group' ng-if='currentActor.img.banner'>
-    <img ng-src='{{currentActor.img.banner}}' class='pull-left' style='margin-right: 0.2em;'>
+<div class='clearfix form-group' ng-if='currentActor.showImg.banner'>
+    <img ng-src='{{currentActor.showImg.banner}}' class='pull-left' style='margin-right: 0.2em;'>
     <button class='btn btn-danger pull-left' ng-click='removeImg("banner")'><i class="fa fa-times"></i></button>
 </div>
-<div class='clearfix form-group' ng-if='currentActor.img.thumb'>
-    <img ng-src='{{currentActor.img.thumb}}' class='pull-left' style='margin-right: 0.2em;'>
+<div class='clearfix form-group' ng-if='currentActor.showImg.thumb'>
+    <img ng-src='{{currentActor.showImg.thumb}}' class='pull-left' style='margin-right: 0.2em;'>
     <button class='btn btn-danger pull-left' ng-click='removeImg("thumb")'><i class="fa fa-times"></i></button>
 </div>
 <button class='btn btn-primary' ng-click='openEditBoard()'>Edit</button>

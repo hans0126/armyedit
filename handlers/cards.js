@@ -1,8 +1,9 @@
 var cards = require('../models/cards.js'),
     products = require('../models/products.js'),
     mongoose = require('mongoose'),
-    fs = require('fs');
-var util = require('util');
+    fs = require('fs'),
+    imgPath = "frontend/products/";
+
 
 // mongoose.Types.ObjectId
 
@@ -22,10 +23,11 @@ exports.inheritCard = function(req, res) {
 
     var _d = JSON.parse(req.body.datas);
     var _file = req.file;
-
+    imgProcess.call(_d);
     categoryIdConvertToObjectId.call(_d);
     abilityIdConvertToObjectId.call(_d);
 
+   
     if (_file) {
         _d.img = uploadImage(_file);
     }
@@ -39,7 +41,7 @@ exports.inheritCard = function(req, res) {
                 copy: re._id
             }
         }, function(err, re2) {
-            console.log(re2);
+          
             res.json(200, re._id);
         })
 
@@ -52,7 +54,7 @@ exports.updateCard = function(req, res) {
 
     var _d = JSON.parse(req.body.datas);
     var _file = req.file;
-
+    imgProcess.call(_d);
     categoryIdConvertToObjectId.call(_d);
     abilityIdConvertToObjectId.call(_d);
 
@@ -66,37 +68,29 @@ exports.updateCard = function(req, res) {
     cards.update({
         _id: mongoose.Types.ObjectId(_id)
     }, _d, function(err) {
-        res.json(200);
+
+        res.json(200, _d.actor);
     })
 }
 
 
 exports.addNewCard = function(req, res) {
-    // console.log(util.inspect(req.body.datas.title, false, null));
+
     var _d = JSON.parse(req.body.datas);
     var _file = req.file;
 
-   // console.log(_file);
-    var _img = _d.actor[0].newImg.banner;
+    imgProcess.call(_d);
+    categoryIdConvertToObjectId.call(_d);
+    abilityIdConvertToObjectId.call(_d);
 
-    _img = _img.replace(/^data:image\/\w+;base64,/, "");
-    var buf = new Buffer(_img, 'base64');
-    fs.writeFile('image.png', buf);
+    if (_file) {
+        _d.img = uploadImage(_file);
+    }
 
-
-    /*
-
-     categoryIdConvertToObjectId.call(_d);
-     abilityIdConvertToObjectId.call(_d);
-
-     if (_file) {
-         _d.img = uploadImage(_file);
-     }
-
-     cards(_d).save(function(err, re) {
-         if (err) throw err;
-         res.json(200,re);
-     })*/
+    cards(_d).save(function(err, re) {
+        if (err) throw err;
+        res.json(200, re);
+    })
 
 }
 
@@ -141,8 +135,43 @@ function abilityIdConvertToObjectId() {
     for (var i = 0; i < _actors.length; i++) {
         if (_actors[i].characterAbility) {
             for (j = 0; j < _actors[i].characterAbility.length; j++) {
-                _actors[i].characterAbility[j] = mongoose.types.ObjectId(_actors[i].characterAbility[j]);
+                _actors[i].characterAbility[j] = mongoose.Types.ObjectId(_actors[i].characterAbility[j]);
             }
         }
+    }
+}
+
+
+//get thumb img and banner img. binary to file
+
+function imgProcess() {
+
+    var _actors = this.actor;
+
+    for (var i = 0; i < _actors.length; i++) {
+
+        for (var key in _actors[i].newImg) {
+
+            var _img = _actors[i].newImg[key],
+                _fileName,
+                _buf;
+
+            if (_img) {
+                //remove old file 
+                if (_actors[i].img[key]) {
+                    fs.unlink(imgPath + "actor_" + key + '/' + _actors[i].img[key]);
+                }
+
+                _fileName = new Date().getTime() + "-" + Math.floor(Math.random() * 1000) + ".png";
+                _img = _img.replace(/^data:image\/\w+;base64,/, "");
+                _buf = new Buffer(_img, 'base64');
+
+                _actors[i].img[key] = _fileName;
+                fs.writeFile(imgPath + "actor_" + key + '/' + _fileName, _buf);
+                
+            }
+        }
+
+        delete _actors[i].newImg;
     }
 }

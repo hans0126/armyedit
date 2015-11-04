@@ -14,7 +14,8 @@ define(function(require) {
             var dbCtrl = new dbCtrlFactory();
             var selectedObj = null;
             var cardsStatus = "new"; //  1.inherit 2.update 3.new(no parent)
-            var imgPath = "/products/normal/";
+            var imgPath = "/products/";
+
 
             var cardTemplate;
             var actorTemplate;
@@ -23,6 +24,14 @@ define(function(require) {
             stService.searchType = "card" //cards or priducts    
             _self.s = settingService;
             _self.cardStatusText = null;
+            _self.thumbImg = null;
+            _self.actorThumb = null;
+            _self.actorBanner = null;
+
+            _self.imgGroup = {
+                thumb: null,
+                banner: null
+            }
 
             _self.submitBtnDisabled = false;
             _self.primaryCard = null;
@@ -39,6 +48,16 @@ define(function(require) {
                     return false;
                 }
 
+
+                _self.imgGroup = {
+                    thumb: null,
+                    banner: null
+                }
+
+                _self.thumbImg = null;
+
+
+
                 _self.submitBtnDisabled = false;
 
                 selectedObj = _obj;
@@ -54,16 +73,21 @@ define(function(require) {
             function productsProcess() {
 
                 if (selectedObj.copy) {
-
-
                     // has data
                     // get data
                     dbCtrl.getData(selectedObj.copy).then(function(response) {
                         _self.primaryCard = response.data;
-                        console.log(_self.primaryCard);
-                        _self.thumbImg = imgPath + _self.primaryCard.image_name;
+
+
                         cardsStatus = "update";
-                        _self.cardStatusText = "Inherited"
+                        _self.cardStatusText = "Inherited";
+
+                        if (_self.primaryCard.image_name) {
+                            _self.thumbImg = imgPath + "normal/" + _self.primaryCard.image_name;
+                        }
+
+
+                        checkInitImg(_self.primaryCard.actor);
 
                     }, function() {
                         console.log("get data error")
@@ -86,7 +110,10 @@ define(function(require) {
 
                     _editData.title = selectedObj.title;
 
-                    _self.thumbImg = imgPath + selectedObj.image_name;
+                    if (selectedObj.image_name) {
+                        _self.thumbImg = imgPath + "normal/" + selectedObj.image_name;
+                    }
+
                     _editData.image_name = selectedObj.image_name;
 
                     _editData.parent_id = selectedObj._id;
@@ -97,7 +124,12 @@ define(function(require) {
             function cardsProcess() {
                 _self.primaryCard = selectedObj;
 
-                _self.thumbImg = imgPath + selectedObj.image_name;
+                if (selectedObj.image_name) {
+                    _self.thumbImg = imgPath + "normal/" + selectedObj.image_name;
+                }
+
+                checkInitImg(_self.primaryCard.actor);
+
                 cardsStatus = "update";
             }
 
@@ -146,6 +178,10 @@ define(function(require) {
                 newImg: {
                     thumb: null,
                     banner: null
+                },
+                showImg: {
+                    thumb: null,
+                    banner: null
                 }
             }
 
@@ -177,10 +213,11 @@ define(function(require) {
                 var _tempCard = angular.copy(_self.primaryCard);
 
                 for (var i = 0; i < _tempCard.actor.length; i++) {
-                    for (var key in _tempCard.actor[i].img) {
+                    for (var key in _tempCard.actor[i].newImg) {
                         if (_tempCard.actor[i].newImg[key]) {
                             _tempCard.actor[i].img[key] = null;
                         }
+                        delete _tempCard.actor[i].showImg;
                     }
                 }
 
@@ -191,6 +228,8 @@ define(function(require) {
                         dbCtrl.update(_d, "update_card").then(function(response) {
                             $scope.msg.showMsg('update complete', 0);
                             _self.submitBtnDisabled = false;
+                            _self.primaryCard.actor = response.data;
+                            checkInitImg(_self.primaryCard.actor);
                         })
 
                         break;
@@ -215,6 +254,25 @@ define(function(require) {
                         })
 
                         break;
+                }
+
+
+            }
+
+            function checkInitImg(actors) {
+                for (var i = 0; i < actors.length; i++) {
+                    if (!actors[i].showImg) {
+                        actors[i].showImg = {
+                            banner: null,
+                            thumb: null
+                        }
+                    }
+
+                    for (var key in actors[i].img) {
+                        if (actors[i].img[key]) {
+                            actors[i].showImg[key] = imgPath + "actor_" + key + "/" + actors[i].img[key];
+                        }
+                    }
                 }
             }
 

@@ -9,7 +9,7 @@
 	"sourceSize": {"w":130,"h":130},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"convergence.png":
+"convergence-of-cyriss.png":
 {
 	"frame": {"x":2,"y":526,"w":128,"h":128},
 	"rotated": false,
@@ -72,6 +72,15 @@
 	"sourceSize": {"w":130,"h":130},
 	"pivot": {"x":0.5,"y":0.5}
 },
+"retribution-of-scyrah.png":
+{
+	"frame": {"x":2,"y":656,"w":128,"h":126},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":2,"w":128,"h":126},
+	"sourceSize": {"w":130,"h":130},
+	"pivot": {"x":0.5,"y":0.5}
+},
 "skorne.png":
 {
 	"frame": {"x":134,"y":234,"w":98,"h":126},
@@ -87,15 +96,6 @@
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":0,"y":1,"w":129,"h":128},
-	"sourceSize": {"w":130,"h":130},
-	"pivot": {"x":0.5,"y":0.5}
-},
-"the-retribution-of-scyrah.png":
-{
-	"frame": {"x":2,"y":656,"w":128,"h":126},
-	"rotated": false,
-	"trimmed": true,
-	"spriteSourceSize": {"x":1,"y":2,"w":128,"h":126},
 	"sourceSize": {"w":130,"h":130},
 	"pivot": {"x":0.5,"y":0.5}
 },
@@ -115,6 +115,6 @@
 	"format": "RGBA8888",
 	"size": {"w":254,"h":784},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:2154e155823ef91aa0bd9adead8d0aa0:79dd3e61a32d1dea870036ab1bfac1f6:bb8e0faf758a3722557540d7e07e708d$"
+	"smartupdate": "$TexturePacker:SmartUpdate:2c1600f2715104269033dba6cf5011aa:8a3f05cf198cc4763e880fb2d4830110:bb8e0faf758a3722557540d7e07e708d$"
 }
 }

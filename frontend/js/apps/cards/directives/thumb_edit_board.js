@@ -1,16 +1,13 @@
 define(function(require) {
 
-    var app = require("app");   
+    var app = require("app");
 
-    app.directive("thumbEditBoard", ['lightBoxService', function(lightBoxService) {
+    app.directive("thumbEditBoard", ['lightBoxService', 'settingService', function(lightBoxService, settingService) {
         return {
             restrict: 'A',
-            scope: {
-                thumbImg: "=thumbImages",
-                currentActor: "=currentActor"
-            },
             transclude: false,
             link: function(scope, element, attr) {
+
 
                 var bc = new bannerCreater();
 
@@ -19,6 +16,8 @@ define(function(require) {
                 var _thumbImgFile = document.getElementById('thumbImgFile');
                 var _actorBanner = document.getElementById('actorBanner');
                 var _actorthumb = document.getElementById('actorthumb');
+
+                var faction = settingService.categoryMapping[scope.currentCard.faction];
 
                 _actorBanner = angular.element(_actorBanner);
                 _actorthumb = angular.element(_actorthumb);
@@ -40,7 +39,14 @@ define(function(require) {
                 scope.apply = apply;
                 scope.cancel = cancel;
 
+
+                if (faction) {
+                    bc.setFaction(faction.title);
+                }
+
                 bc.init(_editArea, _displayArea);
+
+                bc.changeSubTitle(scope.currentCard.title);
 
                 if (scope.currentActor.title) {
                     bc.changeTitle(scope.currentActor.title);
@@ -110,16 +116,24 @@ define(function(require) {
                 }
 
                 function apply() {
+
+                    if (!scope.currentActor.newImg) {
+                        scope.currentActor.newImg = {
+                            banner: null,
+                            thumb: null
+                        }
+                    }
+
                     if (scope.tempBanner) {
-                        scope.currentActor.img.banner = scope.tempBanner;
                         scope.currentActor.newImg.banner = scope.tempBanner;
+                        scope.currentActor.showImg.banner = scope.tempBanner;
                     }
 
                     if (scope.tempThumb) {
-                        scope.currentActor.img.thumb = scope.tempThumb;
                         scope.currentActor.newImg.thumb = scope.tempThumb;
+                        scope.currentActor.showImg.thumb = scope.tempThumb;
                     }
-                  
+
                     lightBoxService.close();
                 }
 
