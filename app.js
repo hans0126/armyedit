@@ -46,7 +46,7 @@ app.use(express.static(global.appRoot));
 
 
 
-//global.dbUrl ="mongodb://hans0126:a0955587777@ds039484.mongolab.com:39484/ttt"
+
 
 //console.log(app.get('env'));
 

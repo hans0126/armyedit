@@ -27,7 +27,7 @@ exports.inheritCard = function(req, res) {
     categoryIdConvertToObjectId.call(_d);
     abilityIdConvertToObjectId.call(_d);
 
-   
+
     if (_file) {
         _d.img = uploadImage(_file);
     }
@@ -41,7 +41,7 @@ exports.inheritCard = function(req, res) {
                 copy: re._id
             }
         }, function(err, re2) {
-          
+
             res.json(200, re._id);
         })
 
@@ -168,7 +168,7 @@ function imgProcess() {
 
                 _actors[i].img[key] = _fileName;
                 fs.writeFile(imgPath + "actor_" + key + '/' + _fileName, _buf);
-                
+
             }
         }
 
