@@ -26,6 +26,8 @@ define(function(require) {
                     }
 
                     function openEditBoard() {
+                        if(!scope.currentCard.faction || !scope.currentCard.title) return;
+
                         var _a = $compile("<div thumb-edit-board></div>")(scope);
                         lightBoxService.open(_a, 720, 520);
                     }
