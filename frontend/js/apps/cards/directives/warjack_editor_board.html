@@ -1,0 +1,36 @@
+<div id="warjackEditArea"></div>
+<div class="form-group ">
+    <div class='btn-group'>
+        <button class="btn btn-primary" ng-click="changeDisplayMode(0)" ng-class='activeClass(0,"displayMode")'>Single</button>
+        <button class="btn btn-primary" ng-click="changeDisplayMode(1)" ng-class='activeClass(1,"displayMode")'>Double</button>
+    </div>
+    <button class="btn btn-danger" ng-click='resetAll()'>Reset</button>
+</div>
+<div class="form-group">
+    <div class='btn-group'>
+        <button class="btn btn-primary" ng-click='getBrush("disabled")' ng-class='activeClass("disabled","brush")'>Disabled</button>
+        <button class="btn btn-primary" ng-click='getBrush("enabled")' ng-class='activeClass("enabled","brush")'>Enabled</button>
+        <button class="btn btn-primary" ng-click='getBrush("C")' ng-class='activeClass("C","brush")'>C</button>
+        <button class="btn btn-primary" ng-click='getBrush("S")' ng-class='activeClass("S","brush")'>S</button>
+        <button class="btn btn-primary" ng-click='getBrush("M")' ng-class='activeClass("M","brush")'>M</button>
+        <button class="btn btn-primary" ng-click='getBrush("L")' ng-class='activeClass("L","brush")'>L</button>
+        <button class="btn btn-primary" ng-click='getBrush("R")' ng-class='activeClass("R","brush")'>R</button>
+        <button class="btn btn-primary" ng-click='getBrush("G")' ng-class='activeClass("G","brush")'>G</button>
+        <button class="btn btn-primary" ng-click='getBrush("I")' ng-class='activeClass("I","brush")'>I</button>
+    </div>
+</div>
+<div class="form-group">
+    <label style="margin-right: 10px;">
+        <input type="checkbox" ng-model='mirrorMode' ng-change='changeMirrorMode("mirror")'> Mirror Mode
+    </label>
+    <label ng-if='mirrorMode' style="margin-right: 10px;">
+        <input type="checkbox" ng-model='lrBind' ng-change='changeMirrorMode("lrBind")'>L/R Bind
+    </label>
+    <label ng-if='mirrorMode'>
+        <input type="checkbox" ng-model='mcBind' ng-change='changeMirrorMode("mcBind")'>M/C Bind
+    </label>
+</div>
+
+<div class="form-group clearfix">
+	<button class="btn btn-primary pull-right">Apply</button>
+</div>

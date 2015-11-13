@@ -25,9 +25,7 @@ var customerSchema = mongoose.Schema({
     "actor": [{
         "title": "String",
         "characterAbility": [],
-        "img": {
-            "pY": "Number",
-            "pX": "Number",
+        "img": {           
             "thumb": "String",
             "banner": "String"
         },
@@ -41,6 +39,13 @@ var customerSchema = mongoose.Schema({
             "mat": "Number",
             "str": "Number",
             "spd": "Number"
+        },
+        "hp":{
+            "type":"String",
+            "count":"Number",
+            "img":"String",
+            "systems":[],
+            "detail":[]
         }
     }]
 }, {
