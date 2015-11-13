@@ -26,8 +26,12 @@ define(function(require) {
     require('js/apps/cards/directives/thumb_edit_board.js');
     require('js/apps/cards/directives/thumb_images_area.js');
     require('js/apps/cards/directives/custom_on_change.js');
+    require('js/apps/cards/directives/warjack_editor.js');
     require('js/apps/cards/services/db_ctrl.js');
-  //  require('js/lib/pixi_banner_creater.js');
+
+
+
+    //  require('js/lib/pixi_banner_creater.js');
 
 
     app.config(['$routeProvider',

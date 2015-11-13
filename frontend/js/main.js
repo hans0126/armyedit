@@ -10,6 +10,7 @@ requirejs.config({
         d3_radar: 'lib/radar-chart-d3-master/src/radar-chart.min',
         pixi: 'lib/pixi.min',
         pixi_bannerCreater: 'lib/pixi_banner_creater',
+        pixi_warjack : "lib/pixi_warjack_box",
         app: 'apps/app'
 
     },
@@ -24,7 +25,7 @@ requirejs.config({
             deps: ['angularAnimate']
         },
         app: {
-            deps: ['angularRoute', 'd3_radar', 'pixi_bannerCreater']
+            deps: ['angularRoute', 'd3_radar', 'pixi_bannerCreater','pixi_warjack']
         },
         d3_radar: {
             deps: ['d3']
