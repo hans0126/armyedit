@@ -4,7 +4,7 @@ var cards = require('../models/cards.js'),
     fs = require('fs'),
     imgPath = "frontend/products/";
 
-
+mongoose.set('debug', true);
 // mongoose.Types.ObjectId
 
 exports.getCard = function(req, res) {
@@ -87,6 +87,8 @@ exports.addNewCard = function(req, res) {
         _d.img = uploadImage(_file);
     }
 
+    console.log(_d);
+
     cards(_d).save(function(err, re) {
         if (err) throw err;
         res.json(200, re);
@@ -151,7 +153,6 @@ function imgProcess() {
     for (var i = 0; i < _actors.length; i++) {
 
         for (var key in _actors[i].newImg) {
-
             var _img = _actors[i].newImg[key],
                 _fileName,
                 _buf;

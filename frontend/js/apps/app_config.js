@@ -29,11 +29,6 @@ define(function(require) {
     require('js/apps/cards/directives/warjack_editor.js');
     require('js/apps/cards/services/db_ctrl.js');
 
-
-
-    //  require('js/lib/pixi_banner_creater.js');
-
-
     app.config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.

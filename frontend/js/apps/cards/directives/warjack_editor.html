@@ -1,1 +1,10 @@
-<button class="btn btn-primary" ng-click='openWarjackEditor()'>Edit</button>
+<div class="form-group">
+    <button class="btn btn-primary" ng-click='openWarjackEditor()'>Edit</button>
+</div>
+<div class="form-group">
+	<img ng-src="{{currentActor.img.damage}}" alt="">
+</div>
+<div class="form-group" ng-if='currentActor.hp.count'>
+    <label>total life:</label> {{currentActor.hp.count}}  
+    <label>system:</label> <span ng-repeat="_s in currentActor.hp.systems | orderBy : _s"><span ng-if="$index > 0">,</span>{{_s}}</span>
+</div>

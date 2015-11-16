@@ -18,11 +18,9 @@ define(function(require) {
                         var _a = $compile("<div warjack-editor-board style='width:600px'></div>")(scope);
                         lightBoxService.open(_a, 720, 520);
                     }
-
                 },
                 templateUrl: "js/apps/cards/directives/warjack_editor.html"
             }
-
         }
     ])
 
@@ -46,17 +44,29 @@ define(function(require) {
                 scope.lrBind = true;
                 scope.mcBind = true;
                 scope.changeMirrorMode = changeMirrorMode;
+                scope.apply = apply;
+
+                lightBoxService.onCloseFn = closeLighbox;
+
+                if (scope.currentActor.hp.detail) {
+                    wj.changeDataRender(scope.currentActor.hp.detail);
+                }
 
                 function getBrush(_b) {
                     currentBrush = _b;
                     wj.getBrush(_b);
                 }
 
+
+                function closeLighbox() {
+                    window.cancelRequestAnimFrame(wj.requestAnime);
+                }
+
                 function changeDisplayMode(_mode) {
                     currentDisplayMode = _mode;
                     wj.changeMode(_mode, function() {
-                         scope.lrBind = wj.LRbind;
-                         scope.mcBind = wj.MCbind;
+                        scope.lrBind = wj.LRbind;
+                        scope.mcBind = wj.MCbind;
                     });
                 }
 
@@ -98,6 +108,23 @@ define(function(require) {
                             wj.MCbind = scope.mcBind;
                             break;
                     }
+                }
+
+                function apply() {
+                    var _img = wj.exportImg();
+                    var _re = wj.getTotalType()
+
+                    scope.currentActor.img.damage = _img;
+                    scope.currentActor.newImg.damage = _img;
+                    scope.currentActor.hp = {
+                        damage_type: "warjack",
+                        count: _re.life,
+                        systems: _re.system,
+                        detail: wj.getDataArray()
+                    }
+
+                    lightBoxService.close();
+                    lightBoxService.onCloseFn = null;
                 }
             },
             templateUrl: "js/apps/cards/directives/warjack_editor_board.html"

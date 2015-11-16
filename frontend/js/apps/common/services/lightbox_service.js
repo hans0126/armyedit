@@ -7,12 +7,14 @@ define(function(require) {
         _self.visible = false;
         _self.htmlBody = angular.element(document.getElementsByTagName('html'));
         _self.lightBox = null;
+        _self.onCloseFn;
 
-        _self.close = function(fn) {
+        _self.close = function() {
             _self.visible = false;
             _self.htmlBody.removeClass('lightBoxFixed');
-            if (typeof(fn) == 'function') {
-                fn();
+
+            if (typeof(_self.onCloseFn) == 'function') {
+                _self.onCloseFn();
             }
             _self.lightBox.empty();
         }
@@ -42,6 +44,7 @@ define(function(require) {
                     top: _y + "px",
                     left: _x + "px"
                 })
+
             }
         }
     }])

@@ -48,16 +48,12 @@ define(function(require) {
                     return false;
                 }
 
-
                 _self.imgGroup = {
                     thumb: null,
                     banner: null
                 }
 
                 _self.thumbImg = null;
-
-
-
                 _self.submitBtnDisabled = false;
 
                 selectedObj = _obj;
@@ -77,15 +73,12 @@ define(function(require) {
                     // get data
                     dbCtrl.getData(selectedObj.copy).then(function(response) {
                         _self.primaryCard = response.data;
-
-
                         cardsStatus = "update";
                         _self.cardStatusText = "Inherited";
 
                         if (_self.primaryCard.image_name) {
                             _self.thumbImg = imgPath + "normal/" + _self.primaryCard.image_name;
                         }
-
 
                         checkInitImg(_self.primaryCard.actor);
 
@@ -171,17 +164,26 @@ define(function(require) {
                     focus: null,
                     threshold: null
                 },
+                hp: {
+                    damage_type: null,
+                    count: null,
+                    systems: [],
+                    detail: []
+                },
                 img: {
                     thumb: null,
-                    banner: null
+                    banner: null,
+                    damage: null
                 },
                 newImg: {
                     thumb: null,
-                    banner: null
+                    banner: null,
+                    damage: null
                 },
                 showImg: {
                     thumb: null,
-                    banner: null
+                    banner: null,
+                    damage: null
                 }
             }
 
@@ -221,6 +223,8 @@ define(function(require) {
                     }
                 }
 
+                console.log(_tempCard);
+
                 _d.datas = angular.toJson(_tempCard);
 
                 switch (cardsStatus) {
@@ -246,6 +250,8 @@ define(function(require) {
                         break;
 
                     case "new":
+
+
                         dbCtrl.update(_d, "add_new_card").then(function(response) {
                             $scope.msg.showMsg('add complete', 0);
                             _self.submitBtnDisabled = false;

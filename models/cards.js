@@ -27,7 +27,8 @@ var customerSchema = mongoose.Schema({
         "characterAbility": [],
         "img": {           
             "thumb": "String",
-            "banner": "String"
+            "banner": "String",
+            "damage": "String"
         },
         "status": {
             "threshold": "Number",
@@ -41,9 +42,8 @@ var customerSchema = mongoose.Schema({
             "spd": "Number"
         },
         "hp":{
-            "type":"String",
-            "count":"Number",
-            "img":"String",
+           "damage_type":"String",
+            "count":"Number",           
             "systems":[],
             "detail":[]
         }
