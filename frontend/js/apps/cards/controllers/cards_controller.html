@@ -99,9 +99,11 @@
                     <label class="shortField">Life:</label>
                     <select class="form-control" ng-model="actor.hp.damage_type" ng-options="life as life for life in cards.s.lifeType"></select>
                 </div>
-                <div lass="form-group" ng-switch="actor.hp.damage_type">
+                <div class="form-group" ng-switch="actor.hp.damage_type">
                     <input type="number" min="0" class="form-control w80" ng-model="actor.hp.count" ng-switch-when="number">
                     <div ng-switch-when="warjack" warjack-editor current-card="cards.primaryCard" current-actor="actor"></div>
+                    <div ng-switch-when="warbeast" warbeast-editor current-actor="actor"></div>
+                   
                 </div>
                 <div class="form-group form-inline clearfix" ng-if="$index!=0">
                     <button class="btn btn-danger pull-right" ng-click="cards.removeActor(actor.$$hashKey)">Remove actor</button>

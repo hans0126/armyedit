@@ -1,0 +1,14 @@
+<div class="form-inline form-group">
+    <label class="text-danger">Body:
+        <input type="number" class="form-control w80" min="0" ng-model="currentActor.hp.warbeast_detail.body" ng-change="changeNum()">
+    </label>
+    <label class="text-primary">Mind:
+        <input type="number" class="form-control w80" min="0" ng-model="currentActor.hp.warbeast_detail.mind" ng-change="changeNum()">
+    </label>
+    <label class="text-success">Spirit:
+        <input type="number" class="form-control w80" min="0" ng-model="currentActor.hp.warbeast_detail.spirit" ng-change="changeNum()">
+    </label>
+</div>
+<div class="form-inline form-group">
+    <label>total life:</label> {{currentActor.hp.count}}
+</div>

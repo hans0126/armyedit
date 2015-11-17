@@ -4,7 +4,7 @@ var cards = require('../models/cards.js'),
     fs = require('fs'),
     imgPath = "frontend/products/";
 
-mongoose.set('debug', true);
+//mongoose.set('debug', true);
 // mongoose.Types.ObjectId
 
 exports.getCard = function(req, res) {
@@ -54,6 +54,7 @@ exports.updateCard = function(req, res) {
 
     var _d = JSON.parse(req.body.datas);
     var _file = req.file;
+
     imgProcess.call(_d);
     categoryIdConvertToObjectId.call(_d);
     abilityIdConvertToObjectId.call(_d);
@@ -68,7 +69,7 @@ exports.updateCard = function(req, res) {
     cards.update({
         _id: mongoose.Types.ObjectId(_id)
     }, _d, function(err) {
-
+        console.log(_d.actor);
         res.json(200, _d.actor);
     })
 }
@@ -86,8 +87,6 @@ exports.addNewCard = function(req, res) {
     if (_file) {
         _d.img = uploadImage(_file);
     }
-
-    console.log(_d);
 
     cards(_d).save(function(err, re) {
         if (err) throw err;
@@ -125,8 +124,10 @@ function categoryIdConvertToObjectId() {
     for (var i = 0; i < _tempC.length; i++) {
         if (this[_tempC[i]] != null) {
             this[_tempC[i]] = mongoose.Types.ObjectId(this[_tempC[i]]);
+
         }
     }
+
 
     //return _data
 
@@ -138,9 +139,12 @@ function abilityIdConvertToObjectId() {
         if (_actors[i].characterAbility) {
             for (j = 0; j < _actors[i].characterAbility.length; j++) {
                 _actors[i].characterAbility[j] = mongoose.Types.ObjectId(_actors[i].characterAbility[j]);
+
             }
         }
     }
+
+
 }
 
 
@@ -158,9 +162,11 @@ function imgProcess() {
                 _buf;
 
             if (_img) {
-                //remove old file 
+                //remove old file                
                 if (_actors[i].img[key]) {
-                    fs.unlink(imgPath + "actor_" + key + '/' + _actors[i].img[key]);
+                    fs.unlink(imgPath + "actor_" + key + '/' + _actors[i].img[key], function(err) {
+                        if (err) throw err;
+                    });
                 }
 
                 _fileName = new Date().getTime() + "-" + Math.floor(Math.random() * 1000) + ".png";
@@ -173,6 +179,18 @@ function imgProcess() {
             }
         }
 
+        if (_actors[i].hp.damage_type == "warbeast") {
+            if (_actors[i].img.damage) {
+                fs.unlink(imgPath + "actor_damage/" + _actors[i].img.damage, function(err) {
+                    if (err) throw err;
+                });
+
+                _actors[i].img.damage = null;
+            }
+        }
+
         delete _actors[i].newImg;
     }
+
+
 }

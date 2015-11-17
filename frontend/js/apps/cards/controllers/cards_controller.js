@@ -22,16 +22,12 @@ define(function(require) {
 
             stService.searchBtnShow = true //select btn visible
             stService.searchType = "card" //cards or priducts    
+
             _self.s = settingService;
             _self.cardStatusText = null;
             _self.thumbImg = null;
             _self.actorThumb = null;
             _self.actorBanner = null;
-
-            _self.imgGroup = {
-                thumb: null,
-                banner: null
-            }
 
             _self.submitBtnDisabled = false;
             _self.primaryCard = null;
@@ -48,10 +44,6 @@ define(function(require) {
                     return false;
                 }
 
-                _self.imgGroup = {
-                    thumb: null,
-                    banner: null
-                }
 
                 _self.thumbImg = null;
                 _self.submitBtnDisabled = false;
@@ -215,24 +207,28 @@ define(function(require) {
                 var _tempCard = angular.copy(_self.primaryCard);
 
                 for (var i = 0; i < _tempCard.actor.length; i++) {
-                    for (var key in _tempCard.actor[i].newImg) {
-                        if (_tempCard.actor[i].newImg[key]) {
-                            _tempCard.actor[i].img[key] = null;
-                        }
-                        delete _tempCard.actor[i].showImg;
+                    var _actor = _tempCard.actor[i];                  
+
+                    delete _actor.showImg;
+
+                    if (_actor.hp.damage_type == "warjack") {
+                        _actor.hp.warbeast_detail = null;
+                    } else if (_actor.hp.damage_type == "warbeast") {
+                        _actor.hp.warjack_detail = null;
+                        _actor.hp.systems = null;
                     }
                 }
 
-                console.log(_tempCard);
-
                 _d.datas = angular.toJson(_tempCard);
+
+
 
                 switch (cardsStatus) {
                     case "update":
                         dbCtrl.update(_d, "update_card").then(function(response) {
                             $scope.msg.showMsg('update complete', 0);
                             _self.submitBtnDisabled = false;
-                            _self.primaryCard.actor = response.data;
+                            _self.primaryCard.actor = response.data;                         
                             checkInitImg(_self.primaryCard.actor);
                         })
 
@@ -270,7 +266,8 @@ define(function(require) {
                     if (!actors[i].showImg) {
                         actors[i].showImg = {
                             banner: null,
-                            thumb: null
+                            thumb: null,
+                            damage: null
                         }
                     }
 

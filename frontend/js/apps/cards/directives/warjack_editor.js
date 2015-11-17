@@ -12,6 +12,12 @@ define(function(require) {
                     currentCard: "=currentCard"
                 },
                 link: function(scope, element, attr) {
+                    var wj = new warjackBox();
+                    if (scope.currentActor.hp.warjack_detail) {
+                        scope.currentActor.hp.count = wj.getTotalType(scope.currentActor.hp.warjack_detail).life;
+                    }else{
+                        scope.currentActor.hp.count = 0;
+                    }   
                     scope.openWarjackEditor = openWarjackEditor;
 
                     function openWarjackEditor() {
@@ -48,8 +54,8 @@ define(function(require) {
 
                 lightBoxService.onCloseFn = closeLighbox;
 
-                if (scope.currentActor.hp.detail) {
-                    wj.changeDataRender(scope.currentActor.hp.detail);
+                if (scope.currentActor.hp.warjack_detail) {                    
+                    wj.changeDataRender(scope.currentActor.hp.warjack_detail);
                 }
 
                 function getBrush(_b) {
@@ -114,14 +120,17 @@ define(function(require) {
                     var _img = wj.exportImg();
                     var _re = wj.getTotalType()
 
-                    scope.currentActor.img.damage = _img;
-                    scope.currentActor.newImg.damage = _img;
-                    scope.currentActor.hp = {
-                        damage_type: "warjack",
-                        count: _re.life,
-                        systems: _re.system,
-                        detail: wj.getDataArray()
+                    if (!scope.currentActor.newImg) {
+                        scope.currentActor.newImg = {};
                     }
+
+                    // scope.currentActor.img.damage = _img;
+                    scope.currentActor.newImg.damage = _img;
+                    scope.currentActor.showImg.damage = _img;
+                    //scope.currentActor.hp.damage_type = "warjack";
+                    scope.currentActor.hp.count = _re.life;
+                    scope.currentActor.hp.systems = _re.system;
+                    scope.currentActor.hp.warjack_detail = wj.getDataArray();
 
                     lightBoxService.close();
                     lightBoxService.onCloseFn = null;

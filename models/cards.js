@@ -45,7 +45,8 @@ var customerSchema = mongoose.Schema({
            "damage_type":"String",
             "count":"Number",           
             "systems":[],
-            "detail":[]
+            "warbeast_detail":{},
+            "warjack_detail":[]
         }
     }]
 }, {
