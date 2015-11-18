@@ -13,6 +13,7 @@ define(function(require) {
             var _self = this;
             var dbCtrl = new dbCtrlFactory();
             var selectedObj = null;
+            var originalObj = null; 
             var cardsStatus = "new"; //  1.inherit 2.update 3.new(no parent)
             var imgPath = "/products/";
 
@@ -36,7 +37,6 @@ define(function(require) {
             _self.removeActor = removeActor;
             _self.createNew = createNew;
 
-
             // to search area stService.objectSelected
             stService.objectSelected = function(_obj) {
 
@@ -44,12 +44,11 @@ define(function(require) {
                     return false;
                 }
 
-
                 _self.thumbImg = null;
                 _self.submitBtnDisabled = false;
 
-                selectedObj = _obj;
-
+                selectedObj = angular.copy(_obj);
+                originalObj = _obj;
 
                 if (stService.searchType == "product") {
                     productsProcess();
@@ -207,7 +206,7 @@ define(function(require) {
                 var _tempCard = angular.copy(_self.primaryCard);
 
                 for (var i = 0; i < _tempCard.actor.length; i++) {
-                    var _actor = _tempCard.actor[i];                  
+                    var _actor = _tempCard.actor[i];
 
                     delete _actor.showImg;
 
@@ -221,15 +220,15 @@ define(function(require) {
 
                 _d.datas = angular.toJson(_tempCard);
 
-
-
                 switch (cardsStatus) {
                     case "update":
                         dbCtrl.update(_d, "update_card").then(function(response) {
                             $scope.msg.showMsg('update complete', 0);
                             _self.submitBtnDisabled = false;
-                            _self.primaryCard.actor = response.data;                         
-                            checkInitImg(_self.primaryCard.actor);
+                            _self.primaryCard = response.data;
+                            selectedObj = angular.copy(_self.primaryCard);                        
+                            angular.extend(originalObj, _self.primaryCard);                        
+                            cardsProcess();
                         })
 
                         break;
@@ -246,8 +245,6 @@ define(function(require) {
                         break;
 
                     case "new":
-
-
                         dbCtrl.update(_d, "add_new_card").then(function(response) {
                             $scope.msg.showMsg('add complete', 0);
                             _self.submitBtnDisabled = false;

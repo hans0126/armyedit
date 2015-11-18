@@ -68,9 +68,8 @@ exports.updateCard = function(req, res) {
 
     cards.update({
         _id: mongoose.Types.ObjectId(_id)
-    }, _d, function(err) {
-        console.log(_d.actor);
-        res.json(200, _d.actor);
+    }, _d, function(err) {      
+        res.json(200, _d);
     })
 }
 
@@ -164,9 +163,7 @@ function imgProcess() {
             if (_img) {
                 //remove old file                
                 if (_actors[i].img[key]) {
-                    fs.unlink(imgPath + "actor_" + key + '/' + _actors[i].img[key], function(err) {
-                        if (err) throw err;
-                    });
+                    fs.unlink(imgPath + "actor_" + key + '/' + _actors[i].img[key]);
                 }
 
                 _fileName = new Date().getTime() + "-" + Math.floor(Math.random() * 1000) + ".png";
