@@ -9,8 +9,8 @@ requirejs.config({
         d3: 'lib/d3.min',
         d3_radar: 'lib/radar-chart-d3-master/src/radar-chart.min',
         pixi: 'lib/pixi.min',
-        pixi_bannerCreater: 'lib/pixi_banner_creater',
-        pixi_warjack : "lib/pixi_warjack_box",
+        pixi_bannerCreater: 'lib/pixi_banner_creater.min',
+        pixi_warjack: "lib/pixi_warjack_box.min",
         app: 'apps/app'
 
     },
@@ -25,7 +25,7 @@ requirejs.config({
             deps: ['angularAnimate']
         },
         app: {
-            deps: ['angularRoute', 'd3_radar', 'pixi_bannerCreater','pixi_warjack']
+            deps: ['angularRoute', 'd3_radar', 'pixi_bannerCreater', 'pixi_warjack']
         },
         d3_radar: {
             deps: ['d3']
@@ -39,7 +39,18 @@ requirejs.config({
 
 require(['apps/app_config'], function(app) {
 
+    var loader = PIXI.loader;
+    loader.add("images/source/satellite.fnt");
+    loader.add("images/source/templar.fnt");
+    loader.add("images/source/flag_pixi.json");
+
+    loader.load();
+
 })
+
+
+
+
 
 window.requestAnimFrame = (function() {
     return window.requestAnimationFrame ||

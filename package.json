@@ -1,6 +1,6 @@
 {
   "name": "armyedit",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "app.js",
   "dependencies": {
@@ -29,7 +29,7 @@
     "type": "git",
     "url": "https://github.com/hans0126/armyedit.git"
   },
-  "author": "",
+  "author": "Hans",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/hans0126/armyedit/issues"
