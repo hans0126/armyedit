@@ -25,7 +25,7 @@ exports.getStatusAvg = function(req, res) {
     }).sort({
         "value.sort": 1
     }).exec(function(err, re) {
-         res.json(200, re);
+         res.json(200, re);       
     })
 
 };

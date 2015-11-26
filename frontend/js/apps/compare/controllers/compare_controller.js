@@ -154,22 +154,18 @@ define(function(require) {
         }
     ])
 
-    app.directive("smallRadar", ["radarFactory", "settingService", function(radarFactory, settingService) {
-
-       
-
+    app.directive("smallRadar", ["radarFactory", function(radarFactory) {
 
         return {
             restrict: 'A',
             scope: {
-                status: "=status",
-                avg: "=avg"
+                status: "=status"
             },
-            link: function(scope, element, attr) {
+            link: function($scope, $element, $attr) {
 
                 var _d = [];
-                if (typeof(scope.status) != "undefined") {
-                    _d.push(radarFactory('a', scope.status, scope.avg))
+                if (typeof($scope.status) != "undefined") {
+                    _d.push(radarFactory('a', $scope.status));
                 }
 
                 var chart = new RadarChart.chart();
@@ -178,17 +174,15 @@ define(function(require) {
                     w: 150,
                     h: 150,
                     maxValue: 100,
-                    circles:false
+                    circles: false
                 }); // retrieve default config
-               
-                var svg = d3.select(element[0]).append('svg').style({
+
+                var svg = d3.select($element[0]).append('svg').style({
                     height: '150px',
-                    width:'150px'
+                    width: '150px'
                 });
 
-                svg.append('g').classed('single', true).datum(_d).call(chart);               
-
-
+                svg.append('g').classed('single', true).datum(_d).call(chart);
 
             }
 
@@ -197,45 +191,72 @@ define(function(require) {
     }])
 
 
-    /*
-        app.directive("compareRadar", ["radarFactory", "statusAvgService", function(radarFactory, statusAvgService) {
 
-            return {
-                restrict: 'A',
-                scope: {
-                    selected: "=selected"
-                },
-                link: function($scope, $element, $attr) {
+    app.directive("compareRadar", ["radarFactory", function(radarFactory) {
 
-                    $scope.$watch('selected.length', function() {
-                        RadarChart.defaultConfig.w = 350;
-                        RadarChart.defaultConfig.h = 350;
-                        RadarChart.defaultConfig.circles = true;
+        return {
+            restrict: 'A',
+            scope: {
+                selected: "=selected"
+            },
+            link: function($scope, $element, $attr) {
 
-                        var _d = [];
-                        _d.push(radarFactory.orignal_data)
+                var chart = new RadarChart.chart();
+
+                chart.config({
+                    w: 350,
+                    h: 350,
+                    maxValue: 100,
+                    circles: false
+                }); // retrieve default config
+
+                var svg = d3.select($element[0]).append('svg').style({
+                    height: '350px',
+                    width: '350px'
+                });
+
+                svg.append('g').classed('single', true);
+
+                $scope.$watch('selected.length', function(cardCount) {
+                    var _d = [];
+                    if (cardCount > 0) {
+
                         for (var i = 0; i < $scope.selected.length; i++) {
-                            if (typeof($scope.selected[i].status) != "undefined") {
-                                _d.push(radarFactory.transferData($scope.selected[i].status, statusAvgService.simple_data, "chart_style_" + i))
+                            var _card = $scope.selected[i].card;
+                            var _idx = $scope.selected[i].actorIndex;
+
+                            if (typeof(_card.actor[_idx].status) != "undefined") {
+                                _d.push(radarFactory("chart_style_" + i, _card.actor[_idx].status));
                             }
                         }
 
-                        RadarChart.draw($element[0], _d);
+                        svg.datum(_d).call(chart);
+
+                      /*  svg.append("circle")
+                            .attr("r", 100)
+                            .on('click', function() {
+                                console.log(svg.selectAll('polygon.chart_style_0').style("stroke"));
+                                //svg.selectAll('.chart_style_0').style.stroke;
+
+                            });*/
+                    } else {
+                        svg.selectAll("polygon").remove();
+                    }
 
 
-                    })
-
-                }
+                })
 
             }
 
-        }])
+        }
+
+    }])
 
 
 
 
 
-        */
+
 
 
 })

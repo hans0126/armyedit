@@ -5,17 +5,16 @@
         <div class="flag {{compare.getFlagName(compare.selctedCard.faction)}}" ng-if="compare.selctedCard.faction"></div>
         <h3>{{compare.selctedCard.title}}</h3>
         <div ng-repeat="actor in compare.selctedCard.actor" class='compareSearchList'>
-            <div ng-style="compare.thumbCss(compare.selctedCard,actor)" class="compareSearchImg pull-left thumbImg" ng-click="compare.selectItem(compare.selctedCard,$index)">
+            <div class="compareSearchImg pull-left " ng-click="compare.selectItem(compare.selctedCard,$index)">
+                <img ng-src="products/actor_banner/{{actor.img.banner}}" alt="">
                 <i class="fa fa-square-o fa-4" ng-if="!actor.selected"></i>
                 <i class="fa fa-check-square-o fa-2" ng-if="actor.selected"></i>
             </div>
-            <h4 class='pull-left'>{{actor.title}}</h4>
             <div class='clearfix'></div>
         </div>
         <ul id="compareSelectedItem" class='list-unstyled'>
             <li ng-repeat="item in compare.compareBox">
-                <div>{{item.card.title}}</div>
-                <h3>{{item.card.actor[item.actorIndex].title}}</h3>
+                <img ng-src="products/actor_banner/{{item.card.actor[item.actorIndex].img.banner}}" alt="">
                 <i class="fa fa-times" ng-click='compare.removeCompareItem(item)'></i>
             </li>
         </ul>
@@ -24,15 +23,16 @@
         </div>
     </div>
 </div>
-
 <div class="row">
     <div class='row' id="itemCompare">
         <div class="selectedItem">
             <div class='col-xs-4' ng-repeat='val in compare.compareBox'>
                 <div>{{val.card.title}}</div>
                 <h4>{{val.card.actor[val.actorIndex].title}}</h4>
-                <div class='imgArea pull-left thumbImg'  ng-style="compare.thumbCss(val.card,val.card.actor[val.actorIndex])" ></div>
-                <div small-radar status="val.card.actor[val.actorIndex].status" avg="compare.s" class="pull-right small_radar"></div>
+                <div class='imgArea pull-left thumbImg'>
+                    <img ng-src="products/actor_thumb/{{val.card.actor[val.actorIndex].img.thumb}}" alt="">
+                </div>
+                <div small-radar status="val.card.actor[val.actorIndex].status" class="pull-right small_radar"></div>
             </div>
         </div>
         <hr style="clear:both">
@@ -42,7 +42,8 @@
                     <thead>
                         <tr>
                             <td></td>
-                            <td ng-repeat='val in compare.compareBox'>{{val.card.title}}<h4>{{val.card.actor[val.actorIndex].title}}</h4></td>
+                            <td ng-repeat='val in compare.compareBox'>{{val.card.title}}
+                                <h4>{{val.card.actor[val.actorIndex].title}}</h4></td>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,7 +55,7 @@
                 </table>
             </div>
             <div class='col-xs-5'>
-                <div compare-radar id="compare_radar" selected="compare.selected"></div>
+                <div compare-radar id="compare_radar" selected="compare.compareBox"></div>
             </div>
         </div>
     </div>

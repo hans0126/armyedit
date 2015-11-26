@@ -34,7 +34,7 @@ define(function(require) {
     app.config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.
-            when('/', angularAMD.route({
+            when('/product', angularAMD.route({
                 templateUrl: 'template/product.html',
                 controller: 'product as product',
                 controllerUrl: 'js/apps/product/product_controller.js'

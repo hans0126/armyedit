@@ -311,7 +311,6 @@ html {
 
 #compareSelectedItem > li {
   position: relative;
-  border-bottom: 1px solid #999;
   margin-bottom: 1em;
 }
 #compareSelectedItem h3 {

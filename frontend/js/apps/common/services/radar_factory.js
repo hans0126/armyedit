@@ -2,11 +2,11 @@ define(function(require) {
 
     var app = require("app");
 
-    app.factory('radarFactory', function() {
+    app.factory('radarFactory',['settingService', function(settingService) {
 
          var statusShow = ["spd", "str", "mat", "rat", "def", "arm"];
         
-        function translateData(_className, _status,settingService) {
+        function translateData(_className, _status) {
 
             var _d = {
                 className: _className, // optional can be used for styling
@@ -106,6 +106,6 @@ define(function(require) {
 */
         return translateData;
 
-    })
+    }])
 
 })

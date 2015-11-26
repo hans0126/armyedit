@@ -27,7 +27,8 @@ define(function(require) {
         _self.getStatusData = function() {
             $http.post("get_statusAvg").then(function(response) {
                 _self.statusValue = response.data;
-                _self.statusMapping = _dataTranslate(response.data);                
+                _self.statusMapping = _dataTranslate(response.data); 
+
             });
         }
 
