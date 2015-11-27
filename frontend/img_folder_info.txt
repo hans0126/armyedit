@@ -1,0 +1,6 @@
+products
+	- actor_banner
+	- actor_damage
+	- actor_thumb
+	- normal
+	- thumb
