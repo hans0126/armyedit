@@ -215,7 +215,8 @@ define(function(require) {
                     width: '350px'
                 });
 
-                svg.append('g').classed('single', true);
+                // svg.append('g').classed('single', true);
+                svg.append('g').classed('compareBtnGroup', true);
 
                 $scope.$watch('selected.length', function(cardCount) {
                     var _d = [];
@@ -226,21 +227,84 @@ define(function(require) {
                             var _idx = $scope.selected[i].actorIndex;
 
                             if (typeof(_card.actor[_idx].status) != "undefined") {
+
+
+
                                 _d.push(radarFactory("chart_style_" + i, _card.actor[_idx].status));
+
+                                svg.select("g.compareBtnGroup")
+                                    .append('g')
+                                    .on('click', function(e) {
+                                        var _v;
+                                        if (typeof(this.hide) == "undefined") {
+                                            this.hide = true;
+                                        } else {
+                                            this.hide = !this.hide;
+                                        }
+
+                                        if (this.hide) {
+                                            _v = "visible";
+                                        } else {
+                                            _v = "hidden";
+                                        }
+
+                                        svg.select('.chart_style_' + d3.select(this).attr('idx')).attr("visibility", _v);
+                                       // console.log(svg.selectAll('polygon.chart_style_0'));
+                                      //  console.log( d3.select(this).attr('idx'))
+                                        //console.log(this.i);
+
+                                    })
+                                    .attr('id', "chart_style_" + i)
+                                    .attr('idx',i)
+                                    .append('text')
+                                    .text(_card.actor[_idx].title)
+                                    .style({
+                                        "font-size": "12px",
+                                        "z-index": "999999999"
+                                    });
+
+                                // console.log( svg.select("g.compareBtnGroup"));
+
+                                svg.select("g.compareBtnGroup")
+                                    .append('use')
+                                    .attr("xlink:href", ".#chart_style_" + i)
+                                    .attr("x", 50)
+                                    .attr("y", 50)
+
+
                             }
                         }
 
+                        /*  console.log(chart);
+
+                          svg.append("circle")
+                              .attr("r", 100);*/
+
                         svg.datum(_d).call(chart);
 
-                      /*  svg.append("circle")
-                            .attr("r", 100)
-                            .on('click', function() {
-                                console.log(svg.selectAll('polygon.chart_style_0').style("stroke"));
-                                //svg.selectAll('.chart_style_0').style.stroke;
 
-                            });*/
+                        for (var i = 0; i < $scope.selected.length; i++) {
+                            var _card = $scope.selected[i].card;
+                            var _idx = $scope.selected[i].actorIndex;
+
+
+
+                        }
+
+
+
+
+
+
+                        /*  svg.append("circle")
+                              .attr("r", 100)
+                              .on('click', function() {
+                                  console.log(svg.selectAll('polygon.chart_style_0').style("stroke"));
+                                  //svg.selectAll('.chart_style_0').style.stroke;
+
+                              });*/
                     } else {
-                        svg.selectAll("polygon").remove();
+                        svg.selectAll("polygon.area").remove();
                     }
 
 
