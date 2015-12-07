@@ -4,6 +4,7 @@ var cards = require('../models/cards.js'),
     fs = require('fs'),
     imgPath = "frontend/products/";
 
+ 
 //mongoose.set('debug', true);
 // mongoose.Types.ObjectId
 
@@ -68,7 +69,7 @@ exports.updateCard = function(req, res) {
 
     cards.update({
         _id: mongoose.Types.ObjectId(_id)
-    }, _d, function(err) {      
+    }, _d, function(err) {
         res.json(200, _d);
     })
 }
@@ -163,8 +164,10 @@ function imgProcess() {
             if (_img) {
                 //remove old file                
                 if (_actors[i].img[key]) {
-                    fs.unlink(imgPath + "actor_" + key + '/' + _actors[i].img[key]);
+                    var _p = imgPath + "actor_" + key + '/' + _actors[i].img[key];
+                    removeFile(_p);
                 }
+
 
                 _fileName = new Date().getTime() + "-" + Math.floor(Math.random() * 1000) + ".png";
                 _img = _img.replace(/^data:image\/\w+;base64,/, "");
@@ -178,9 +181,8 @@ function imgProcess() {
 
         if (_actors[i].hp.damage_type == "warbeast") {
             if (_actors[i].img.damage) {
-                fs.unlink(imgPath + "actor_damage/" + _actors[i].img.damage, function(err) {
-                    if (err) throw err;
-                });
+                var _p = imgPath + "actor_" + key + '/' + _actors[i].img[key];
+                removeFile(_p);
 
                 _actors[i].img.damage = null;
             }
@@ -190,4 +192,13 @@ function imgProcess() {
     }
 
 
+}
+
+
+function removeFile(_path) {
+    fs.exists(_path, function(exists) {
+        if (exists) {
+            fs.unlink(_path);
+        }
+    });
 }

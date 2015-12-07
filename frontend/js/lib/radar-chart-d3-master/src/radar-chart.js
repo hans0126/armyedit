@@ -216,13 +216,13 @@ var RadarChart = {
             d3.event.stopPropagation();
             container.classed('focus', 1);
             d3.select(this).classed('focused', 1);
-            setTooltip(tooltip, dd.className);
+           // setTooltip(tooltip, dd.className);
           })
           .on('mouseout', function(){
             d3.event.stopPropagation();
             container.classed('focus', 0);
             d3.select(this).classed('focused', 0);
-            setTooltip(tooltip, false);
+           // setTooltip(tooltip, false);
           });
 
         polygon.exit()

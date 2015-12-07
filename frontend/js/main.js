@@ -7,7 +7,7 @@ requirejs.config({
         angularAnimate: 'lib/angular-animate.min',
         angularAMD: 'lib/angularAMD.min',
         d3: 'lib/d3.min',
-        d3_radar: 'lib/radar-chart-d3-master/src/radar-chart.min',
+        d3_radar: 'lib/radar-chart-d3-master/src/radar-chart',
         pixi: 'lib/pixi.min',
         pixi_bannerCreater: 'lib/pixi_banner_creater.min',
         pixi_warjack: "lib/pixi_warjack_box.min",

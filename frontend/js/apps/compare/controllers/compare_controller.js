@@ -213,12 +213,12 @@ define(function(require) {
                 var svg = d3.select($element[0]).append('svg').style({
                     height: '350px',
                     width: '350px'
-                });
+                });               
 
-                // svg.append('g').classed('single', true);
-                svg.append('g').classed('compareBtnGroup', true);
-
+                compareBtnGroup = svg.append('g').classed('compareBtnGroup', true).attr('id', 'chartBtnGroup');
+                
                 $scope.$watch('selected.length', function(cardCount) {
+                    compareBtnGroup.html("");
                     var _d = [];
                     if (cardCount > 0) {
 
@@ -227,82 +227,62 @@ define(function(require) {
                             var _idx = $scope.selected[i].actorIndex;
 
                             if (typeof(_card.actor[_idx].status) != "undefined") {
-
-
-
                                 _d.push(radarFactory("chart_style_" + i, _card.actor[_idx].status));
-
-                                svg.select("g.compareBtnGroup")
-                                    .append('g')
-                                    .on('click', function(e) {
-                                        var _v;
-                                        if (typeof(this.hide) == "undefined") {
-                                            this.hide = true;
-                                        } else {
-                                            this.hide = !this.hide;
-                                        }
-
-                                        if (this.hide) {
-                                            _v = "visible";
-                                        } else {
-                                            _v = "hidden";
-                                        }
-
-                                        svg.select('.chart_style_' + d3.select(this).attr('idx')).attr("visibility", _v);
-                                       // console.log(svg.selectAll('polygon.chart_style_0'));
-                                      //  console.log( d3.select(this).attr('idx'))
-                                        //console.log(this.i);
-
-                                    })
-                                    .attr('id', "chart_style_" + i)
-                                    .attr('idx',i)
-                                    .append('text')
-                                    .text(_card.actor[_idx].title)
-                                    .style({
-                                        "font-size": "12px",
-                                        "z-index": "999999999"
-                                    });
-
-                                // console.log( svg.select("g.compareBtnGroup"));
-
-                                svg.select("g.compareBtnGroup")
-                                    .append('use')
-                                    .attr("xlink:href", ".#chart_style_" + i)
-                                    .attr("x", 50)
-                                    .attr("y", 50)
-
-
                             }
                         }
 
-                        /*  console.log(chart);
-
-                          svg.append("circle")
-                              .attr("r", 100);*/
+                      
 
                         svg.datum(_d).call(chart);
-
 
                         for (var i = 0; i < $scope.selected.length; i++) {
                             var _card = $scope.selected[i].card;
                             var _idx = $scope.selected[i].actorIndex;
+                            var strokeColor = svg.select('polygon.chart_style_' + i).style("stroke");
 
+                            var _gBtn = compareBtnGroup
+                                .append('g')
+                                .attr("transform", "translate(" + "0," + (i * 20) + ")")
+                                .on('click', function(e) {
+
+                                    var _v;
+                                    if (typeof(this.hide) == "undefined") {
+                                        this.hide = false;
+                                    } else {
+                                        this.hide = !this.hide;
+                                    }
+
+                                    if (this.hide) {
+                                        _v = "visible";
+                                    } else {
+                                        _v = "hidden";
+                                    }
+
+                                    svg.select('.chart_style_' + d3.select(this).attr('idx')).attr("visibility", _v);                                   
+
+                                })
+                                .attr('id', "chart_style_" + i)
+                                .attr('idx', i);
+
+                            _gBtn.append('rect')
+                                .attr('width', 20)
+                                .attr('height', 10)
+                                .attr('fill', strokeColor);
+
+                            _gBtn.append('text')
+                                .text(_card.actor[_idx].title)
+                                .attr('dy', "1em")
+                                .attr('x',25)
+                                .style({
+                                    "font-size": "12px",
+                                    "z-index": "999999999"
+                                });                         
 
 
                         }
 
 
-
-
-
-
-                        /*  svg.append("circle")
-                              .attr("r", 100)
-                              .on('click', function() {
-                                  console.log(svg.selectAll('polygon.chart_style_0').style("stroke"));
-                                  //svg.selectAll('.chart_style_0').style.stroke;
-
-                              });*/
+                     
                     } else {
                         svg.selectAll("polygon.area").remove();
                     }

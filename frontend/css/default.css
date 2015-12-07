@@ -371,3 +371,12 @@ body {
 }
 
 */
+.compareBtnGroup text {
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.compareBtnGroup > g {
+  cursor: pointer;
+}
