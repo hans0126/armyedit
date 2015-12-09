@@ -128,7 +128,6 @@ function categoryIdConvertToObjectId() {
         }
     }
 
-
     //return _data
 
 }
@@ -143,8 +142,6 @@ function abilityIdConvertToObjectId() {
             }
         }
     }
-
-
 }
 
 

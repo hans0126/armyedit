@@ -1,4 +1,4 @@
-<div id="popup_search" class="row" ng-controller="searchController as search" ng-if='compare.popupShow'>
+<div id="popup_search" class="row" ng-controller="searchController as search" ng-show='compare.popupShow'>
     <div class='col-xs-4' ng-include="search.searchTemplateUrl"></div>
     <div class='col-xs-4' ng-include="search.resultTemplateUrl"></div>
     <div class='col-xs-4' id='compareSearchArea'>
@@ -23,8 +23,11 @@
         </div>
     </div>
 </div>
+<div class="row form-group">
+    <button class="btn btn-primary" ng-click="compare.openSearchPanel()">search</button>
+</div>
 <div class="row">
-    <div class='row' id="itemCompare">
+    <div id="itemCompare">
         <div class="selectedItem">
             <div class='col-xs-4' ng-repeat='val in compare.compareBox'>
                 <div>{{val.card.title}}</div>
@@ -42,14 +45,29 @@
                     <thead>
                         <tr>
                             <td></td>
-                            <td ng-repeat='val in compare.compareBox'>{{val.card.title}}
+                            <td ng-repeat='val in compare.compareBox' ng-style='compare.colWidth()'>{{val.card.title}}
                                 <h4>{{val.card.actor[val.actorIndex].title}}</h4></td>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat='_val in compare.s.cardStatusFields'>
                             <td>{{_val | uppercase}}</td>
-                            <td ng-repeat='actor in compare.compareBox'>{{actor.card.actor[actor.actorIndex].status[_val]}}</td>
+                            <td ng-repeat='actor in compare.compareBox' ng-class="compare.bestValueStyle($index,_val)">{{actor.card.actor[actor.actorIndex].status[_val]}}</td>
+                        </tr>
+                        <tr>
+                            <td>Life</td>
+                            <td ng-repeat='actor in compare.compareBox'>{{actor.card.actor[actor.actorIndex].hp.count}}</td>
+                        </tr>
+                        <tr>
+                            <td>Cost</td>
+                            <td ng-repeat='actor in compare.compareBox'>{{actor.card.pc.min.cost}}</td>
+                        </tr>
+                        <tr>
+                            <td>Ability</td>
+                            <td ng-repeat='actor in compare.compareBox'>
+                                <span ng-repeat="ability in actor.card.actor[actor.actorIndex].characterAbility" ng-class='compare.getAbilityIcon(ability)'></span>
+                            
+                            </td>
                         </tr>
                     </tbody>
                 </table>

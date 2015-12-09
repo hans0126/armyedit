@@ -36,6 +36,7 @@ define(function(require) {
             _self.addActor = addActor;
             _self.removeActor = removeActor;
             _self.createNew = createNew;
+          
 
             // to search area stService.objectSelected
             stService.objectSelected = function(_obj) {
@@ -280,6 +281,8 @@ define(function(require) {
                 _self.primaryCard = angular.copy(cardTemplate);
                 _self.primaryCard.actor.push(angular.copy(actorTemplate));
             }
+
+            
 
             resetData();
 

@@ -13,20 +13,19 @@ define(function(require) {
             stService.searchType = "card" //cards or priducts   
 
             _self.s = settingService;
-
             _self.getFlagName = getFlagName;
-
             _self.selctedCard = null;
-
             _self.thumbCss = thumbCss;
             _self.selectItem = selectItem;
-
             _self.removeCompareItem = removeCompareItem;
-
             _self.compareBox = [];
-
+            _self.getAbilityIcon = getAbilityIcon;
+            _self.colWidth = colWidth;
             _self.popupShow = true;
             _self.compareStart = compareStart;
+            _self.openSearchPanel = openSearchPanel;
+            _self.bestStatus = null;
+            _self.bestValueStyle = bestValueStyle;
 
             stService.objectSelected = function(obj) {
                 _self.selctedCard = obj;
@@ -67,6 +66,8 @@ define(function(require) {
                     }
                 }
 
+                compareValue();
+
 
                 function checkTheSame(_tobj, _tidx) {
                     var result = -1;
@@ -95,61 +96,89 @@ define(function(require) {
                     }
                 }
 
-
                 if (_self.selctedCard._id == _obj.card._id) {
                     _self.selctedCard.actor[_obj.actorIndex].selected = false;
                 }
+
+                compareValue();
             }
 
             function compareStart() {
                 _self.popupShow = false;
             }
 
+            function openSearchPanel() {
+                _self.popupShow = true;
+            }
 
-            /*
-            _self.search = search;
 
-            _self.search.init();
+            function getAbilityIcon(_id) {
+                return ["sprite", settingService.abilityMapping[_id].cssClass]
+            }
 
-            _self.selected = [];
-       
-            _self.statusAvg = statusAvgService;
-          
-            search.itemSelect = function(_obj) {
+            function colWidth() {
+                var _w = (100 / (_self.compareBox.length + 1)) + "%";
 
-                if (_self.selected.length >= 3) return false;
-
-                var _exists = false;
-                for (var i = 0; i < _self.selected.length; i++) {
-                    if (_self.selected[i]._id == _obj._id) {
-                        _exists = true;
-                        break;
-                    }
-                }
-
-                if (!_exists) {
-                    _self.selected.push(_obj);
-                   
+                return {
+                    width: _w
                 }
             }
 
-            _self.statusAvgService = statusAvgService;
+            function compareValue() {
+                if (_self.compareBox.length <= 1) {
+                    return
+                }
 
-            _self.searchBtn = {
-                text: "open",
-                open: false,
-                trigger: function() {
-                    if (this.open) {
-                        this.text = "open";
-                    } else {
-                        this.text = "close";
+                _self.bestStatus = {
+                    values: [],
+                    best: []
+                };
+
+                for (var i = 0; i < _self.compareBox.length; i++) {
+                    //basic status
+                    var _card = _self.compareBox[i].card.actor[_self.compareBox[i].actorIndex];
+                    for (var key in _card.status) {
+                        if (!_self.bestStatus.values[key]) {
+                            _self.bestStatus.values[key] = [];
+                            _self.bestStatus.best[key] = [];
+                        }
+                        _self.bestStatus.values[key].push({
+                            value: _card.status[key],
+                            idx: i
+                        });
                     }
 
-                    this.open = !this.open;
+                    //life
+                }
 
+
+                for (var key in _self.bestStatus.values) {
+                    _self.bestStatus.values[key].sort(function(a, b) {
+                        return b.value - a.value
+                    })
+
+                    var _bestSingleValue = _self.bestStatus.values[key][0].value;
+
+
+                    for (var i = 0; i < _self.bestStatus.values[key].length; i++) {
+                        if (_self.bestStatus.values[key][i].value === _bestSingleValue) {
+                            _self.bestStatus.best[key].push(_self.bestStatus.values[key][i].idx);
+                        }
+                    }
+                }
+
+            }
+
+
+            function bestValueStyle(_idx, _key) {
+                if (!_self.bestStatus) {
+                    return
+                }
+
+                if (_self.bestStatus.best[_key].indexOf(_idx) >= 0) {
+                    return "bg-primary"
                 }
             }
-            */
 
         }
     ])
@@ -213,10 +242,10 @@ define(function(require) {
                 var svg = d3.select($element[0]).append('svg').style({
                     height: '350px',
                     width: '350px'
-                });               
+                });
 
                 compareBtnGroup = svg.append('g').classed('compareBtnGroup', true).attr('id', 'chartBtnGroup');
-                
+
                 $scope.$watch('selected.length', function(cardCount) {
                     compareBtnGroup.html("");
                     var _d = [];
@@ -230,8 +259,6 @@ define(function(require) {
                                 _d.push(radarFactory("chart_style_" + i, _card.actor[_idx].status));
                             }
                         }
-
-                      
 
                         svg.datum(_d).call(chart);
 
@@ -258,7 +285,7 @@ define(function(require) {
                                         _v = "hidden";
                                     }
 
-                                    svg.select('.chart_style_' + d3.select(this).attr('idx')).attr("visibility", _v);                                   
+                                    svg.select('.chart_style_' + d3.select(this).attr('idx')).attr("visibility", _v);
 
                                 })
                                 .attr('id', "chart_style_" + i)
@@ -272,17 +299,17 @@ define(function(require) {
                             _gBtn.append('text')
                                 .text(_card.actor[_idx].title)
                                 .attr('dy', "1em")
-                                .attr('x',25)
+                                .attr('x', 25)
                                 .style({
                                     "font-size": "12px",
                                     "z-index": "999999999"
-                                });                         
+                                });
 
 
                         }
 
 
-                     
+
                     } else {
                         svg.selectAll("polygon.area").remove();
                     }
