@@ -2,6 +2,7 @@ var basicLoad = require('./handlers/basic_load.js'),
     search = require('./handlers/search.js'),
     statusMapreduce = require('./handlers/status_mapreduce.js'),
     cards = require('./handlers/cards.js'),
+    parser = require('./handlers/parser.js')
 
     multer = require('multer'),
     upload = multer({
@@ -41,7 +42,12 @@ module.exports = function(app) {
     app.post('/update_card', upload.single('file'), cards.updateCard);
 
     app.post('/add_new_card', upload.single('file'), cards.addNewCard);
+
+    //parse
     
+    app.get('/_p',parser.parserWeb);
+
+
     /*
     app.get('/p', function(req, res) {
         //parse web data

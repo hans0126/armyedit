@@ -137,6 +137,7 @@ define(function(require) {
                 for (var i = 0; i < _self.compareBox.length; i++) {
                     //basic status
                     var _card = _self.compareBox[i].card.actor[_self.compareBox[i].actorIndex];
+                  
                     for (var key in _card.status) {
                         if (!_self.bestStatus.values[key]) {
                             _self.bestStatus.values[key] = [];
@@ -148,9 +149,20 @@ define(function(require) {
                         });
                     }
 
+                      if (!_self.bestStatus.values['life']) {
+                            _self.bestStatus.values['life'] = [];
+                            _self.bestStatus.best['life'] = [];
+                        }
+
+                      _self.bestStatus.values['life'].push({
+                            value: _card.hp.count,
+                            idx: i
+                        });
+
                     //life
                 }
 
+                //comapre
 
                 for (var key in _self.bestStatus.values) {
                     _self.bestStatus.values[key].sort(function(a, b) {
@@ -159,10 +171,12 @@ define(function(require) {
 
                     var _bestSingleValue = _self.bestStatus.values[key][0].value;
 
+                    if (_bestSingleValue != null) {
 
-                    for (var i = 0; i < _self.bestStatus.values[key].length; i++) {
-                        if (_self.bestStatus.values[key][i].value === _bestSingleValue) {
-                            _self.bestStatus.best[key].push(_self.bestStatus.values[key][i].idx);
+                        for (var i = 0; i < _self.bestStatus.values[key].length; i++) {
+                            if (_self.bestStatus.values[key][i].value === _bestSingleValue) {
+                                _self.bestStatus.best[key].push(_self.bestStatus.values[key][i].idx);
+                            }
                         }
                     }
                 }
@@ -176,7 +190,7 @@ define(function(require) {
                 }
 
                 if (_self.bestStatus.best[_key].indexOf(_idx) >= 0) {
-                    return "bg-primary"
+                    return "bg-info"
                 }
             }
 

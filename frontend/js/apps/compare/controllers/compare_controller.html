@@ -56,7 +56,7 @@
                         </tr>
                         <tr>
                             <td>Life</td>
-                            <td ng-repeat='actor in compare.compareBox'>{{actor.card.actor[actor.actorIndex].hp.count}}</td>
+                            <td ng-repeat='actor in compare.compareBox'  ng-class="compare.bestValueStyle($index,'life')">{{actor.card.actor[actor.actorIndex].hp.count}}</td>
                         </tr>
                         <tr>
                             <td>Cost</td>
