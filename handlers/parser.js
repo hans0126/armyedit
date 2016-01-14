@@ -216,6 +216,8 @@ parserImg.prototype.init = function() {
 
     var _self = this;
 
+    return;
+
     products.find({
         "img": {
             "$exists": false
@@ -242,7 +244,6 @@ parserImg.prototype.init = function() {
 
 parserImg.prototype.getImg = function(_id, _iName) {
 
-
     var _self = this;
 
     _self.imgCount = 0;
@@ -252,7 +253,7 @@ parserImg.prototype.getImg = function(_id, _iName) {
     var _path = appDir + "\\frontend\\products\\normal\\";
     var _thumbPath = appDir + "\\frontend\\products\\thumb\\";
 
-    var _imgUrl = "http://privateerpress.com/files/products/";   
+    var _imgUrl = "http://privateerpress.com/files/products/";
 
     if (typeof(_iName) == "undefined") {
 
@@ -297,7 +298,7 @@ parserImg.prototype.getImg = function(_id, _iName) {
                 res.on('end', function() {
                     console.log("end");
 
-                    fs.writeFile(_path + _img, imagedata, 'binary', function(err, re) {
+                    fs.writeFile(_path + _img, imagedata, 'binary', function(err, re) { //save img
                         if (err) throw err
 
                         _self.currentImgCount++;
@@ -305,7 +306,7 @@ parserImg.prototype.getImg = function(_id, _iName) {
                         console.log(_self.imgCount + "/" + _self.currentImgCount);
                         console.log(_self.imgCount + '.File saved.' + _img);
 
-                        im.resize({
+                        im.resize({ // create thumb
                             srcPath: _path + _img,
                             dstPath: _thumbPath + _img,
                             width: 130,
@@ -313,10 +314,28 @@ parserImg.prototype.getImg = function(_id, _iName) {
                         }, function(err, stdout, stderr) {
                             if (err) throw err;
                             console.log('resized %s to fit within 120px', _img);
+
+                            im.identify(_thumbPath + _img, function(err, features) { // get img information
+                                if (err) throw err;
+
+                                if (features.width != features.height) { // if img is not ratio then crop
+
+                                    im.crop({
+                                        srcPath: _thumbPath + _img,
+                                        dstPath: _thumbPath + _img,
+                                        width: 130,
+                                        height: 130,
+                                        quality: 1,
+                                        gravity: "Center"
+                                    }, function(err) {
+                                        if (err) throw err;
+                                    })
+                                }
+                            });
                         });
 
 
-                        if (_self.currentImgCount == _self.imgCount) {
+                        if (_self.currentImgCount == _self.imgCount) { //when all img downloaded
                             console.log("get complete, save to db");
                             saveImgStatus();
                         }

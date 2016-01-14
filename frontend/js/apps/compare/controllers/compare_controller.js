@@ -28,7 +28,8 @@ define(function(require) {
             _self.bestValueStyle = bestValueStyle;
 
             stService.objectSelected = function(obj) {
-                _self.selctedCard = obj;
+                _self.selctedCard = obj;             
+            
                 for (var i = 0; i < _self.compareBox.length; i++) {
                     if (_self.compareBox[i].card._id == obj._id) {
                         if (obj.actor[_self.compareBox[i].actorIndex]) {

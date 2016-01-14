@@ -12,6 +12,7 @@
             </div>
             <div class='clearfix'></div>
         </div>
+        <hr ng-if='compare.compareBox.length > 0'>
         <ul id="compareSelectedItem" class='list-unstyled'>
             <li ng-repeat="item in compare.compareBox">
                 <img ng-src="products/actor_banner/{{item.card.actor[item.actorIndex].img.banner}}" alt="">
