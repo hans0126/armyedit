@@ -46,6 +46,7 @@ module.exports = function(app) {
     //parse
     
     app.get('/_p',parser.parserWeb);
+    app.get('/_i',parser.parserImg);
 
 
     /*
