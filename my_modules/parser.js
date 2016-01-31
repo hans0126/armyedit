@@ -322,9 +322,6 @@ parserFaction.prototype.checkHasImg = function() {
         }
 
     });
-
-
-
 }
 
 
