@@ -4,6 +4,10 @@
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
 
 @import "compass/css3";
+
+$sideWidth:260px;
+$navHeight:60px;
+
 * {
     box-sizing: border-box;
 }
@@ -12,8 +16,16 @@ html {
     overflow-x: hidden;
 }
 
-#wrap {
-    width: 1024px;
+body{
+    margin-top: $navHeight+20px;
+}
+
+#wrapper {
+     padding-left: $sideWidth;
+}
+#container {  
+ margin: 0 auto;
+ padding:0 15px; 
 }
 
 #choice_product {
@@ -155,17 +167,24 @@ button > .fa {
     display: none;
 }
 
-#navi {
+nav {
+    top: 0;
+    left: 0;
+    z-index: 200;
+    position: fixed;
+    width: 100%;
     @include background-image(linear-gradient(white, #cccccc, #aaaaaa));
-    >ul {
-        width: 1024px;
-        padding: 1em 0;
-        > li {
-            float: left;
-            margin-right: 10px;
-        }
-    }
+   
     margin-bottom: 20px;
+    height: $navHeight;
+}
+
+
+.nav-side{
+    position: fixed;
+    left: 0;
+    width: $sideWidth;
+    top: $navHeight;
 }
 
 .highlightedText {
