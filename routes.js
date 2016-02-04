@@ -113,6 +113,7 @@ module.exports = function(app) {
     app.get('/user_login_process', oauth.loginProcess);
     app.post('/front_get_token', oauth.frontGetToken);
     app.post('/check_mail',oauth.checkMail);
+    app.post('/user_update',oauth.updateUser);
 
     /*
     app.get('/p', function(req, res) {

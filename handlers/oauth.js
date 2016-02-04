@@ -29,11 +29,12 @@ exports.loginProcess = function(req, res) {
         if (err) throw err
 
         if (re.length == 0) { //redirect regist page
+            req.session.newUser = true;
             res.redirect('./#/register');
 
             //res.send(req.user);
         } else {
-
+            console.log("already");
         }
 
     })
@@ -59,7 +60,8 @@ exports.frontGetToken = function(req, res) {
 
         var _d = {
             name: name,
-            email: email
+            email: email,
+            newUser: req.session.newUser
         }
 
         res.json(200, _d);
@@ -81,7 +83,29 @@ exports.checkMail = function(req, res) {
             _returnValue = true;
         }
 
-        res.json(200,_returnValue );
+        res.json(200, _returnValue);
     })
+
+}
+
+
+exports.updateUser = function(req, res) {
+    var _u = req.body;
+
+    var userData = new user({
+        display_name: req.user.displayName,
+        email: req.user.email,
+        token_id: req.user.id,
+        name: _u.userName
+    })
+
+   
+
+    userData.save(function(err) {
+        if (err) return console.error(err);
+        console.log("save ok");
+    })
+
+ 
 
 }

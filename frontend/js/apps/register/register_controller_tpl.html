@@ -1,13 +1,12 @@
 <form name="form">
     <div class="form-group" novalidate>
         <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" placeholder="Email" ng-model="register.user.email"  check-mail required name="uEmail" ng-model-options="{ updateOn: 'blur' }">
+        <input type="email" class="form-control" placeholder="Email" ng-model="register.user.email" check-mail required name="uEmail" ng-model-options="{ updateOn: 'blur' }">
         <div>
             <span ng-show="form.uEmail.$error.required">Tell us your email.</span>
             <span ng-show="form.uEmail.$error.email">This is not a valid email.</span>
-             <span ng-show="form.uEmail.$error.checkMail">bbbb.</span>
-
-            
+            <span ng-show="form.uEmail.$error.checkMail">This email was used</span>
+            <span ng-show="!form.uEmail.$error.checkMail">This email can register</span>
         </div>
     </div>
     <div class="form-group">
@@ -17,5 +16,5 @@
             <span ng-show="form.uName.$error.required" class="help-block">name error</span>
         </div>
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default" ng-click="register.update()">Submit</button>
 </form>

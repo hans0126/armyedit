@@ -22,9 +22,20 @@ define(function(require) {
             _self.reset();
 
             registerService.getToken(function(re) {
-                _self.user.userName = re.name;
-                _self.user.email = re.email;
+
+              
+
+                if (re.newUser) {
+                    _self.user.userName = re.name;
+                    _self.user.email = re.email;
+                }
             });
+
+
+            _self.update = function() {
+                _self.defaultVal = angular.copy(_self.user);
+                registerService.userUpdate(_self.defaultVal);
+            }
 
         }
     ])

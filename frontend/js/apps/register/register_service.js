@@ -20,6 +20,16 @@ define(function(require) {
             });
         }
 
+         _self.userUpdate = function(_data,fn) {
+            $http.post("/user_update",_data).then(function(response) {
+              
+
+                if (typeof(fn) === "function") {
+                    fn();
+                }
+
+            });
+        }
 
 
     }])
