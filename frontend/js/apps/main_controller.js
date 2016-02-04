@@ -7,23 +7,21 @@ define(function(require) {
     app.controller("mainCtrl", ["$scope",
         "$location",
         "msgService",
-        "settingService",    
+        "settingService",
         function($scope, $location, msgService, setting) {
 
             var _self = this;
 
-            setting.init();        
+            setting.init();
 
             _self.go = function(path) {
                 $location.path(path);
             }
             $scope.msg = msgService;
+            $scope.login = false;
 
         }
     ])
-
-
-
 
 
     app.service("msgService", function($timeout) {
@@ -54,7 +52,7 @@ define(function(require) {
     })
 
 
-    
+
     app.directive("msg", function($rootScope) {
 
         return {
@@ -66,6 +64,65 @@ define(function(require) {
         }
 
     })
+
+
+    app.directive("navTop", ["$compile",
+        "lightBoxService",
+        "settingService",
+        "$location",
+        function($compile, lightBoxService, settingService, $location) {
+
+            return {
+                restrict: 'A',
+                scope: {
+                    login: "=navTop"
+                },
+                link: function(scope, element, attr) {
+
+                    scope.$watch("login", function() {
+                        if (scope.login) {
+                            scope.loginBtnText = "logout";
+                            scope.logIcon = "fa-sign-out";
+                        } else {
+                            scope.loginBtnText = "login";
+                            scope.logIcon = "fa-sign-in";
+                        }
+                    })
+
+                    scope.dropShow = false;
+
+
+                    // scope.gid=settingService.GOOGLE_CLIENT_ID;
+
+                    // console.log($location.path());
+
+                    scope.googleOauthUrl = combinUrl(settingService.googleOauth);
+
+
+                    function combinUrl(_obj) {
+                        var _temp = "";
+                        var gUrl = _obj.url;
+
+                        for (var key in _obj.parameter) {
+                            _temp += "&" + key + "=" + _obj.parameter[key];
+                        }
+
+                        _temp = _temp.substr(1, _temp.length);
+                        return _obj.url + _temp;
+                    }
+
+
+
+                    scope.triggerLogin = function() {
+                        scope.dropShow = !scope.dropShow;
+                    }
+                },
+                templateUrl: "js/apps/main_frame/nav_user_tpl.html"
+            }
+        }
+    ])
+
+
 
 
 })

@@ -27,8 +27,13 @@ define(function(require) {
     require('js/apps/cards/directives/thumb_images_area.js');
     require('js/apps/cards/directives/custom_on_change.js');
 
+    /*register*/
+     require('js/apps/register/register_service.js');
+
+    /**/
+
     require('js/apps/cards/directives/warjack_editor.js');
-     require('js/apps/cards/directives/warbeast_editor.js');
+    require('js/apps/cards/directives/warbeast_editor.js');
     require('js/apps/cards/services/db_ctrl.js');
 
     app.config(['$routeProvider',
@@ -58,6 +63,11 @@ define(function(require) {
                 templateUrl: 'js/apps/lab/controllers/laboratory_controller.html',
                 controller: 'laboratory_controller as lab',
                 controllerUrl: 'js/apps/lab/controllers/laboratory_controller.js'
+            })).
+            when('/register', angularAMD.route({
+                templateUrl: 'js/apps/register/register_controller_tpl.html',
+                controller: 'register_controller as register',
+                controllerUrl: 'js/apps/register/register_controller.js'
             })).
             otherwise({
                 redirectTo: '/cards'

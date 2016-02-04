@@ -1,0 +1,13 @@
+<li>
+    <button class='btn nav-btn' ng-click='triggerLogin()'><i class='fa {{logIcon}} fa-1x'></i> {{loginBtnText}}</button>
+    <div ng-show="dropShow">
+        <ul ng-if="!scope.login">
+            <li><a href="{{googleOauthUrl}}">google login</a></li>
+            <li><a href='#'>facebook login</a></li>
+        </ul>
+        <ul ng-if="scope.login">
+            <li><a href='#'>user function</a></li>
+            <li><a href='#'>user function</a></li>
+        </ul>
+    </div>
+</li>

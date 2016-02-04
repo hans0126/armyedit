@@ -4,10 +4,8 @@
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
 
 @import "compass/css3";
-
 $sideWidth:260px;
-$navHeight:60px;
-
+$navHeight:70px;
 * {
     box-sizing: border-box;
 }
@@ -16,17 +14,104 @@ html {
     overflow-x: hidden;
 }
 
-body{
+body {
     margin-top: $navHeight+20px;
 }
 
 #wrapper {
-     padding-left: $sideWidth;
+    padding-left: $sideWidth;
 }
-#container {  
- margin: 0 auto;
- padding:0 15px; 
+
+#container {
+    margin: 0 auto;
+    padding: 0 15px;
 }
+
+nav {
+    top: 0;
+    left: 0;
+    z-index: 200;
+    position: fixed;
+    width: 100%;
+    // @include background-image(linear-gradient(white, #cccccc, #aaaaaa));
+    background-color: #333;
+    margin-bottom: 20px;
+    height: $navHeight;
+    border-bottom: 2px solid #ffa500;
+    ul,
+    li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+}
+
+.nav-side {
+    position: fixed;
+    left: 0;
+    width: $sideWidth;
+    top: $navHeight;
+    bottom: 0;
+    background: #333;
+    > li {
+        border-bottom: 1px solid #666;
+    }
+    a {
+        padding: 0.6em;
+        color: #FFF;
+        display: block;
+    }
+}
+
+.nav-top {
+    top: 16px;
+    right: 20px;
+    position: absolute;
+}
+
+.oauth_icon {
+    display: inline-block;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-image: url(../images/oauth_icon.png);
+}
+
+.fb_icon {
+    width: 24px;
+    height: 24px;
+    background-position: -1px -1px
+}
+
+.google_icon {
+    width: 24px;
+    height: 24px;
+    background-position: -27px -1px
+}
+
+.twitter_icon {
+    width: 24px;
+    height: 24px;
+    background-position: -53px -1px
+}
+
+.nav-btn {
+    // @include background-image(linear-gradient(top, #337ab7 0, #265a88 100%));
+    background: transparent;
+    color: #FFF;
+    &:focus, &:active:focus{
+         outline: 0 none;
+         box-shadow: none;
+         color:#FFF;
+    }
+    &:hover {
+        //  @include background-image(linear-gradient(top, #333333 0, #666666 100%));
+        background: #666;
+        color: #FFF;
+    } 
+
+}
+
+
 
 #choice_product {
     /*  > .row {
@@ -165,26 +250,6 @@ button > .fa {
 
 .germanyss {
     display: none;
-}
-
-nav {
-    top: 0;
-    left: 0;
-    z-index: 200;
-    position: fixed;
-    width: 100%;
-    @include background-image(linear-gradient(white, #cccccc, #aaaaaa));
-   
-    margin-bottom: 20px;
-    height: $navHeight;
-}
-
-
-.nav-side{
-    position: fixed;
-    left: 0;
-    width: $sideWidth;
-    top: $navHeight;
 }
 
 .highlightedText {

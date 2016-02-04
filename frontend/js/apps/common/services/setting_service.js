@@ -9,7 +9,23 @@ define(function(require) {
         var _self = this;
 
 
+        _self.googleOauth = {
+            url: "https://accounts.google.com/o/oauth2/v2/auth?",
+            parameter: {
+                client_id: "76530001040-sq318gj5rdtr7vocqdfhsjer9vep65df.apps.googleusercontent.com",
+                response_type: "code",
+                scope: "openid%20email",
+                redirect_uri: "http://localhost:3000/google_oauth"
+            }
+        }
 
+        _self.fbOauth = {
+            url: "https://www.facebook.com/dialog/oauth?",
+            parameter: {
+                client_id: "223259027847992",
+                redirect_uri: "http://localhost:3000/fb_auth"
+            }
+        }
 
         //init 
         _self.init = function() {
@@ -27,7 +43,7 @@ define(function(require) {
         _self.getStatusData = function() {
             $http.post("get_statusAvg").then(function(response) {
                 _self.statusValue = response.data;
-                _self.statusMapping = _dataTranslate(response.data); 
+                _self.statusMapping = _dataTranslate(response.data);
 
             });
         }
@@ -58,7 +74,7 @@ define(function(require) {
 
         _self.getCategoryData = function() {
 
-            $http.post("get_category").then(function(response) {               
+            $http.post("get_category").then(function(response) {
                 _translate(response.data);
             })
 
